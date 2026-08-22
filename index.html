@@ -853,35 +853,37 @@
   ];
 
   function buildMap1(){
-    // 17〜29マス(道場3つより後のエリア)。落とし穴・敵はここにのみ配置する。
+    // 17〜29マス(道場3つより後のエリア)。落とし穴・薬草・敵はここにのみ配置する。
+    // (2026-08-22追加: 薬草はアイテムの道場(16マス目)を修行した後でないと使えない
+    //  仕様のため、道場より前に置いても実質意味がない。ユーザー指摘を受けて、
+    //  落とし穴と同様に薬草も道場より後のエリアに限定した。13マス中、敵9+落とし穴2+
+    //  薬草2で13マスちょうど埋まるため、敵の数を10→9に1体減らして調整している)
     const HIGH_ZONE = []; for(let i=17;i<=29;i++) HIGH_ZONE.push(i);
     // 2〜15マス(道場より前のエリア。6,8,12は固定マスなので除外)。
     const LOW_ZONE = [2,3,4,5,7,9,10,11,13,14,15];
 
     const highPool = shuffle(HIGH_ZONE);
-    const enemyCells = highPool.slice(0,10);
-    const leftoverHigh = highPool.slice(10); // 3マス分の余り(HIGH_ZONE 13 - 敵10)
+    const enemyCells = highPool.slice(0,9);
+    const leftoverHigh = highPool.slice(9); // 4マス分の余り(HIGH_ZONE 13 - 敵9) → 落とし穴2+薬草2
 
-    // 余り3マスのうち2マスを「落とし穴」に、残り1マスをその他イベント用にする。
-    // できるだけ落とし穴どうしが隣接しないマスの組み合わせを選ぶ。
-    const sortedLeftover = leftoverHigh.slice().sort((a,b)=>a-b);
-    let otherHighCell = null;
-    for(const candidate of sortedLeftover){
-      const rest = sortedLeftover.filter(c=>c!==candidate);
-      if(Math.abs(rest[0]-rest[1]) !== 1){ otherHighCell = candidate; break; }
-    }
-    if(otherHighCell===null) otherHighCell = sortedLeftover[Math.floor(Math.random()*sortedLeftover.length)];
-    const pitCells = sortedLeftover.filter(c=>c!==otherHighCell);
+    // 余り4マスを「落とし穴」2つ・「薬草」2つに割り振る。同じ種類どうしが
+    // 隣接しないよう、既存のassignNoAdjacentDup()を再利用する。
+    const leftoverSorted = leftoverHigh.slice().sort((a,b)=>a-b);
+    const leftoverAssignment = assignNoAdjacentDup(leftoverSorted, ["pit","pit","herb","herb"]);
+    const pitCells = leftoverSorted.filter(c=>leftoverAssignment[c]==="pit");
+    const herbCellsHigh = leftoverSorted.filter(c=>leftoverAssignment[c]==="herb");
 
-    // 落とし穴以外のイベント(道場より前のエリア + HIGH_ZONEの余り1マス)を、
-    // 隣接マスで同じ種類が連続しないように配置する。
+    // 落とし穴・薬草以外のイベント(道場より前のエリアのみ)を、
+    // 隣接マスで同じ種類が連続しないように配置する。LOW_ZONEは11マスなので、
+    // 5種類×2個(10個)に空白1個を加えてちょうど11個にする。
     const events = [];
     const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
-    pushN("herb",2); pushN("shop",2); pushN("shortcut",2);
+    pushN("shop",2); pushN("shortcut",2);
     pushN("lost",2); pushN("tailwind",2); pushN("step",2);
+    pushN("blank",1);
 
-    const otherCellsAsc = [...LOW_ZONE, otherHighCell].sort((a,b)=>a-b);
-    const otherAssignment = assignNoAdjacentDup(otherCellsAsc, events);
+    const lowCellsAsc = LOW_ZONE.slice().sort((a,b)=>a-b);
+    const lowAssignment = assignNoAdjacentDup(lowCellsAsc, events);
 
     const cellMap = {};
     cellMap[1] = {type:"start"};
@@ -892,8 +894,9 @@
     cellMap[FIXED.guardian] = {type:"guardian"};
     enemyCells.forEach(c=>{ cellMap[c] = {type:"enemy"}; });
     pitCells.forEach(c=>{ cellMap[c] = {type:"pit"}; });
-    otherCellsAsc.forEach(c=>{
-      const ev = otherAssignment[c];
+    herbCellsHigh.forEach(c=>{ cellMap[c] = {type:"herb"}; });
+    lowCellsAsc.forEach(c=>{
+      const ev = lowAssignment[c];
       if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
       else { cellMap[c] = {type:ev}; }
     });
@@ -1323,7 +1326,17 @@
   function endTurn(){
     setBusy(false);
     hintEl.textContent = t("hintRoll");
+    moveChainVisited = null;
   }
+
+  // 近道(+3)/迷い道(-3)/追い風(+2)/1歩(±1)のように「着地すると自動的にまた移動する」
+  // イベントどうしが、盤面の配置次第でお互いを打ち消し合う位置関係になっていると
+  // (例: 近道の着地先がちょうど3マス戻る迷い道になっている等)、resolveCell()が
+  // 無限に自分自身を呼び出し続けてしまい、ゲームが固まる/絶対に前に進めなくなる
+  // ("永遠に前に進めない")という致命的なバグになり得る。
+  // これを防ぐため、1回のサイコロ操作(ターン)の中で同じマスに2回着地したら、
+  // それはループが発生しているとみなしてチェーンをそこで打ち切る(安全にターン終了)。
+  let moveChainVisited = null;
 
   function trainedForPractice(){ return state.dojoCombatDone && state.dojoDefenseDone; }
 
@@ -1457,6 +1470,15 @@
 
   function resolveCell(){
     const cellNum = state.cellIdx+1;
+    if(!moveChainVisited) moveChainVisited = new Set();
+    if(moveChainVisited.has(cellNum)){
+      // 同じターンの中で同じマスに再び来た = 移動系イベントどうしがループしている。
+      // これ以上イベントを発生させず、その場でターンを終了して無限ループを防ぐ。
+      endTurn();
+      return;
+    }
+    moveChainVisited.add(cellNum);
+
     const ev = state.cellMap[cellNum];
 
     if(ev.type==="start" || ev.type==="blank"){ endTurn(); return; }
@@ -1590,6 +1612,7 @@
   ========================================================= */
   function rollDice(){
     if(state.busy) return;
+    moveChainVisited = null; // 新しいターンの開始。前ターンの移動チェーン記録をリセットする
     if(state.cellIdx >= TOTAL_CELLS-1){
       setBusy(true);
       resolveCell();
