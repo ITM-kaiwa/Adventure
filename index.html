@@ -100,6 +100,57 @@
     flex-wrap:wrap;
   }
   .hud .stat{ white-space:nowrap; }
+
+  /* 所持アイテム表示(インベントリ)(2026-08-22・16回目追加) */
+  .inventory-row{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+    margin:-2px 0 10px; padding:6px 12px;
+    background:rgba(15,22,42,.45);
+    border:1px solid rgba(212,160,23,.25);
+    border-radius:12px;
+    font-size:.78rem;
+    min-height:18px;
+  }
+  .inventory-row.empty{ display:none; }
+  .inventory-label{ opacity:.75; margin-right:2px; }
+  .inv-item{ position:relative; display:inline-flex; }
+  .inv-item .inv-icon{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:30px; height:30px; border-radius:8px; font-size:1.05rem;
+    background:rgba(212,160,23,.15); border:1px solid rgba(212,160,23,.4);
+    cursor:default;
+  }
+  .inv-item .inv-tooltip{
+    position:absolute; bottom:calc(100% + 9px); left:50%; transform:translateX(-50%);
+    background:#1c1408; color:var(--parchment,#f3e6c8);
+    border:1px solid rgba(212,160,23,.6);
+    border-radius:10px; padding:8px 10px;
+    font-size:.72rem; line-height:1.4; white-space:normal;
+    width:max-content; max-width:200px;
+    box-shadow:0 6px 16px rgba(0,0,0,.4);
+    opacity:0; pointer-events:none; transition:opacity .12s ease;
+    z-index:70;
+  }
+  .inv-item .inv-tooltip b{ display:block; margin-bottom:3px; color:var(--gold-light,#f0d78a); }
+  .inv-item .inv-tooltip::after{
+    content:""; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+    border:6px solid transparent; border-top-color:#1c1408;
+  }
+  .inv-item:hover .inv-tooltip, .inv-item:focus .inv-tooltip{ opacity:1; }
+
+  /* 手動保存ボタンのフィードバック用トースト(2026-08-22・16回目追加) */
+  .save-toast{
+    position:fixed; top:52px; right:10px; z-index:80;
+    background:#1c1408; color:var(--parchment,#f3e6c8);
+    border:1px solid rgba(212,160,23,.6);
+    border-radius:10px; padding:8px 14px;
+    font-size:.8rem;
+    box-shadow:0 6px 16px rgba(0,0,0,.4);
+    opacity:0; transform:translateY(-6px);
+    transition:opacity .2s ease, transform .2s ease;
+    pointer-events:none;
+  }
+  .save-toast.show{ opacity:1; transform:translateY(0); }
   .hud .stat b{ color:var(--gold-light); }
 
   .board-wrap{
@@ -247,7 +298,10 @@
     background:var(--accent); color:#fff; padding:3px 10px; border-radius:999px;
     margin-bottom:10px; letter-spacing:.03em;
   }
-  .qtext{ font-size:1.08rem; font-weight:700; margin:6px 0 16px; line-height:1.6; }
+  .qtext{ font-size:1.08rem; font-weight:700; margin:6px 0 16px; line-height:1.9; }
+  /* 質問文・選択肢中の漢字に振るふりがな(ルビ)の表示調整(2026-08-22・15回目追加) */
+  .qtext ruby, .choice-btn ruby{ ruby-position:over; }
+  .qtext rt, .choice-btn rt{ font-size:.55em; font-weight:400; color:inherit; opacity:.85; user-select:none; }
   .choices{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:6px; }
   .choice-btn{
     font-size:.92rem;
@@ -345,9 +399,11 @@
   </div>
 </div>
 
+<button class="devbtn" id="saveBtn" style="right:142px;" title="Save">💾</button>
 <button class="devbtn" id="bgmBtn" style="right:98px;" title="BGM">🔊</button>
 <button class="devbtn" id="accountBtn" style="right:54px;" title="Account">👤</button>
 <button class="devbtn" id="devBtn" title="Dev settings">⚙</button>
+<div class="save-toast" id="saveToast"></div>
 <audio id="bgm" loop preload="auto"><source id="bgmSource" src="public/audio/opening_bgm.mp3" type="audio/mpeg"></audio>
 <div class="app">
 
@@ -361,6 +417,8 @@
     <div class="stat">🌟 <span id="lblExp">Kinh nghiệm</span>: <b id="expVal">0</b>/100</div>
     <div class="stat">💰 <span id="lblGold">Vàng</span>: <b id="goldVal">0</b></div>
   </div>
+
+  <div class="inventory-row" id="inventoryRow"></div>
 
   <div class="board-wrap">
     <div class="board" id="board"></div>
@@ -417,6 +475,7 @@
       dojoTrainBtn:(cost)=>`Luyện tập (${cost} Vàng)`,
       dojoTrainedMsg:"Bạn đã luyện tập thành công!",
       enemyTitle:"Quái vật luyện tập xuất hiện!",
+      enemyTitleReal:"Quái vật xuất hiện!",
       guardianTitle:"Người Gác Cổng xuất hiện!",
       untrainedHurt:"Bạn chưa học phòng thủ nên bị thương ngay lập tức! Sinh lực -1.",
       sentBack:"Bạn chưa luyện tập đầy đủ nên bị đưa trở lại ô số 8 để luyện tập thêm!",
@@ -425,10 +484,13 @@
       wrong:"❌ Sai rồi…",
       noDamagePractice:"(Đây là khu vực luyện tập nên sinh lực không bị giảm)",
       practiceDefeatNote:(g)=>`(Đây là khu vực luyện tập nên sinh lực không bị giảm) Nhận được +${g} 💰`,
+      defeatGoldNote:(g)=>`Nhận được +${g} 💰!`,
       enemyDamage:"Kẻ địch mất 1 điểm sinh lực!",
       enemyNoTrainNote:"(Bạn chưa học chiến đấu nên đòn đánh không có tác dụng với kẻ địch)",
       enemyDefeated:"Bạn đã đánh bại quái vật luyện tập!",
+      enemyDefeatedReal:"Bạn đã đánh bại quái vật!",
       guardianDefeated:"Bạn đã đánh bại Người Gác Cổng luyện tập! Bản đồ 1 hoàn thành!",
+      guardianDefeatedReal:"Bạn đã đánh bại Người Gác Cổng!",
       pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
       shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
       lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
@@ -444,6 +506,12 @@
       shopBought:(name)=>`Đã mua: ${name}`,
       shopClose:"Rời cửa hàng",
       itemHerb:"🌿 Thảo Dược", itemElixir:"🧪 Elixir Thần Kỳ", itemBoots:"👢 Ủng Có Cánh", itemLifeWater:"💧 Nước Sinh Mệnh",
+      itemOrderScroll:"📜 Chiếu Chỉ Nhà Vua",
+      itemOrderScrollDesc:"Chiếu chỉ do Quốc Vương ban tặng. Cần có vật này mới có thể luyện tập tại 3 võ đường của Thị Trấn Hoàng Gia.",
+      itemElixirDesc:"Khi sinh lực về 0, tự động hồi sinh với 3 sinh lực. Chỉ dùng được 1 lần rồi biến mất.",
+      inventoryLabel:"🎒 Vật phẩm:",
+      saveToastSuccess:"💾 Đã lưu!",
+      saveToastError:"⚠️ Lưu thất bại, vui lòng thử lại.",
       itemLockedNote:"(Bạn chưa học ở Võ đường Vật Phẩm nên vật phẩm này chưa có tác dụng)",
       elixirReadyNote:"(Elixir sẽ tự động hồi sinh bạn nếu sinh lực về 0)",
       lifeWaterTextHeal:"Bạn dùng Nước Sinh Mệnh, sinh lực +1!",
@@ -531,6 +599,7 @@
       dojoTrainBtn:(cost)=>`修行する（${cost}ゴールド）`,
       dojoTrainedMsg:"修行に成功した！",
       enemyTitle:"練習用モンスターが現れた！",
+      enemyTitleReal:"モンスターが現れた！",
       guardianTitle:"番人が現れた！",
       untrainedHurt:"守り方を学んでいないので、即座に傷を負ってしまった！ライフ-1。",
       sentBack:"修行が足りないため、8マス目まで連れ戻されてしまった！",
@@ -539,10 +608,13 @@
       wrong:"❌ 残念…",
       noDamagePractice:"（練習エリアのためライフは減らない）",
       practiceDefeatNote:(g)=>`（練習エリアのためライフは減らない）+${g} 💰 獲得！`,
+      defeatGoldNote:(g)=>`+${g} 💰 獲得！`,
       enemyDamage:"敵のライフが1減った！",
       enemyNoTrainNote:"（戦い方を学んでいないため、敵に攻撃が通らない）",
       enemyDefeated:"練習用モンスターを倒した！",
+      enemyDefeatedReal:"モンスターを倒した！",
       guardianDefeated:"練習用の番人を倒した！マップ1クリア！",
+      guardianDefeatedReal:"番人を倒した！",
       pitTitle:"落とし穴！", pitText:"落とし穴に落ちてしまった！ライフ-1。",
       shortcutTitle:"近道！", shortcutText:"近道を見つけた！3マス進む。",
       lostTitle:"迷い道！", lostText:"道に迷ってしまった！3マス戻る。",
@@ -558,6 +630,12 @@
       shopBought:(name)=>`購入した: ${name}`,
       shopClose:"お店を出る",
       itemHerb:"🌿 薬草", itemElixir:"🧪 エリクサー", itemBoots:"👢 翼のあるブーツ", itemLifeWater:"💧 生命の水",
+      itemOrderScroll:"📜 王の命令書",
+      itemOrderScrollDesc:"国王から授かった命令書。城下町の3つの道場で修行するために必要。",
+      itemElixirDesc:"ライフが0になったとき、自動的にライフ3で復活する。1回使うと消える。",
+      inventoryLabel:"🎒 持ち物:",
+      saveToastSuccess:"💾 保存しました！",
+      saveToastError:"⚠️ 保存に失敗しました。もう一度お試しください。",
       itemLockedNote:"（まだアイテムの道場で学んでいないため、この効果は発動しない）",
       elixirReadyNote:"（ライフが0になったとき、自動的に生き返らせてくれる）",
       lifeWaterTextHeal:"生命の水を使い、ライフが1増えた！",
@@ -704,8 +782,8 @@
         {q:"So sánh 「猫は 冷蔵庫の前に います。」 và 「冷蔵庫の前に 猫が います。」, sự khác nhau chủ yếu nằm ở đâu?", c:["「は」đưa 猫 lên làm chủ đề đã biết, còn 「が」giới thiệu sự tồn tại như thông tin mới","Không có khác biệt gì","Câu đầu dùng cho đồ vật, câu sau dùng cho người","Câu sau là câu hỏi"], a:0},
         {q:"「駅の 近くに コンビニが あります。」 Từ 「近く」 trong câu này đóng vai trò gì?", c:["Một danh từ chỉ vị trí, nghĩa là \"gần\"","Một động từ","Một tính từ đuôい","Một trợ từ chỉ thời gian"], a:0}]},
     11:{ title:"助数詞・期間(から〜まで)", normal:[
-        {q:"「りんごが 3つ あります。」 Từ 「3つ」 dùng để làm gì?", c:["Đếm số lượng đồ vật bằng trợ数詞 chung 「つ」","Chỉ số thứ tự","Chỉ một địa danh","Chỉ một chức danh"], a:0},
-        {q:"「教室に 学生が 7人 います。」 Trợ数詞 「人」 dùng để đếm gì?", c:["Số người","Số đồ vật mỏng dẹt (giấy, ảnh...)","Số máy móc/xe cộ","Số ngày"], a:0},
+        {q:"「りんごが 3つ あります。」 Từ 「3つ」 dùng để làm gì?", c:["Đếm số lượng đồ vật bằng 助数詞 chung 「つ」","Chỉ số thứ tự","Chỉ một địa danh","Chỉ một chức danh"], a:0},
+        {q:"「教室に 学生が 7人 います。」 助数詞 「人」 dùng để đếm gì?", c:["Số người","Số đồ vật mỏng dẹt (giấy, ảnh...)","Số máy móc/xe cộ","Số ngày"], a:0},
         {q:"「1週間 休みました。」 Cụm 「1週間」 diễn tả điều gì?", c:["Một khoảng thời gian (thời lượng)","Một thời điểm cụ thể trong ngày","Một địa điểm","Một số lượng đồ vật"], a:0}],
       hard:[
         {q:"「大阪から 東京まで 2時間 かかります。」 Động từ 「かかります」 ở đây nghĩa là gì?", c:["Cần/tốn (thời gian hoặc tiền bạc)","Đi đến một nơi","Mua một món đồ","Cho ai đó cái gì"], a:0},
@@ -723,7 +801,7 @@
         {q:"「公園へ 散歩に 行きます。」 Mẫu 「場所へ 名詞に 行きます」 diễn tả điều gì?", c:["Mục đích của việc đi đến địa điểm đó","Phương tiện di chuyển được sử dụng","Thời gian xuất phát","Người cùng đi"], a:0}],
       hard:[
         {q:"「ホラー映画を 見たくないです。」 là dạng nào của 「見たいです」?", c:["Dạng phủ định của thể 「~たいです」","Dạng quá khứ của thể 「~たいです」","Thể lịch sự của câu mệnh lệnh","Thể khả năng của động từ"], a:0},
-        {q:"So sánh 「喫茶店へ コーヒーを 飲みに 行きます。」 và 「公園へ 散歩に 行きます。」, sự khác nhau về ngữ pháp nằm ở đâu?", c:["Câu trước dùng động詞ます形(bỏ ます)+に, câu sau dùng danh từ trực tiếp+に","Không có khác biệt nào về ngữ pháp","Câu trước ở thì quá khứ, câu sau ở thì hiện tại","Câu trước là thể phủ định, câu sau là thể khẳng định"], a:0}]},
+        {q:"So sánh 「喫茶店へ コーヒーを 飲みに 行きます。」 và 「公園へ 散歩に 行きます。」, sự khác nhau về ngữ pháp nằm ở đâu?", c:["Câu trước dùng 動詞ます形(bỏ ます)+に, câu sau dùng danh từ trực tiếp+に","Không có khác biệt nào về ngữ pháp","Câu trước ở thì quá khứ, câu sau ở thì hiện tại","Câu trước là thể phủ định, câu sau là thể khẳng định"], a:0}]},
   };
 
   function shuffle(arr){
@@ -1071,11 +1149,39 @@
     }
   }
 
+  /* 所持アイテム(インベントリ)一覧(2026-08-22・16回目追加)。
+     現状ゲーム内で「持ち続けるアイテム」として管理されているのは
+     王の命令書(hasOrderScroll)とエリクサー(hasElixir)の2つのみ
+     (薬草・ブーツ等は入手した瞬間に効果が発動する即時消費型のため対象外)。 */
+  const INVENTORY_ITEMS = [
+    { icon:"📜", has:()=>state.hasOrderScroll, nameKey:"itemOrderScroll", descKey:"itemOrderScrollDesc" },
+    { icon:"🧪", has:()=>state.hasElixir, nameKey:"itemElixir", descKey:"itemElixirDesc" },
+  ];
+
+  function renderInventory(){
+    const row = document.getElementById("inventoryRow");
+    if(!row) return;
+    const held = INVENTORY_ITEMS.filter(it=>it.has());
+    if(held.length===0){
+      row.className = "inventory-row empty";
+      row.innerHTML = "";
+      return;
+    }
+    row.className = "inventory-row";
+    row.innerHTML = `<span class="inventory-label">${t("inventoryLabel")}</span>` + held.map(it=>`
+      <span class="inv-item" tabindex="0">
+        <span class="inv-icon">${it.icon}</span>
+        <span class="inv-tooltip"><b>${t(it.nameKey)}</b>${t(it.descKey)}</span>
+      </span>
+    `).join("");
+  }
+
   function renderHUD(){
     document.getElementById("lifeVal").textContent = state.life;
     document.getElementById("lifeMaxVal").textContent = state.maxLife;
     document.getElementById("expVal").textContent = state.exp;
     document.getElementById("goldVal").textContent = state.gold;
+    renderInventory();
     scheduleAutoSave();
   }
 
@@ -1091,6 +1197,7 @@
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
     if(openingLoadingTextEl){ openingLoadingTextEl.textContent = t("openingLoadingText"); }
+    renderInventory();
   }
 
   /* =========================================================
@@ -1126,13 +1233,52 @@
     renderHUD();
   }
 
+  /* ---- 問題文・選択肢中の漢字へのふりがな(ルビ)付与(2026-08-22・15回目追加) ----
+     クイズに登場する日本語(問題文・選択肢に埋め込まれた実際の日本語)に含まれる
+     漢字は固定の語彙なので、対応表を用意し、該当する語をruby要素に置き換えて
+     ベトナム人学習者でも読み方がわかるようにする。 */
+  const FURIGANA_WORDS = [
+    ["日本料理","にほんりょうり"],["冷蔵庫","れいぞうこ"],["助数詞","じょすうし"],
+    ["喫茶店","きっさてん"],["富士山","ふじさん"],["形容詞","けいようし"],
+    ["日本語","にほんご"],["一番","いちばん"],["上手","じょうず"],["京都","きょうと"],
+    ["元気","げんき"],["公園","こうえん"],["動詞","どうし"],["友達","ともだち"],
+    ["名詞","めいし"],["場所","ばしょ"],["大阪","おおさか"],["天気","てんき"],
+    ["子供","こども"],["学生","がくせい"],["寿司","すし"],["教室","きょうしつ"],
+    ["散歩","さんぽ"],["映画","えいが"],["時間","じかん"],["東京","とうきょう"],
+    ["試験","しけん"],["週間","しゅうかん"],["食堂","しょくどう"],
+    ["休","やす"],["何","なん"],["分","ふん"],["好","す"],["形","けい"],
+    ["急","いそ"],["新","あたら"],["昼","ひる"],["机","つくえ"],["来","き"],
+    ["犬","いぬ"],["猫","ねこ"],["町","まち"],["花","はな"],["薬","くすり"],
+    ["行","い"],["見","み"],["話","はな"],["近","ちか"],["金","かね"],
+    ["難","むずか"],["靴","くつ"],["食","た"],["飯","はん"],["飲","の"],
+    ["駅","えき"],["高","たか"],["前","まえ"],["中","なか"],["上","うえ"],
+    ["回","かい"],["本","ほん"],["人","にん"]
+  ];
+  const FURIGANA_MAP = new Map(FURIGANA_WORDS);
+  // 長い語(複合語)から先に一致させることで、単漢字の対応表による部分一致の誤変換を防ぐ
+  const FURIGANA_ALT = FURIGANA_WORDS.map(w=>w[0]).sort((a,b)=>b.length-a.length)
+    .map(w=> w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
+  // 「人」「日」は前後の文脈(数字/国名など)によって読みが変わるため、辞書とは別に先読みで処理する
+  const FURIGANA_RE = new RegExp(
+    "(ブラジル)(人)|([0-9])(日)|([0-9])(人)|(" + FURIGANA_ALT + ")", "g"
+  );
+  function addFurigana(text){
+    if(!text) return text;
+    return text.replace(FURIGANA_RE, (m, brz, brzJin, dNichi, nichi, dNin, nin, word) => {
+      if(brz !== undefined){ return brz + "<ruby>"+brzJin+"<rt>じん</rt></ruby>"; }
+      if(dNichi !== undefined){ return dNichi + "<ruby>"+nichi+"<rt>にち</rt></ruby>"; }
+      if(dNin !== undefined){ return dNin + "<ruby>"+nin+"<rt>にん</rt></ruby>"; }
+      return "<ruby>"+word+"<rt>"+FURIGANA_MAP.get(word)+"</rt></ruby>";
+    });
+  }
+
   function showQuiz(question, badgeText, onDone){
     openModal(`
       <div class="card">
         <div class="badge">${badgeText}</div>
-        <div class="qtext">${question.q}</div>
+        <div class="qtext">${addFurigana(question.q)}</div>
         <div class="choices" id="choicesWrap">
-          ${question.c.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${c}</span></button>`).join("")}
+          ${question.c.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${addFurigana(c)}</span></button>`).join("")}
         </div>
         <div class="feedback" id="fb"></div>
       </div>
@@ -1342,7 +1488,10 @@
 
   function resolveEnemyLike(isGuardian){
     const life = isGuardian ? 3 : 1;
-    const getTitle = ()=> isGuardian ? t("guardianTitle") : t("enemyTitle");
+    // 「練習用」という表現は、城下町(マップ1)の8〜16セルより後にある練習ステージ限定の設定。
+    // マップ2以降は本当の冒険の一部として敵と戦う場面なので「練習用」を付けない表記にする。
+    const isPracticeFraming = state.currentMap===1;
+    const getTitle = ()=> isGuardian ? t("guardianTitle") : t(isPracticeFraming ? "enemyTitle" : "enemyTitleReal");
     const icon = isGuardian ? "🛡️" : "👹";
 
     // 戦い方も守り方も未修行 → 即ダメージ + 城(1マス目)まで送還。戻ったマスのイベントも再生する。
@@ -1377,7 +1526,7 @@
     let remainingLife = life;
     function ask(){
       const q = isGuardian ? randomHardQuestion() : randomQuestion("normal");
-      showEvent(()=> showQuiz(q, isGuardian ? "🛡️ "+t("guardianTitle") : "👹 "+t("enemyTitle"), (correct)=>{
+      showEvent(()=> showQuiz(q, isGuardian ? "🛡️ "+t("guardianTitle") : "👹 "+getTitle(), (correct)=>{
         if(correct){
           remainingLife--;
           gainExp(1);
@@ -1385,7 +1534,11 @@
             const goldGain = isGuardian ? 5 : 1;
             state.gold += goldGain;
             renderHUD();
-            showEvent(()=> showFlavor("🏆", isGuardian? t("guardianDefeated") : t("enemyDefeated"), t("practiceDefeatNote", goldGain), ()=>{
+            const defeatedTitle = isGuardian
+              ? t(isPracticeFraming ? "guardianDefeated" : "guardianDefeatedReal")
+              : t(isPracticeFraming ? "enemyDefeated" : "enemyDefeatedReal");
+            const defeatedNote = isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain);
+            showEvent(()=> showFlavor("🏆", defeatedTitle, defeatedNote, ()=>{
               if(isGuardian){ showMapClear(); }
               else { endTurn(); }
             }));
@@ -1915,6 +2068,27 @@
   }
   accountBtn.addEventListener("click", openAccountPanel);
 
+  /* 手動保存ボタン(2026-08-22・16回目追加)。
+     アカウントパネルを開かずに、その場ですぐ保存できるショートカット。
+     未ログイン時は保存先がないため、代わりにアカウントパネル(ログイン導線)を開く。 */
+  let saveToastTimer = null;
+  function showSaveToast(text){
+    const toastEl = document.getElementById("saveToast");
+    if(!toastEl) return;
+    toastEl.textContent = text;
+    toastEl.classList.add("show");
+    clearTimeout(saveToastTimer);
+    saveToastTimer = setTimeout(()=>{ toastEl.classList.remove("show"); }, 2200);
+  }
+  const saveBtn = document.getElementById("saveBtn");
+  saveBtn.addEventListener("click", async ()=>{
+    if(!auth.user){ openAccountPanel(); return; }
+    saveBtn.disabled = true;
+    const ok = await saveProgress();
+    saveBtn.disabled = false;
+    showSaveToast(ok ? t("saveToastSuccess") : t("saveToastError"));
+  });
+
   /* =========================================================
      BGM(背景音楽)
      - ブラウザの自動再生制限により、ユーザーの最初の操作(クリック/タップ/キー入力)
@@ -1936,10 +2110,13 @@
 
   function switchBgmTrack(path){
     if(bgmSourceEl.getAttribute("src") === path) return;
-    const wasPlaying = bgmStarted && !bgmEl.paused && !bgmEl.muted;
+    // 「切り替え直前に本当に再生中だったか」だけで判定すると、load()直後の一瞬paused状態に
+    // なっている等のタイミング次第でfalseと誤判定されることがあるため、
+    // 「BGMを一度でも開始しておりミュートもしていない」を条件に、常に鳴らし続ける前提で再生を試みる。
+    const shouldPlay = bgmStarted && !bgmEl.muted;
     bgmSourceEl.src = path;
     bgmEl.load();
-    if(wasPlaying){
+    if(shouldPlay){
       bgmEl.play().catch(()=>{});
     }
   }
@@ -1951,8 +2128,18 @@
       bgmEl.play().catch(()=>{ /* 自動再生がブロックされた場合は次の操作まで待つ */ bgmStarted = false; });
     }
   }
-  ["pointerdown","keydown"].forEach(evName=>{
-    document.addEventListener(evName, startBgmOnce, {once:false});
+  // スマートフォン(特にiOS Safari等)ではpointerdownイベントがタップ操作で
+  // 期待通りに発火しない端末・OSバージョンが存在するため、touchstart/touchend/mousedown/click
+  // も含め複数のイベント種別を監視し、どれか1つでも発火した最初の操作でBGMを開始できるようにする
+  // (startBgmOnce自体はbgmStartedフラグで多重発火しても安全)。
+  ["pointerdown","touchstart","touchend","mousedown","click","keydown"].forEach(evName=>{
+    document.addEventListener(evName, startBgmOnce, {once:false, passive:true});
+  });
+
+  // 音声ファイルの読み込みに失敗した場合(ファイル未配置・パス誤り・ファイル破損等)は
+  // ブラウザのdevtoolsコンソールに原因調査用のログを残す(ユーザー向けの表示は変えない)。
+  bgmEl.addEventListener("error", ()=>{
+    console.warn("[BGM] failed to load:", bgmSourceEl.getAttribute("src"), bgmEl.error && bgmEl.error.code);
   });
 
   function updateBgmBtn(){
