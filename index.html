@@ -293,6 +293,10 @@
   }
   .card h2{ font-size:1.2rem; margin:0 0 10px; }
   .card p{ font-size:.92rem; line-height:1.7; margin:0 0 12px; }
+  .help-item{ text-align:left; margin:0 0 14px; padding:0 0 12px; border-bottom:1px solid rgba(150,110,40,.25); }
+  .help-item:last-of-type{ border-bottom:none; padding-bottom:0; }
+  .help-vi{ font-size:.92rem; line-height:1.6; margin:0 0 4px; font-weight:600; }
+  .help-ja{ font-size:.86rem; line-height:1.6; margin:0; opacity:.8; }
   .badge{
     display:inline-block; font-size:.68rem; font-weight:700;
     background:var(--accent); color:#fff; padding:3px 10px; border-radius:999px;
@@ -399,6 +403,7 @@
   </div>
 </div>
 
+<button class="devbtn" id="helpBtn" style="right:186px;" title="Help">？</button>
 <button class="devbtn" id="saveBtn" style="right:142px;" title="Save">💾</button>
 <button class="devbtn" id="bgmBtn" style="right:98px;" title="BGM">🔊</button>
 <button class="devbtn" id="accountBtn" style="right:54px;" title="Account">👤</button>
@@ -2166,7 +2171,7 @@
         <div class="badge">⚙ ${t("devTitle")}</div>
         <p>${t("devLangLabel")}: <b>${state.lang.toUpperCase()}</b></p>
         <button class="primary" id="langToggleBtn">${state.lang==="vi" ? t("devToJa") : t("devToVi")}</button>
-        <br><button class="secondary" id="devCloseBtn">${t("devClose")}</button>
+        <br><button class="secondary" id="devCloseBtn" style="margin-top:14px;">${t("devClose")}</button>
       </div>
     `);
     document.getElementById("langToggleBtn").onclick = ()=>{
@@ -2179,6 +2184,52 @@
     };
   }
   document.getElementById("devBtn").addEventListener("click", openDevPanel);
+
+  /* =========================================================
+     遊び方(ヘルプ)パネル
+     - UIの表示言語(state.lang)に関わらず、常にベトナム語と日本語を
+       併記する(ユーザー要望により、現在の表示言語設定とは独立)。
+  ========================================================= */
+  const HELP_ITEMS = [
+    { vi:"Mục tiêu: Giải cứu công chúa bị rồng bắt cóc, theo lệnh của Quốc Vương.",
+      ja:"目的: ドラゴンにさらわれた姫を、国王の依頼で助け出す。" },
+    { vi:"Cách chơi: Nhấn (chạm) vào hình xúc xắc để tung xúc xắc và di chuyển quân cờ trên bàn cờ.",
+      ja:"遊び方: サイコロの絵をタップ(クリック)するとサイコロが振られ、マスを進みます。" },
+    { vi:"Khi gặp quái vật/người gác cổng, hãy trả lời đúng câu hỏi tiếng Nhật để chiến thắng. Trả lời sai sẽ mất Sinh lực (Life).",
+      ja:"モンスターや番人に遭遇したら、日本語の問題に正しく答えて倒そう。間違えるとライフが減る。" },
+    { vi:"3 võ đường trong thị trấn hoàng gia (Chiến đấu / Phòng thủ / Vật phẩm) cần tu luyện trước khi có thể tiến xa hơn trong thị trấn.",
+      ja:"城下町にある3つの道場(戦い方・守り方・アイテムの使い方)は、先に進む前に修行しておく必要がある。" },
+    { vi:"Sinh lực về 0 sẽ kết thúc trò chơi (trừ khi có Elixir). Kinh nghiệm (Exp) đầy 100 sẽ tăng thêm 1 Sinh lực tối đa.",
+      ja:"ライフが0になるとゲームオーバー(エリクサー所持時を除く)。経験値(Exp)が100たまるとライフの上限が1増える。" },
+    { vi:"Vàng (Gold) nhận được khi đánh bại quái vật, có thể dùng ở Cửa hàng để mua vật phẩm (cỏ thuốc, ủng, v.v).",
+      ja:"モンスターを倒すとゴールドが手に入り、ショップで薬草・ブーツなどのアイテムと交換できる。" },
+    { vi:"🎒 Vật phẩm đang mang theo hiển thị dưới thanh chỉ số (Sinh lực/KN/Vàng); di chuột (hoặc chạm) vào để xem giải thích.",
+      ja:"🎒 現在持っているアイテムはライフ等のHUDの下に表示され、カーソルを合わせる(またはタップする)と説明が見られる。" },
+    { vi:"💾 Có thể lưu tiến trình chơi thủ công bất cứ lúc nào (cần đăng nhập bằng email trước).",
+      ja:"💾 いつでも手動でセーブできる(あらかじめメールでログインしておく必要がある)。" },
+    { vi:"⚙ Có thể chuyển đổi ngôn ngữ hiển thị giữa Tiếng Việt và Tiếng Nhật.",
+      ja:"⚙ 表示言語をベトナム語と日本語の間で切り替えられる。" },
+  ];
+  function openHelpPanel(){
+    const returnTo = activeModalRenderer;
+    const itemsHtml = HELP_ITEMS.map(it=>`
+      <div class="help-item">
+        <p class="help-vi">${it.vi}</p>
+        <p class="help-ja">${it.ja}</p>
+      </div>
+    `).join("");
+    openModal(`
+      <div class="card">
+        <div class="badge">？ Hướng dẫn chơi / 遊び方</div>
+        ${itemsHtml}
+        <button class="secondary" id="helpCloseBtn" style="margin-top:10px;">Đóng / 閉じる</button>
+      </div>
+    `);
+    document.getElementById("helpCloseBtn").onclick = ()=>{
+      if(returnTo){ returnTo(); } else { closeModal(); }
+    };
+  }
+  document.getElementById("helpBtn").addEventListener("click", openHelpPanel);
 
   /* =========================================================
      初期化
