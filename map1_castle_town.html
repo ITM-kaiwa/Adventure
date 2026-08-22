@@ -15,6 +15,14 @@
     --accent:#7a5a2e; --accent-light:#b4934f;
     --bg1:#3a2f1e; --bg2:#241c10; --bg3:#100b06;
   }
+  /* マップ2「草原」のテーマカラー(薄緑基調)。currentMapが2の間、bodyに
+     .map2 クラスを付与してCSS変数を上書きする(タイル等の見た目はそのまま
+     --gold/--parchment等の変数を参照しているだけで自動的に緑系に変わる)。 */
+  body.map2{
+    --gold:#6fae4a; --gold-light:#9cd478;
+    --accent:#4f7a34; --accent-light:#8fbf68;
+    --bg1:#5c7f3c; --bg2:#33501f; --bg3:#111d0a;
+  }
   *{box-sizing:border-box;}
   body{
     margin:0;
@@ -180,6 +188,9 @@
     box-shadow:0 4px 0 #a67a10, 0 8px 18px rgba(0,0,0,.35);
   }
   button.primary:active{ transform:translateY(3px); box-shadow:0 1px 0 #a67a10; }
+  body.map2 button.primary{ box-shadow:0 4px 0 #2f5a1c, 0 8px 18px rgba(0,0,0,.35); }
+  body.map2 button.primary:active{ box-shadow:0 1px 0 #2f5a1c; }
+  body.map2 .controls{ border-color:rgba(111,174,74,.4); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
     font-weight:500;
@@ -944,7 +955,7 @@
     document.getElementById("lblLife").textContent = t("life");
     document.getElementById("lblExp").textContent = t("exp");
     document.getElementById("lblGold").textContent = t("gold");
-    document.body.className = "lang-"+state.lang;
+    document.body.className = "lang-"+state.lang + (state.currentMap===2 ? " map2" : "");
     const openingHintEl = document.getElementById("openingHint");
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
@@ -1043,6 +1054,7 @@
     renderHUD();
     diceEl.classList.remove("disabled");
     hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(2));
     scheduleAutoSave();
     showEvent(()=> showFlavor("🌾", t("map2WelcomeTitle"), t("map2WelcomeText", heroDisplayName()), ()=>{}));
   }
@@ -1732,6 +1744,11 @@
 
   // 画面(オープニング/マップ)に応じてBGMの曲を切り替える。
   // 再生中であれば同じ再生状態を保ったまま新しい曲に差し替える。
+  // マップ番号に対応するBGMファイルのパスを返す(マップごとの命名規則: public/audio/map{N}_bgm.mp3)
+  function bgmPathForMap(mapNum){
+    return "public/audio/map"+mapNum+"_bgm.mp3";
+  }
+
   function switchBgmTrack(path){
     if(bgmSourceEl.getAttribute("src") === path) return;
     const wasPlaying = bgmStarted && !bgmEl.paused && !bgmEl.muted;
@@ -1806,7 +1823,7 @@
       </div>
     `);
     document.getElementById("startBtn").onclick = ()=>{
-      switchBgmTrack("public/audio/map1_bgm.mp3");
+      switchBgmTrack(bgmPathForMap(1));
       closeModal();
     };
   }
@@ -1853,8 +1870,8 @@
         </div>
       `);
       document.getElementById("continueYesBtn").onclick = ()=>{
-        switchBgmTrack("public/audio/map1_bgm.mp3");
         applyStateSnapshot(savedState);
+        switchBgmTrack(bgmPathForMap(state.currentMap));
         closeModal();
         showEvent(()=> showFlavor("🧝", t("welcomeBackText", heroDisplayName()||"..."), t("hintRoll"), ()=>{}));
       };

@@ -15,6 +15,30 @@
     --accent:#7a5a2e; --accent-light:#b4934f;
     --bg1:#3a2f1e; --bg2:#241c10; --bg3:#100b06;
   }
+  /* マップ2「草原」のテーマカラー(薄緑基調)。currentMapが2の間、bodyに
+     .map2 クラスを付与してCSS変数を上書きする(タイル等の見た目はそのまま
+     --gold/--parchment等の変数を参照しているだけで自動的に緑系に変わる)。 */
+  body.map2{
+    --gold:#6fae4a; --gold-light:#9cd478;
+    --accent:#4f7a34; --accent-light:#8fbf68;
+    --bg1:#5c7f3c; --bg2:#33501f; --bg3:#111d0a;
+  }
+  /* マップ3「洞窟」のテーマカラー(暗い青灰色基調)。松明のような琥珀色を差し色に使う。 */
+  body.map3{
+    --gold:#c98a3e; --gold-light:#e6ac5c;
+    --accent:#5a6270; --accent-light:#8b93a0;
+    --bg1:#2a2d33; --bg2:#16181c; --bg3:#050607;
+  }
+  /* マップ3限定: 現在地から3マス先までしか見えない「霧」の演出。
+     元のタイル種別のクラス(enemy/pit/guardian等)は残したまま、背景色だけを
+     一律の暗色で上書きして種別が見た目からわからないようにする。 */
+  .tile.fog{
+    background:#0c0d10 !important;
+    color:#4a4f58 !important;
+    border-color:rgba(255,255,255,.06) !important;
+    box-shadow:none !important;
+  }
+  .tile.fog .icon{ opacity:.7; }
   *{box-sizing:border-box;}
   body{
     margin:0;
@@ -180,6 +204,12 @@
     box-shadow:0 4px 0 #a67a10, 0 8px 18px rgba(0,0,0,.35);
   }
   button.primary:active{ transform:translateY(3px); box-shadow:0 1px 0 #a67a10; }
+  body.map2 button.primary{ box-shadow:0 4px 0 #2f5a1c, 0 8px 18px rgba(0,0,0,.35); }
+  body.map2 button.primary:active{ box-shadow:0 1px 0 #2f5a1c; }
+  body.map2 .controls{ border-color:rgba(111,174,74,.4); }
+  body.map3 button.primary{ box-shadow:0 4px 0 #8a5c26, 0 8px 18px rgba(0,0,0,.5); }
+  body.map3 button.primary:active{ box-shadow:0 1px 0 #8a5c26; }
+  body.map3 .controls{ border-color:rgba(201,138,62,.35); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
     font-weight:500;
@@ -432,7 +462,13 @@
       map2WelcomeTitle:"Chào mừng đến Thảo Nguyên!",
       map2WelcomeText:(name)=>`${name} bước ra khỏi cổng thành, tiến vào vùng thảo nguyên rộng lớn. Cuộc phiêu lưu thực sự bắt đầu từ đây!`,
       map2ClearTitle:"Bản đồ 2 hoàn thành!",
-      map2ClearText:"Bạn đã băng qua thảo nguyên an toàn. (Bản đồ 3: Hang Động sẽ được bổ sung ở phiên bản tiếp theo.)",
+      map2ClearText:"Bạn đã băng qua thảo nguyên an toàn. Phía trước là một hang động tối tăm...",
+      proceedMap3Btn:"➡️ Đến Bản đồ 3: Hang Động",
+      map3WelcomeTitle:"Chào mừng đến Hang Động!",
+      map3WelcomeText:(name)=>`${name} bước vào hang động tối tăm và ẩm ướt. Trong bóng tối này, chỉ có thể nhìn thấy vài bước phía trước...`,
+      map3ClearTitle:"Bản đồ 3 hoàn thành!",
+      map3ClearText:"Bạn đã vượt qua hang động tối tăm một cách an toàn. (Bản đồ 4 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      subtitleMap3:"Bản đồ 3: Hang Động (LV10〜LV13)",
       statLifeShort:"Sinh lực", statExpShort:"KN", statGoldShort:"Vàng",
       devTitle:"Cài đặt nhà phát triển",
       devLangLabel:"Ngôn ngữ hiển thị",
@@ -540,7 +576,13 @@
       map2WelcomeTitle:"草原へようこそ！",
       map2WelcomeText:(name)=>`${name}は城下町を出て、広大な草原へ足を踏み入れた。本当の冒険がここから始まる！`,
       map2ClearTitle:"マップ2クリア！",
-      map2ClearText:"草原を無事に抜けた。（マップ3：洞窟は次のバージョンで追加予定です。）",
+      map2ClearText:"草原を無事に抜けた。この先には暗い洞窟が広がっている……",
+      proceedMap3Btn:"➡️ マップ3：洞窟へ進む",
+      map3WelcomeTitle:"洞窟へようこそ！",
+      map3WelcomeText:(name)=>`${name}は薄暗く湿った洞窟へ足を踏み入れた。この暗闇では、少し先までしか見通せない……`,
+      map3ClearTitle:"マップ3クリア！",
+      map3ClearText:"暗い洞窟を無事に抜けた。（マップ4は次のバージョンで追加予定です。）",
+      subtitleMap3:"マップ3：洞窟 (LV10〜LV13)",
       statLifeShort:"ライフ", statExpShort:"経験値", statGoldShort:"ゴールド",
       devTitle:"開発者向け設定",
       devLangLabel:"表示言語",
@@ -654,6 +696,34 @@
       hard:[
         {q:"「ミラーさんは 日本語が 上手です。」 và 「ミラーさんは 日本語が 好きです。」 khác nhau ở điểm nào?", c:["上手 nói về năng lực, 好き nói về sự yêu thích","Không khác nhau","上手 chỉ dùng cho người Nhật","好き chỉ dùng cho đồ vật"], a:0},
         {q:"「あたまが いたいですから、休みます。」 Vị trí của 「から」 trong câu này nằm ở đâu và có ý nghĩa gì?", c:["Cuối mệnh đề chỉ lý do, đứng trước mệnh đề kết quả","Đầu câu, chỉ thời gian","Giữa câu, chỉ địa điểm","Cuối câu, chỉ nghi vấn"], a:0}]},
+    10:{ title:"あります・います(存在)・位置名詞", normal:[
+        {q:"Trong câu 「教室に 机が あります。」, tại sao dùng 「あります」 mà không phải 「います」?", c:["Vì「机」là đồ vật vô tri (không phải người/động vật)","Vì「机」là số nhiều","Vì câu này ở thì quá khứ","Vì「机」ở xa người nói"], a:0},
+        {q:"Trong câu 「公園に 犬が います。」, động từ 「います」 được dùng vì lý do gì?", c:["「犬」là động vật (có sự sống)","「犬」là đồ vật","Câu này ở thể phủ định","Không có lý do đặc biệt"], a:0},
+        {q:"Trong câu 「机の 上に 本が あります。」, vị trí danh từ 「上」 chỉ điều gì?", c:["Phía trên","Phía dưới","Bên trong","Bên cạnh"], a:0}],
+      hard:[
+        {q:"So sánh 「猫は 冷蔵庫の前に います。」 và 「冷蔵庫の前に 猫が います。」, sự khác nhau chủ yếu nằm ở đâu?", c:["「は」đưa 猫 lên làm chủ đề đã biết, còn 「が」giới thiệu sự tồn tại như thông tin mới","Không có khác biệt gì","Câu đầu dùng cho đồ vật, câu sau dùng cho người","Câu sau là câu hỏi"], a:0},
+        {q:"「駅の 近くに コンビニが あります。」 Từ 「近く」 trong câu này đóng vai trò gì?", c:["Một danh từ chỉ vị trí, nghĩa là \"gần\"","Một động từ","Một tính từ đuôい","Một trợ từ chỉ thời gian"], a:0}]},
+    11:{ title:"助数詞・期間(から〜まで)", normal:[
+        {q:"「りんごが 3つ あります。」 Từ 「3つ」 dùng để làm gì?", c:["Đếm số lượng đồ vật bằng trợ数詞 chung 「つ」","Chỉ số thứ tự","Chỉ một địa danh","Chỉ một chức danh"], a:0},
+        {q:"「教室に 学生が 7人 います。」 Trợ数詞 「人」 dùng để đếm gì?", c:["Số người","Số đồ vật mỏng dẹt (giấy, ảnh...)","Số máy móc/xe cộ","Số ngày"], a:0},
+        {q:"「1週間 休みました。」 Cụm 「1週間」 diễn tả điều gì?", c:["Một khoảng thời gian (thời lượng)","Một thời điểm cụ thể trong ngày","Một địa điểm","Một số lượng đồ vật"], a:0}],
+      hard:[
+        {q:"「大阪から 東京まで 2時間 かかります。」 Động từ 「かかります」 ở đây nghĩa là gì?", c:["Cần/tốn (thời gian hoặc tiền bạc)","Đi đến một nơi","Mua một món đồ","Cho ai đó cái gì"], a:0},
+        {q:"「1日に 3回 薬を 飲みます。」 Cụm 「1日に3回」 diễn tả điều gì?", c:["Tần suất lặp lại trong một khoảng thời gian nhất định","Thời điểm duy nhất trong ngày","Số lượng thuốc còn lại","Giá tiền của thuốc"], a:0}]},
+    12:{ title:"比較(より／どちら／一番)・形容詞の過去形", normal:[
+        {q:"「きのうは 天気が よかったです。」 Đây là dạng nào của tính từ đuôい？", c:["Quá khứ khẳng định (đặc biệt của「いい」)","Hiện tại khẳng định","Quá khứ phủ định","Thể mệnh lệnh"], a:0},
+        {q:"「エベレストは 富士山より 高いです。」 Mẫu 「Aは Bより ~」 dùng để làm gì?", c:["So sánh A hơn B về một đặc điểm nào đó","Nói A giống hệt B","Phủ định đặc điểm của A","Đặt câu hỏi về B"], a:0},
+        {q:"「犬と猫と どちらが 好きですか。」「猫の ほうが 好きです。」 Cấu trúc 「どちらが」 dùng khi nào?", c:["Khi so sánh giữa 2 đối tượng để chọn 1","Khi so sánh từ 3 đối tượng trở lên","Khi hỏi về địa điểm","Khi hỏi về thời gian"], a:0}],
+      hard:[
+        {q:"「日本料理の 中で 寿司が 一番 好きです。」 Mẫu 「~の中で~が一番~」 thường dùng khi có bao nhiêu đối tượng để so sánh?", c:["3 đối tượng trở lên (so sánh nhất)","Chỉ đúng 2 đối tượng","Không giới hạn, luôn dùng cho 2 đối tượng","Chỉ dùng khi so sánh người với người"], a:0},
+        {q:"「試験は 難しくなかったです。」 là dạng phủ định quá khứ của tính từ đuôい, được tạo ra như thế nào?", c:["Bỏ「い」ở cuối rồi thêm「くなかったです」","Thêm「じゃありませんでした」vào sau nguyên dạng","Thêm「でした」vào sau nguyên dạng","Không cần thay đổi gì, dùng nguyên dạng"], a:0}]},
+    13:{ title:"ほしいです・～たいです・～に行きます", normal:[
+        {q:"「新しい パソコンが ほしいです。」 Mẫu 「~が ほしいです」 diễn tả điều gì?", c:["Mong muốn có được một vật gì đó","Mong muốn thực hiện một hành động","Yêu cầu ai đó làm gì đó","Phủ định một mong muốn"], a:0},
+        {q:"「ご飯を 食べたいです。」 Từ 「食べたい」 được tạo ra bằng cách nào từ động từ 「食べます」?", c:["Bỏ 「ます」 rồi thêm 「たい」","Thêm 「たい」 vào nguyên thể từ điển của động từ","Thêm 「たい」 vào thể て của động từ","Không cần thay đổi gì cả"], a:0},
+        {q:"「公園へ 散歩に 行きます。」 Mẫu 「場所へ 名詞に 行きます」 diễn tả điều gì?", c:["Mục đích của việc đi đến địa điểm đó","Phương tiện di chuyển được sử dụng","Thời gian xuất phát","Người cùng đi"], a:0}],
+      hard:[
+        {q:"「ホラー映画を 見たくないです。」 là dạng nào của 「見たいです」?", c:["Dạng phủ định của thể 「~たいです」","Dạng quá khứ của thể 「~たいです」","Thể lịch sự của câu mệnh lệnh","Thể khả năng của động từ"], a:0},
+        {q:"So sánh 「喫茶店へ コーヒーを 飲みに 行きます。」 và 「公園へ 散歩に 行きます。」, sự khác nhau về ngữ pháp nằm ở đâu?", c:["Câu trước dùng động詞ます形(bỏ ます)+に, câu sau dùng danh từ trực tiếp+に","Không có khác biệt nào về ngữ pháp","Câu trước ở thì quá khứ, câu sau ở thì hiện tại","Câu trước là thể phủ định, câu sau là thể khẳng định"], a:0}]},
   };
 
   function shuffle(arr){
@@ -715,7 +785,7 @@
   const lastDrawnQuestion = { normal:null, hard:null };
   // マップごとに出題するLVの範囲を分ける(マップ1=LV0〜3、マップ2=LV4〜9、...)。
   // 前のマップで習った内容が後のマップで蒸し返されたり、逆に後の内容が前のマップに混ざったりしない。
-  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9] };
+  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13] };
 
   function buildQuestionBag(pool){
     const range = MAP_LEVEL_RANGES[state.currentMap] || Object.keys(LEVELS).map(Number);
@@ -863,6 +933,37 @@
     return cellMap;
   }
 
+  // マップ3: 洞窟。マス構成自体はマップ2と同じ(国王・道場なし、2〜29マスに
+  // 敵/落とし穴/アイテム等を隣接重複なしで配置)。洞窟らしさは見た目(暗いテーマカラー)と
+  // 「現在地から3マス先までしか見えない」霧(fog)の演出で表現する(buildBoard/placeToken側で処理)。
+  function buildMap3(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",10);
+    pushN("pit",2);
+    pushN("herb",2);
+    pushN("shop",2);
+    pushN("shortcut",2);
+    pushN("lost",2);
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",4); // 合計28
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
   /* =========================================================
      描画
   ========================================================= */
@@ -901,6 +1002,8 @@
       div.style.gridColumn = (col+1);
       div.style.gridRow = gridRow;
       div.id = "cell-"+i;
+      div.dataset.icon = v.icon;
+      div.dataset.label = v.label;
       div.innerHTML = `<span class="num">${i}</span><span class="icon">${v.icon}</span><span>${v.label}</span>`;
       boardEl.appendChild(div);
     }
@@ -927,7 +1030,42 @@
     tok.textContent = "🧝";
     cur.appendChild(tok);
     cur.scrollIntoView({behavior:"smooth", block:"center", inline:"center"});
+    applyFogOfWar(curNum);
     scheduleAutoSave();
+  }
+
+  // マップ3「洞窟」専用: 現在地から3マス先までしか見えない「霧」の演出。
+  // state.cellMapの中身自体は変更せず(ゲームロジックはそのまま参照可能)、
+  // DOM上の見た目(アイコン・ラベル・背景色)だけを一時的に隠す。
+  function applyFogOfWar(curNum){
+    if(state.currentMap!==3){
+      // マップ3以外では霧を一切かけない(念のため既存の霧表示を解除)
+      document.querySelectorAll(".tile.fog").forEach(el=>{
+        el.classList.remove("fog");
+        const iconSpan = el.querySelector(".icon");
+        if(iconSpan && el.dataset.icon) iconSpan.textContent = el.dataset.icon;
+        const spans = el.querySelectorAll("span");
+        if(spans[2] && el.dataset.label!==undefined) spans[2].textContent = el.dataset.label;
+      });
+      return;
+    }
+    const visibleUpTo = curNum + 3;
+    for(let i=1;i<=TOTAL_CELLS;i++){
+      const el = document.getElementById("cell-"+i);
+      if(!el) continue;
+      const iconSpan = el.querySelector(".icon");
+      const spans = el.querySelectorAll("span");
+      const labelSpan = spans[2];
+      if(i <= visibleUpTo){
+        el.classList.remove("fog");
+        if(iconSpan) iconSpan.textContent = el.dataset.icon || iconSpan.textContent;
+        if(labelSpan) labelSpan.textContent = el.dataset.label || "";
+      } else {
+        el.classList.add("fog");
+        if(iconSpan) iconSpan.textContent = "❓";
+        if(labelSpan) labelSpan.textContent = "";
+      }
+    }
   }
 
   function renderHUD(){
@@ -940,11 +1078,12 @@
 
   function renderStaticText(){
     document.getElementById("titleText").textContent = t("title");
-    document.getElementById("subtitleText").textContent = state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
+    document.getElementById("subtitleText").textContent =
+      state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
     document.getElementById("lblLife").textContent = t("life");
     document.getElementById("lblExp").textContent = t("exp");
     document.getElementById("lblGold").textContent = t("gold");
-    document.body.className = "lang-"+state.lang;
+    document.body.className = "lang-"+state.lang + (state.currentMap===2 ? " map2" : state.currentMap===3 ? " map3" : "");
     const openingHintEl = document.getElementById("openingHint");
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
@@ -1043,8 +1182,27 @@
     renderHUD();
     diceEl.classList.remove("disabled");
     hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(2));
     scheduleAutoSave();
     showEvent(()=> showFlavor("🌾", t("map2WelcomeTitle"), t("map2WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
+  function goToMap3(){
+    closeModal();
+    state.currentMap = 3;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap3();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(3));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("🕯️", t("map3WelcomeTitle"), t("map3WelcomeText", heroDisplayName()), ()=>{}));
   }
 
   function showMapClear(){
@@ -1063,13 +1221,28 @@
       document.getElementById("retryBtn").onclick = resetGame;
       return;
     }
-    // マップ2クリア(現時点ではマップ3以降は未実装)
+    if(state.currentMap===2){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map2ClearTitle")}</h2>
+          <p>${t("map2ClearText")}</p>
+          <button class="primary" id="proceedMap3Btn">${t("proceedMap3Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap3Btn").onclick = goToMap3;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    // マップ3クリア(現時点ではマップ4以降は未実装)
     activeModalRenderer = showMapClear;
     openModal(`
       <div class="card">
         <div class="final-emoji">🏆</div>
-        <h2>${t("map2ClearTitle")}</h2>
-        <p>${t("map2ClearText")}</p>
+        <h2>${t("map3ClearTitle")}</h2>
+        <p>${t("map3ClearText")}</p>
         <button class="primary" id="retryBtn">${t("retryBtn")}</button>
       </div>
     `);
@@ -1585,7 +1758,8 @@
     state.hasElixir = !!snap.hasElixir;
     state.busy = false;
     state.lastDiceRoll = null;
-    state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap : (state.currentMap===2 ? buildMap2() : buildMap1());
+    state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap
+      : (state.currentMap===3 ? buildMap3() : state.currentMap===2 ? buildMap2() : buildMap1());
     renderStaticText();
     buildBoard();
     renderHUD();
@@ -1732,6 +1906,11 @@
 
   // 画面(オープニング/マップ)に応じてBGMの曲を切り替える。
   // 再生中であれば同じ再生状態を保ったまま新しい曲に差し替える。
+  // マップ番号に対応するBGMファイルのパスを返す(マップごとの命名規則: public/audio/map{N}_bgm.mp3)
+  function bgmPathForMap(mapNum){
+    return "public/audio/map"+mapNum+"_bgm.mp3";
+  }
+
   function switchBgmTrack(path){
     if(bgmSourceEl.getAttribute("src") === path) return;
     const wasPlaying = bgmStarted && !bgmEl.paused && !bgmEl.muted;
@@ -1806,7 +1985,7 @@
       </div>
     `);
     document.getElementById("startBtn").onclick = ()=>{
-      switchBgmTrack("public/audio/map1_bgm.mp3");
+      switchBgmTrack(bgmPathForMap(1));
       closeModal();
     };
   }
@@ -1853,8 +2032,8 @@
         </div>
       `);
       document.getElementById("continueYesBtn").onclick = ()=>{
-        switchBgmTrack("public/audio/map1_bgm.mp3");
         applyStateSnapshot(savedState);
+        switchBgmTrack(bgmPathForMap(state.currentMap));
         closeModal();
         showEvent(()=> showFlavor("🧝", t("welcomeBackText", heroDisplayName()||"..."), t("hintRoll"), ()=>{}));
       };
