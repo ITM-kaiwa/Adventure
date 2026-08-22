@@ -29,6 +29,18 @@
     --accent:#5a6270; --accent-light:#8b93a0;
     --bg1:#2a2d33; --bg2:#16181c; --bg3:#050607;
   }
+  /* マップ4「水のエリア」のテーマカラー(透明感あふれる水色基調)。 */
+  body.map4{
+    --gold:#4fc3e0; --gold-light:#8fe8f5;
+    --accent:#2f8fae; --accent-light:#7cc9e0;
+    --bg1:#1f5f78; --bg2:#123244; --bg3:#05131c;
+  }
+  /* マップ5「炎のエリア」のテーマカラー(真紅の炎基調)。 */
+  body.map5{
+    --gold:#d43a2f; --gold-light:#f2694a;
+    --accent:#8c1f1f; --accent-light:#c94f3a;
+    --bg1:#5c1010; --bg2:#300808; --bg3:#120202;
+  }
   /* マップ3限定: 現在地から3マス先までしか見えない「霧」の演出。
      元のタイル種別のクラス(enemy/pit/guardian等)は残したまま、背景色だけを
      一律の暗色で上書きして種別が見た目からわからないようにする。 */
@@ -261,6 +273,12 @@
   body.map3 button.primary{ box-shadow:0 4px 0 #8a5c26, 0 8px 18px rgba(0,0,0,.5); }
   body.map3 button.primary:active{ box-shadow:0 1px 0 #8a5c26; }
   body.map3 .controls{ border-color:rgba(201,138,62,.35); }
+  body.map4 button.primary{ box-shadow:0 4px 0 #145868, 0 8px 18px rgba(0,0,0,.35); }
+  body.map4 button.primary:active{ box-shadow:0 1px 0 #145868; }
+  body.map4 .controls{ border-color:rgba(79,195,224,.4); }
+  body.map5 button.primary{ box-shadow:0 4px 0 #5c1010, 0 8px 18px rgba(0,0,0,.5); }
+  body.map5 button.primary:active{ box-shadow:0 1px 0 #5c1010; }
+  body.map5 .controls{ border-color:rgba(212,58,47,.4); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
     font-weight:500;
@@ -540,8 +558,27 @@
       map3WelcomeTitle:"Chào mừng đến Hang Động!",
       map3WelcomeText:(name)=>`${name} bước vào hang động tối tăm và ẩm ướt. Trong bóng tối này, chỉ có thể nhìn thấy vài bước phía trước...`,
       map3ClearTitle:"Bản đồ 3 hoàn thành!",
-      map3ClearText:"Bạn đã vượt qua hang động tối tăm một cách an toàn. (Bản đồ 4 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      map3ClearText:"Bạn đã vượt qua hang động tối tăm một cách an toàn. Phía trước là một vùng nước trong vắt...",
       subtitleMap3:"Bản đồ 3: Hang Động (LV10〜LV13)",
+      proceedMap4Btn:"➡️ Đến Bản đồ 4: Vùng Nước",
+      map4WelcomeTitle:"Chào mừng đến Vùng Nước!",
+      map4WelcomeText:(name)=>`${name} bước vào một vùng nước trong vắt. Dòng nước cản trở từng bước chân, khiến ${name} không thể tiến về phía trước một cách dễ dàng...`,
+      map4ClearTitle:"Bản đồ 4 hoàn thành!",
+      map4ClearText:"Bạn đã vượt qua vùng nước một cách an toàn. Phía trước là một vùng đất bao phủ bởi lửa đỏ rực...",
+      subtitleMap4:"Bản đồ 4: Vùng Nước (LV14〜LV16)",
+      proceedMap5Btn:"➡️ Đến Bản đồ 5: Vùng Lửa",
+      map5WelcomeTitle:"Chào mừng đến Vùng Lửa!",
+      map5WelcomeText:(name)=>`${name} bước vào một vùng đất bao phủ bởi lửa đỏ rực. Hơi nóng táp vào mặt từng cơn...`,
+      map5ClearTitle:"Bản đồ 5 hoàn thành!",
+      map5ClearText:"Bạn đã vượt qua vùng lửa một cách an toàn. (Bản đồ 6 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      subtitleMap5:"Bản đồ 5: Vùng Lửa (LV17〜LV20)",
+      drownTitle:"Suýt chết đuối!",
+      drownText:"Dòng nước bất ngờ cuốn bạn xuống sâu. Bạn mất 1 Sinh lực.",
+      fireTitle:"Bị lửa thiêu!",
+      fireText:"Một ngọn lửa bùng lên bất ngờ. Bạn mất 1 Sinh lực.",
+      rolledWaterMove:(roll,steps)=>`Xúc xắc ra ${roll}, nhưng vì dòng nước cản trở nên chỉ tiến được ${steps} bước.`,
+      waterStuckTitle:"Không thể tiến lên!",
+      waterStuckText:(roll)=>`Xúc xắc ra ${roll}, nhưng dòng nước quá mạnh nên bạn không thể tiến lên được.`,
       statLifeShort:"Sinh lực", statExpShort:"KN", statGoldShort:"Vàng",
       devTitle:"Cài đặt nhà phát triển",
       devLangLabel:"Ngôn ngữ hiển thị",
@@ -664,8 +701,27 @@
       map3WelcomeTitle:"洞窟へようこそ！",
       map3WelcomeText:(name)=>`${name}は薄暗く湿った洞窟へ足を踏み入れた。この暗闇では、少し先までしか見通せない……`,
       map3ClearTitle:"マップ3クリア！",
-      map3ClearText:"暗い洞窟を無事に抜けた。（マップ4は次のバージョンで追加予定です。）",
+      map3ClearText:"暗い洞窟を無事に抜けた。この先には透き通った水のエリアが広がっている……",
       subtitleMap3:"マップ3：洞窟 (LV10〜LV13)",
+      proceedMap4Btn:"➡️ マップ4:水のエリアへ進む",
+      map4WelcomeTitle:"水のエリアへようこそ！",
+      map4WelcomeText:(name)=>`${name}は透き通った水のエリアに足を踏み入れた。水の抵抗で、なかなか前に進めない……`,
+      map4ClearTitle:"マップ4クリア！",
+      map4ClearText:"水のエリアを無事に抜けた。この先には真紅の炎に包まれたエリアが広がっている……",
+      subtitleMap4:"マップ4：水のエリア (LV14〜LV16)",
+      proceedMap5Btn:"➡️ マップ5:炎のエリアへ進む",
+      map5WelcomeTitle:"炎のエリアへようこそ！",
+      map5WelcomeText:(name)=>`${name}は真紅の炎に包まれたエリアへ足を踏み入れた。熱風が肌を刺すように吹きつける……`,
+      map5ClearTitle:"マップ5クリア！",
+      map5ClearText:"炎のエリアを無事に抜けた。（マップ6は次のバージョンで追加予定です。）",
+      subtitleMap5:"マップ5：炎のエリア (LV17〜LV20)",
+      drownTitle:"溺れかけた！",
+      drownText:"急な水の流れに引き込まれた。ライフを1失った。",
+      fireTitle:"炎に焼かれた！",
+      fireText:"突然、炎が燃え上がった。ライフを1失った。",
+      rolledWaterMove:(roll,steps)=>`${roll}が出たが、水の抵抗で${steps}マスしか進めなかった。`,
+      waterStuckTitle:"前に進めない！",
+      waterStuckText:(roll)=>`${roll}が出たが、水の勢いが強すぎて前に進めなかった。`,
       statLifeShort:"ライフ", statExpShort:"経験値", statGoldShort:"ゴールド",
       devTitle:"開発者向け設定",
       devLangLabel:"表示言語",
@@ -807,6 +863,55 @@
       hard:[
         {q:"「ホラー映画を 見たくないです。」 là dạng nào của 「見たいです」?", c:["Dạng phủ định của thể 「~たいです」","Dạng quá khứ của thể 「~たいです」","Thể lịch sự của câu mệnh lệnh","Thể khả năng của động từ"], a:0},
         {q:"So sánh 「喫茶店へ コーヒーを 飲みに 行きます。」 và 「公園へ 散歩に 行きます。」, sự khác nhau về ngữ pháp nằm ở đâu?", c:["Câu trước dùng 動詞ます形(bỏ ます)+に, câu sau dùng danh từ trực tiếp+に","Không có khác biệt nào về ngữ pháp","Câu trước ở thì quá khứ, câu sau ở thì hiện tại","Câu trước là thể phủ định, câu sau là thể khẳng định"], a:0}]},
+    14:{ title:"Vてください・Vましょうか・Vています(進行)・Vかた", normal:[
+        {q:"「ちょっと 待って ください。」 Mẫu 「Vてください」 dùng để làm gì?", c:["Yêu cầu lịch sự người khác làm một việc gì đó","Cấm không được làm một việc gì đó","Hỏi ý kiến của người nghe","Diễn tả một hành động đang diễn ra"], a:0},
+        {q:"「荷物を 持ちましょうか。」 Mẫu 「Vましょうか」 ở đây dùng để làm gì?", c:["Đề nghị giúp người nghe làm một việc gì đó","Yêu cầu người nghe làm việc gì đó cho mình","Từ chối một lời mời","Hỏi giờ hiện tại"], a:0},
+        {q:"「今、雨が 降っています。」 Mẫu 「Vています」 ở đây diễn tả điều gì?", c:["Một hành động đang diễn ra ngay tại thời điểm nói","Một thói quen hàng ngày","Nghề nghiệp của người nói","Kết quả còn lại của một hành động đã xong"], a:0}],
+      hard:[
+        {q:"「すみません、この漢字の 読みかたを 教えて ください。」 Từ 「読みかた」 được tạo ra như thế nào?", c:["Bỏ 「ます」 của 動詞ます形(読みます) rồi thêm 「かた」(nghĩa: cách làm ~việc gì)","Thêm 「かた」 vào thể từ điển của động từ","Là thể quá khứ của động từ 「読みます」","Là thể mệnh lệnh của động từ"], a:0},
+        {q:"So sánh 「すみません、写真を 撮って ください。」 và 「写真を 撮りましょうか。」, khác biệt chính giữa 2 câu là gì?", c:["Câu trước là nhờ vả người nghe làm giúp, câu sau là người nói tự đề nghị làm giúp người nghe","Không có khác biệt gì về nghĩa","Câu trước ở thì quá khứ","Câu sau là câu phủ định"], a:0}]},
+    15:{ title:"Vてもいいですか・Vてはいけません・Vています(状態・職業)", normal:[
+        {q:"「ここで 写真を 撮っても いいですか。」 Mẫu 「~てもいいですか」 dùng để làm gì?", c:["Xin phép được làm một việc gì đó","Ra lệnh cho người khác phải làm gì đó","Từ chối một lời mời","Diễn tả một thói quen hàng ngày"], a:0},
+        {q:"「ここで タバコを 吸っては いけません。」 Mẫu 「~てはいけません」 diễn tả điều gì?", c:["Cấm/không được phép làm một việc gì đó","Cho phép làm một việc gì đó","Đề nghị giúp đỡ ai đó","Hỏi ý kiến của người nghe"], a:0},
+        {q:"「木村さんは 結婚しています。」 Ở câu này, 「~ています」 diễn tả điều gì?", c:["Trạng thái/kết quả vẫn còn tiếp diễn sau một sự việc đã xảy ra (đã kết hôn và hiện vẫn vậy)","Một hành động đang xảy ra ngay lúc nói","Một ý định trong tương lai","Một lời mời"], a:0}],
+      hard:[
+        {q:"So sánh 「今、電話を かけています。」 và 「わたしは 銀行に 勤めています。」, cùng dùng 「ています」 nhưng khác nhau ở điểm nào?", c:["Câu trước diễn tả hành động đang xảy ra ngay lúc nói, câu sau diễn tả nghề nghiệp/trạng thái lâu dài","Không có gì khác nhau về nghĩa","Câu trước là thì quá khứ, câu sau là thì tương lai","Câu sau là một câu hỏi"], a:0},
+        {q:"「このボタンを 押しても いいですが、あのボタンを 押しては いけません。」 Vì sao 2 mẫu câu 「てもいいです」 và 「てはいけません」 lại xuất hiện cùng nhau trong câu này?", c:["Để thể hiện sự đối lập: một việc được phép làm, một việc khác thì bị cấm","Vì cả hai đều là việc bắt buộc phải làm","Vì cả hai đều là lời mời","Vì đây là câu hỏi về quá khứ"], a:0}]},
+    16:{ title:"NはNがAdj・形容詞の接続(くて／で)・V1てからV2", normal:[
+        {q:"「象は 鼻が 長いです。」 Mẫu 「N1は N2が Adj」 dùng để diễn tả điều gì?", c:["Đặc điểm của một bộ phận/phương diện thuộc về N1","N1 và N2 là hai vật hoàn toàn khác nhau, không liên quan","Sự so sánh giữa N1 và N2","N1 sở hữu N2 theo nghĩa tài sản"], a:0},
+        {q:"「この 部屋は 静かで、明るいです。」 Vì sao tính từ 「静かで」 kết thúc bằng 「で」 chứ không phải 「です」?", c:["Vì đây là tính từ đuôいな(ナ形容詞) ở thể nối câu, để nối tiếp với vế sau","Vì đây là câu phủ định","Vì đây là câu ở thì quá khứ","Vì đây là một câu hỏi"], a:0},
+        {q:"「手を 洗ってから、ご飯を 食べます。」 Mẫu 「V1てから、V2」 diễn tả trình tự như thế nào?", c:["Làm xong V1 rồi mới làm V2 (theo đúng thứ tự trước sau)","V1 và V2 xảy ra đồng thời với nhau","V2 xảy ra trước, rồi mới đến V1","V1 là lý do dẫn đến V2"], a:0}],
+      hard:[
+        {q:"So sánh cách nối câu của イ形容詞 「大きくて、おいしいです」 và ナ形容詞/danh từ 「静かで、きれいです」, quy tắc tạo thể nối khác nhau ở đâu?", c:["イ形容詞 bỏ 「い」 cuối rồi thêm 「くて」，còn ナ形容詞/danh từ thì thêm 「で」","Cả hai loại đều thêm 「くて」 giống nhau","Cả hai loại đều thêm 「で」 giống nhau","Không có quy tắc cố định, tùy theo người nói"], a:0},
+        {q:"「朝 起きて、シャワーを 浴びて、朝ごはんを 食べます。」 Mẫu 「V1て、V2て、V3」 ở đây được dùng để làm gì?", c:["Liệt kê nhiều hành động xảy ra nối tiếp nhau theo đúng thứ tự thời gian","Liệt kê các hành động trái ngược nhau","So sánh mức độ giữa các hành động","Phủ định tất cả các hành động"], a:0}]},
+    17:{ title:"Vないでください・Vなくてもいいです・Vなければなりません", normal:[
+        {q:"「ここに 車を 止めないで ください。」 Mẫu 「Vないでください」 dùng để làm gì?", c:["Yêu cầu người khác đừng làm một việc gì đó","Yêu cầu người khác làm một việc gì đó","Cho phép làm một việc gì đó","Diễn tả một thói quen"], a:0},
+        {q:"「あしたは 休みですから、早く 起きなくても いいです。」 Mẫu 「Vなくてもいいです」 nghĩa là gì?", c:["Không cần thiết/không bắt buộc phải làm việc đó","Bị cấm làm việc đó","Bắt buộc phải làm việc đó","Đã làm xong việc đó rồi"], a:0},
+        {q:"「あした 病院へ 行かなければ なりません。」 Mẫu 「Vなければなりません」 diễn tả điều gì?", c:["Nghĩa vụ/sự bắt buộc phải làm một việc gì đó","Sự cho phép làm việc gì đó","Sự cấm đoán","Một đề nghị lịch sự"], a:0}],
+      hard:[
+        {q:"「肉は 食べますが、魚は 食べません。」 Trợ từ 「は」 gắn vào 「魚」(vốn là tân ngữ, thường đi với「を」) trong câu này có vai trò gì?", c:["Nhấn mạnh sự đối lập/so sánh với vế trước (thịt thì ăn, còn cá thì không)","Đánh dấu chủ ngữ của câu","Dùng để hỏi về địa điểm","Không có ý nghĩa đặc biệt gì"], a:0},
+        {q:"So sánh 「タバコを 吸わないで ください。」 và 「タバコを 吸わなくても いいです。」, khác nhau chủ yếu ở đâu?", c:["Câu trước là yêu cầu mạnh (đừng làm), câu sau chỉ là không bắt buộc (làm cũng được, không làm cũng được)","Cả hai câu có nghĩa giống hệt nhau","Câu trước ở thì quá khứ","Câu sau là một câu hỏi"], a:0}]},
+    18:{ title:"N/Vることができます・Vるまえに・趣味はVることです", normal:[
+        {q:"「わたしは 漢字を 読む ことが できます。」 Mẫu 「Vることができます」 ở đây diễn tả điều gì?", c:["Khả năng làm được một việc gì đó","Nghĩa vụ phải làm một việc gì đó","Sự cấm đoán","Một lời mời"], a:0},
+        {q:"「今日は 忙しいですから、質問に 答える ことが できません。」 Đây là cách dùng nào của 「ことができます」?", c:["Khả năng do hoàn cảnh/tình huống hiện tại quyết định (không phải năng lực bẩm sinh)","Khả năng bẩm sinh, cố định","Sở thích cá nhân","Kinh nghiệm trong quá khứ"], a:0},
+        {q:"「わたしの 趣味は 写真を 撮る ことです。」 Mẫu 「趣味は Vることです」 dùng để làm gì?", c:["Giới thiệu sở thích của bản thân thông qua một hành động (động từ)","Giới thiệu nghề nghiệp của bản thân","Đưa ra lời khuyên cho người khác","Diễn tả kế hoạch trong tương lai"], a:0}],
+      hard:[
+        {q:"「寝るまえに、歯を 磨きます。」 Mẫu 「Vるまえに」 dùng động từ ở thể nào?", c:["Thể từ điển (thể nguyên dạng) của động từ, không chia theo thì","Thể ます của động từ","Thể た của động từ","Thể ない của động từ"], a:0},
+        {q:"So sánh 「食事の まえに、手を 洗います。」 và 「3年 まえに、日本へ 来ました。」, từ 「まえ」 trong 2 câu này khác nhau ở điểm nào?", c:["Câu trước nghĩa là 'trước khi làm gì', câu sau nghĩa là 'cách đây bao lâu' (một thời điểm trong quá khứ)","Không có khác biệt gì về nghĩa","Cả hai đều chỉ vị trí phía trước về không gian","Cả hai đều là thì tương lai"], a:0}]},
+    19:{ title:"Vたことがあります・V1たりV2たりします・Adjになります", normal:[
+        {q:"「わたしは 富士山に 登った ことが あります。」 Mẫu 「Vたことがあります」 diễn tả điều gì?", c:["Kinh nghiệm đã từng làm một việc gì đó trong quá khứ","Kế hoạch trong tương lai","Một việc đang làm dở dang","Nghĩa vụ phải làm một việc"], a:0},
+        {q:"「週末は 本を 読んだり、映画を 見たり します。」 Mẫu 「V1たりV2たりします」 dùng khi nào?", c:["Liệt kê một vài hành động tiêu biểu trong số nhiều việc đã/thường làm","Liệt kê tất cả các hành động theo đúng thứ tự thời gian","Diễn tả 2 hành động xảy ra đồng thời liên tục","Phủ định các hành động đã nêu"], a:0},
+        {q:"「日本語が 上手に なりました。」 Mẫu 「ナAに なります」 diễn tả điều gì?", c:["Sự thay đổi/chuyển biến sang một trạng thái mới","Trạng thái không hề đổi từ trước đến nay","Một câu mệnh lệnh","Một lời mời"], a:0}],
+      hard:[
+        {q:"「くだものが 安く なりました。」 So với thể từ điển 「安いです」, đuôい đã biến đổi ra sao để tạo thành 「なります」?", c:["Bỏ 「い」 ở cuối rồi thêm 「く」 ngay trước 「なります」","Thêm 「に」 trực tiếp vào ngay sau 「安い」","Không cần thay đổi gì cả","Thêm 「かった」 vào sau"], a:0},
+        {q:"So sánh 「大阪へ 行った ことが あります。」 và 「大阪へ 行きました。」, khác nhau chủ yếu là gì?", c:["Câu trước nhấn mạnh trải nghiệm/kinh nghiệm đã từng có, câu sau chỉ đơn thuần thuật lại một sự việc đã xảy ra","Không có khác biệt gì về nghĩa","Câu trước là thì tương lai","Câu sau là câu phủ định"], a:0}]},
+    20:{ title:"普通形(普通体)：動詞・形容詞・名詞", normal:[
+        {q:"「あした 雨が 降ると 思います。」 Trong câu này, từ 「降る」(thay vì 「降ります」) là thể nào?", c:["普通形(thể thông thường/thể ngắn, thường dùng trước 「と思います」)","敬体(thể lịch sự ですます)","Thể mệnh lệnh","Thể て"], a:0},
+        {q:"「あの 映画は おもしろかった。」 Câu này được nói theo văn phong nào?", c:["普通体(văn nói suồng sã giữa bạn bè/người thân, không dùng です・ます)","敬体(lịch sự, trang trọng)","Văn viết báo cáo công việc","Văn viết thư trang trọng"], a:0},
+        {q:"「あしたは たぶん 暇だ。」 thể 「暇だ」 tương ứng với thể lịch sự (敬体) nào sau đây?", c:["暇です","暇でした","暇じゃないです","暇くないです"], a:0}],
+      hard:[
+        {q:"「この 部屋は 静かだし、駅にも 近いし、いい部屋だと 思います。」 Trợ từ 「し」 trong câu này có vai trò gì?", c:["Liệt kê nhiều lý do/đặc điểm cùng lúc để dẫn đến một kết luận","Chỉ đưa ra đúng một lý do duy nhất","Phủ định các lý do đã nêu trước đó","Dùng để đặt câu hỏi về lý do"], a:0},
+        {q:"So sánh 「行きます」→「行く」、「行きません」→「行かない」、「行きました」→「行った」、「行きませんでした」→「行かなかった」, quy luật chung khi chuyển từ 敬体 sang 普通形 của động từ là gì?", c:["Mỗi thì (hiện tại/quá khứ, khẳng định/phủ định) của 敬体 đều có một dạng 普通形 tương ứng riêng, không đơn giản chỉ là bỏ 「ます」","Chỉ cần bỏ 「ます」 là xong trong mọi trường hợp","Không có sự tương ứng nào giữa hai thể","普通形 chỉ tồn tại ở thì hiện tại"], a:0}]},
   };
 
   function shuffle(arr){
@@ -868,7 +973,7 @@
   const lastDrawnQuestion = { normal:null, hard:null };
   // マップごとに出題するLVの範囲を分ける(マップ1=LV0〜3、マップ2=LV4〜9、...)。
   // 前のマップで習った内容が後のマップで蒸し返されたり、逆に後の内容が前のマップに混ざったりしない。
-  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13] };
+  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16], 5:[17,18,19,20] };
 
   function buildQuestionBag(pool){
     const range = MAP_LEVEL_RANGES[state.currentMap] || Object.keys(LEVELS).map(Number);
@@ -1050,6 +1155,78 @@
     return cellMap;
   }
 
+  // マップ4: 水のエリア。マス構成自体はマップ2・3と同じ(国王・道場なし、
+  // 2〜29マスに敵/アイテム等を隣接重複なしで配置)だが、「落とし穴」の代わりに
+  // 水のエリアらしい「溺れる」イベント(drown。効果自体は落とし穴と同じライフ-1)を配置する。
+  // 水の抵抗でサイコロの目の半分しか進めない特殊ルールは、rollDice()側で
+  // state.currentMap===4を見て処理する(盤面データ自体には手を加えない)。
+  function buildMap4(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",10);
+    pushN("drown",2);
+    pushN("herb",2);
+    pushN("shop",2);
+    pushN("shortcut",2);
+    pushN("lost",2);
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",4); // 合計28
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
+  // マップ5: 炎のエリア。6マスに1つの割合(30マス中5マス)で「炎」イベント
+  // (ライフ-1)を配置し、薬草は他マップの2倍(4つ)配置する(ユーザー指定)。
+  // 炎・薬草を増やした分、敵と空白マスの数を他マップより減らして28マスに収める。
+  function buildMap5(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",7);
+    pushN("fire",5);
+    pushN("herb",4);
+    pushN("shop",2);
+    pushN("shortcut",2);
+    pushN("lost",2);
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",2); // 合計28
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
+  function buildMapByNumber(n){
+    if(n===5) return buildMap5();
+    if(n===4) return buildMap4();
+    if(n===3) return buildMap3();
+    if(n===2) return buildMap2();
+    return buildMap1();
+  }
+
   /* =========================================================
      描画
   ========================================================= */
@@ -1060,6 +1237,7 @@
     start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🛡️",
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
+    drown:"🌊", fire:"🔥",
   };
 
   function tileVisual(cellNum){
@@ -1193,11 +1371,11 @@
   function renderStaticText(){
     document.getElementById("titleText").textContent = t("title");
     document.getElementById("subtitleText").textContent =
-      state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
+      state.currentMap===5 ? t("subtitleMap5") : state.currentMap===4 ? t("subtitleMap4") : state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
     document.getElementById("lblLife").textContent = t("life");
     document.getElementById("lblExp").textContent = t("exp");
     document.getElementById("lblGold").textContent = t("gold");
-    document.body.className = "lang-"+state.lang + (state.currentMap===2 ? " map2" : state.currentMap===3 ? " map3" : "");
+    document.body.className = "lang-"+state.lang + (state.currentMap>=2 && state.currentMap<=5 ? " map"+state.currentMap : "");
     const openingHintEl = document.getElementById("openingHint");
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
@@ -1257,7 +1435,20 @@
     ["行","い"],["見","み"],["話","はな"],["近","ちか"],["金","かね"],
     ["難","むずか"],["靴","くつ"],["食","た"],["飯","はん"],["飲","の"],
     ["駅","えき"],["高","たか"],["前","まえ"],["中","なか"],["上","うえ"],
-    ["回","かい"],["本","ほん"],["人","にん"]
+    ["回","かい"],["本","ほん"],["人","にん"],
+    // 2026-08-22(18回目・マップ4/5追加): LV14〜LV20の問題文で新たに使う語彙
+    ["漢字","かんじ"],["写真","しゃしん"],["荷物","にもつ"],["結婚","けっこん"],
+    ["銀行","ぎんこう"],["電話","でんわ"],["部屋","へや"],["病院","びょういん"],
+    ["質問","しつもん"],["趣味","しゅみ"],["食事","しょくじ"],["週末","しゅうまつ"],
+    ["教","おし"],["読","よ"],["勤","つと"],["押","お"],["象","ぞう"],["鼻","はな"],
+    ["長","なが"],["静","しず"],["明","あか"],["手","て"],["洗","あら"],["大","おお"],
+    ["朝","あさ"],["起","お"],["浴","あ"],["車","くるま"],["止","と"],["早","はや"],
+    ["肉","にく"],["魚","さかな"],["答","こた"],["寝","ね"],["歯","は"],["磨","みが"],
+    ["年","ねん"],["登","のぼ"],["安","やす"],["雨","あめ"],["降","ふ"],["思","おも"],
+    ["暇","ひま"],["撮","と"],
+    ["今日","きょう"],["木村","きむら"],["普通形","ふつうけい"],["普通体","ふつうたい"],
+    ["敬体","けいたい"],["待","ま"],["持","も"],["今","いま"],["吸","す"],["忙","いそが"],
+    ["日本","にほん"]
   ];
   const FURIGANA_MAP = new Map(FURIGANA_WORDS);
   // 長い語(複合語)から先に一致させることで、単漢字の対応表による部分一致の誤変換を防ぐ
@@ -1359,6 +1550,42 @@
     showEvent(()=> showFlavor("🕯️", t("map3WelcomeTitle"), t("map3WelcomeText", heroDisplayName()), ()=>{}));
   }
 
+  function goToMap4(){
+    closeModal();
+    state.currentMap = 4;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap4();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(4));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("🌊", t("map4WelcomeTitle"), t("map4WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
+  function goToMap5(){
+    closeModal();
+    state.currentMap = 5;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap5();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(5));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("🔥", t("map5WelcomeTitle"), t("map5WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
   function showMapClear(){
     if(state.currentMap===1){
       activeModalRenderer = showMapClear;
@@ -1390,13 +1617,43 @@
       document.getElementById("retryBtn").onclick = resetGame;
       return;
     }
-    // マップ3クリア(現時点ではマップ4以降は未実装)
+    if(state.currentMap===3){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map3ClearTitle")}</h2>
+          <p>${t("map3ClearText")}</p>
+          <button class="primary" id="proceedMap4Btn">${t("proceedMap4Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap4Btn").onclick = goToMap4;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    if(state.currentMap===4){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map4ClearTitle")}</h2>
+          <p>${t("map4ClearText")}</p>
+          <button class="primary" id="proceedMap5Btn">${t("proceedMap5Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap5Btn").onclick = goToMap5;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    // マップ5クリア(現時点ではマップ6以降は未実装)
     activeModalRenderer = showMapClear;
     openModal(`
       <div class="card">
         <div class="final-emoji">🏆</div>
-        <h2>${t("map3ClearTitle")}</h2>
-        <p>${t("map3ClearText")}</p>
+        <h2>${t("map5ClearTitle")}</h2>
+        <p>${t("map5ClearText")}</p>
         <button class="primary" id="retryBtn">${t("retryBtn")}</button>
       </div>
     `);
@@ -1446,6 +1703,14 @@
     const candidates = [1,2,3,4,5,6].filter(v => v !== state.lastDiceRoll);
     const roll = candidates[Math.floor(Math.random()*candidates.length)];
     state.lastDiceRoll = roll;
+    return roll;
+  }
+
+  // マップ4(水のエリア)限定: 水の抵抗でサイコロの目の半分ほどしか進めない。
+  // 出た目そのもの(ダイスの絵)は変えず、実際に進むマス数だけをこの対応表で変換する。
+  const MAP4_DICE_STEPS = { 1:0, 2:1, 3:2, 4:2, 5:2, 6:3 };
+  function stepsForRoll(roll){
+    if(state.currentMap===4) return MAP4_DICE_STEPS[roll];
     return roll;
   }
 
@@ -1720,6 +1985,16 @@
       showEvent(()=> showFlavor(ICONS.pit, t("pitTitle"), t("pitText"), ()=>{ checkDeath(endTurn); }));
       return;
     }
+    if(ev.type==="drown"){
+      loseLife(1);
+      showEvent(()=> showFlavor(ICONS.drown, t("drownTitle"), t("drownText"), ()=>{ checkDeath(endTurn); }));
+      return;
+    }
+    if(ev.type==="fire"){
+      loseLife(1);
+      showEvent(()=> showFlavor(ICONS.fire, t("fireTitle"), t("fireText"), ()=>{ checkDeath(endTurn); }));
+      return;
+    }
     if(ev.type==="shortcut"){
       showEvent(()=> showFlavor(ICONS.shortcut, t("shortcutTitle"), t("shortcutText"), ()=>{
         stepMove(3, ()=>{ resolveCell(); });
@@ -1792,8 +2067,21 @@
         diceEl.textContent = DICE_FACES[roll-1];
         diceEl.classList.add("settle");
         setTimeout(()=>diceEl.classList.remove("settle"), 420);
-        hintEl.textContent = t("rolled", roll);
-        stepMove(roll, ()=>{ resolveCell(); });
+        const steps = stepsForRoll(roll);
+        if(state.currentMap===4 && steps<=0){
+          // 水の抵抗が強すぎて1マスも進めない(出目が1の場合)。
+          // 盤面上は移動が発生しない(現在のマスを再度resolveCell()しない)ため、
+          // ここでは移動イベントを起こさず、専用のモーダルで「進めなかった」ことを伝えてターンを終える。
+          hintEl.textContent = "";
+          showEvent(()=> showFlavor("🌊", t("waterStuckTitle"), t("waterStuckText", roll), endTurn));
+          return;
+        }
+        if(state.currentMap===4){
+          hintEl.textContent = t("rolledWaterMove", roll, steps);
+        } else {
+          hintEl.textContent = t("rolled", roll);
+        }
+        stepMove(steps, ()=>{ resolveCell(); });
       }
     }, 90);
   }
@@ -1940,7 +2228,7 @@
     state.busy = false;
     state.lastDiceRoll = null;
     state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap
-      : (state.currentMap===3 ? buildMap3() : state.currentMap===2 ? buildMap2() : buildMap1());
+      : buildMapByNumber(state.currentMap);
     renderStaticText();
     buildBoard();
     renderHUD();
