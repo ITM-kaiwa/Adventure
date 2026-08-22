@@ -1,24 +1,20 @@
+
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>勇者の日本語冒険 - LV1〜LV35 全世界制覇の旅</title>
+<title>Cuộc Phiêu Lưu Của Dũng Sĩ - Bản đồ 1: Thị Trấn Hoàng Gia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#1b2a4a;
-    --navy-light:#334872;
-    --parchment:#f2e8d5;
-    --parchment-dark:#e3d5b8;
-    --gold:#d4a017;
-    --gold-light:#f0c94a;
-    --ink:#3a2a1e;
-    --heart:#c94f6d;
-    --accent:#3f6644;
-    --accent-light:#5c8a5f;
-    --bg1:#24365e; --bg2:#1b2a4a; --bg3:#0e1830;
+    --navy:#1b2a4a; --navy-light:#334872;
+    --parchment:#f2e8d5; --parchment-dark:#e3d5b8;
+    --gold:#d4a017; --gold-light:#f0c94a;
+    --ink:#3a2a1e; --heart:#c94f6d;
+    --accent:#7a5a2e; --accent-light:#b4934f;
+    --bg1:#3a2f1e; --bg2:#241c10; --bg3:#100b06;
   }
   *{box-sizing:border-box;}
   body{
@@ -28,68 +24,59 @@
     background:radial-gradient(ellipse at top, var(--bg1) 0%, var(--bg2) 45%, var(--bg3) 100%);
     min-height:100vh;
     overflow-x:hidden;
-    transition:background 1s ease;
   }
-  body.world0{ --accent:#3f6644; --accent-light:#5c8a5f; --bg1:#24365e; --bg2:#1b2a4a; --bg3:#0e1830; }
-  body.world1{ --accent:#1f5f7a; --accent-light:#3d92b5; --bg1:#123a52; --bg2:#0c2740; --bg3:#061420; }
-  body.world2{ --accent:#8a3a1e; --accent-light:#c9642f; --bg1:#4a1e14; --bg2:#33130c; --bg3:#1a0805; }
-  body.world3{ --accent:#a67a2e; --accent-light:#d1a94f; --bg1:#4a3a1e; --bg2:#332812; --bg3:#1a1408; }
-  body.world4{ --accent:#2e5a2e; --accent-light:#4f8a4f; --bg1:#1e3a24; --bg2:#132814; --bg3:#0a1408; }
+  body.lang-vi{ font-family:'Times New Roman', Times, serif; }
+  body.lang-vi h1, body.lang-vi h2, body.lang-vi .card, body.lang-vi .hud, body.lang-vi button, body.lang-vi .hint{
+    font-family:'Times New Roman', Times, serif;
+  }
+  body.lang-ja{ font-family:'Noto Sans JP', sans-serif; }
+  body.lang-ja h1, body.lang-ja h2{ font-family:'Noto Serif JP', serif; }
 
   .stars{
     position:fixed; inset:0; pointer-events:none; z-index:0;
     background-image:
-      radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,.5), transparent),
-      radial-gradient(1.5px 1.5px at 90px 80px, rgba(255,255,255,.4), transparent),
-      radial-gradient(1px 1px at 150px 40px, rgba(255,255,255,.6), transparent),
-      radial-gradient(1.5px 1.5px at 210px 120px, rgba(255,255,255,.4), transparent),
-      radial-gradient(1px 1px at 260px 20px, rgba(255,255,255,.5), transparent);
+      radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 90px 80px, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 150px 40px, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 210px 120px, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 260px 20px, rgba(255,255,255,.4), transparent);
     background-repeat:repeat; background-size:300px 200px;
-    opacity:.7;
+    opacity:.5;
   }
   .app{ position:relative; z-index:1; max-width:760px; margin:0 auto; padding:14px 14px 60px; }
 
+  .devbtn{
+    position:fixed; top:10px; right:10px; z-index:60;
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(15,22,42,.7); border:1px solid rgba(212,160,23,.5);
+    color:var(--gold-light); font-size:1.1rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .devbtn.logged-in{ border-color:#3f9142; color:#8be29a; }
+
   header.top{ text-align:center; padding:10px 0 6px; }
   header.top h1{
-    font-family:'Noto Serif JP', serif;
     font-weight:900;
-    font-size:clamp(1.25rem, 4.6vw, 1.8rem);
+    font-size:clamp(1.15rem, 4.2vw, 1.6rem);
     margin:0 0 2px;
-    letter-spacing:.03em;
+    letter-spacing:.02em;
     color:var(--gold-light);
     text-shadow:0 2px 8px rgba(0,0,0,.5);
   }
-  header.top p{ margin:0; font-size:.78rem; color:#c9d3ea; }
-
-  .worldbar{
-    display:flex; align-items:center; justify-content:center; gap:6px;
-    margin:8px 0 4px; flex-wrap:wrap;
-  }
-  .worldchip{
-    font-size:.68rem; padding:4px 9px; border-radius:999px;
-    border:1px solid rgba(212,160,23,.4); background:rgba(15,22,42,.5);
-    color:#c9d3ea; white-space:nowrap;
-  }
-  .worldchip.done{ background:var(--accent); color:#fff; border-color:var(--accent-light); }
-  .worldchip.current{ background:var(--gold); color:#2c1d10; font-weight:700; border-color:var(--gold-light); }
+  header.top p{ margin:0; font-size:.78rem; color:#e6d9c2; }
 
   .hud{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     background:rgba(15,22,42,.6);
     border:1px solid rgba(212,160,23,.35);
     border-radius:14px;
-    padding:9px 13px;
+    padding:10px 14px;
     margin:10px 0;
-    backdrop-filter:blur(4px);
     font-size:.82rem;
     flex-wrap:wrap;
   }
-  .hud .hearts span{ font-size:1rem; margin-right:1px; filter:drop-shadow(0 0 3px rgba(201,79,109,.6)); }
-  .hud .shields{ color:var(--gold-light); font-size:.9rem; white-space:nowrap; }
-  .hud .equip{ color:#f0eaff; font-size:.85rem; white-space:nowrap; display:flex; gap:8px; }
-  .hud .equip span{ white-space:nowrap; }
-  .hud .progress{ text-align:right; color:#c9d3ea; }
-  .hud .progress b{ color:var(--gold-light); }
+  .hud .stat{ white-space:nowrap; }
+  .hud .stat b{ color:var(--gold-light); }
 
   .board-wrap{
     background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 22%, #223454) 0%, #223454 100%);
@@ -109,35 +96,36 @@
     aspect-ratio:1/1;
     border-radius:10px;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
-    font-size:.58rem;
+    font-size:.56rem;
     line-height:1.1;
     text-align:center;
     padding:2px;
     border:1.5px solid rgba(0,0,0,.25);
     box-shadow:0 2px 0 rgba(0,0,0,.2) inset;
-    transition:transform .2s ease;
-    opacity:.55;
+    opacity:.6;
   }
-  .tile.cleared{ opacity:.85; }
-  .tile.icon-big .icon{ font-size:1.1rem; }
-  .tile .num{ position:absolute; top:2px; left:3px; font-size:.5rem; opacity:.6; font-weight:700;}
+  .tile.cleared{ opacity:.9; }
+  .tile .icon{ font-size:1.05rem; }
+  .tile .num{ position:absolute; top:2px; left:3px; font-size:.5rem; opacity:.65; font-weight:700;}
   .tile.current{ opacity:1; transform:scale(1.1); box-shadow:0 0 0 3px var(--gold-light), 0 4px 10px rgba(0,0,0,.4); z-index:2; }
 
-  .tile.quiz{ background:var(--accent); color:#eaf3ea; }
-  .tile.bonus{ background:var(--gold); color:#3a2a1e; }
-  .tile.trap{ background:#8b2635; color:#fbe6e6; }
-  .tile.heart{ background:var(--heart); color:#fff0f2; }
-  .tile.story{ background:#4a4470; color:#ece8fb; }
-  .tile.item{ background:#5a4a8a; color:#f0eaff; }
-  .tile.elixir{ background:linear-gradient(160deg,#b8860b,#8a5a00); color:#fff8e1; border-color:var(--gold-light); }
-  .tile.midboss{ background:#7a1f1f; color:#ffe6e6; border-color:var(--gold); }
-  .tile.guardian{ background:linear-gradient(160deg,#3a2a1e,#1b1210); color:var(--gold-light); font-weight:700; border:2px solid var(--gold); }
   .tile.start{ background:var(--parchment); color:var(--ink); font-weight:700; }
-  .tile.goal{ background:linear-gradient(160deg,#3a2a1e,#1b1210); color:var(--gold-light); font-weight:700; border:2px solid var(--gold); }
+  .tile.king{ background:linear-gradient(160deg,#6a4a1e,#3a2a10); color:var(--gold-light); border:2px solid var(--gold); }
+  .tile.dojo{ background:#4a4470; color:#ece8fb; }
+  .tile.enemy{ background:#7a2a2a; color:#ffe6e6; }
+  .tile.guardian{ background:linear-gradient(160deg,#3a2a1e,#1b1210); color:var(--gold-light); font-weight:700; border:2px solid var(--gold); }
+  .tile.pit{ background:#3a2a2a; color:#e6c9c9; }
+  .tile.shortcut{ background:var(--gold); color:#3a2a1e; }
+  .tile.lost{ background:#8b2635; color:#fbe6e6; }
+  .tile.tailwind{ background:#3f6644; color:#eaf3ea; }
+  .tile.step{ background:#5a5a5a; color:#eee; }
+  .tile.herb{ background:#3f7a4a; color:#eaffea; }
+  .tile.shop{ background:#7a5a1e; color:#fff3d6; }
+  .tile.blank{ background:#33405c; color:#c9d3ea; }
 
   .token{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:1.3rem; pointer-events:none;
+    font-size:1.25rem; pointer-events:none;
     filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));
     animation:bob 1.4s ease-in-out infinite;
   }
@@ -150,8 +138,37 @@
     border-radius:14px;
     padding:16px;
   }
+  .dice-wrap{ perspective:400px; }
+  .dice{
+    width:76px; height:76px; border-radius:16px;
+    background:linear-gradient(155deg,#ffffff,var(--parchment) 60%, var(--parchment-dark));
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:2.6rem; line-height:1;
+    box-shadow:0 5px 0 var(--parchment-dark), 0 12px 22px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.06);
+    user-select:none;
+    cursor:pointer;
+  }
+  .dice:active{ transform:translateY(3px); box-shadow:0 2px 0 var(--parchment-dark), 0 6px 12px rgba(0,0,0,.35); }
+  .dice.disabled{ cursor:not-allowed; opacity:.6; filter:grayscale(.3); }
+  .dice.rolling{ animation: diceTumble .55s linear infinite; }
+  @keyframes diceTumble{
+    0%   { transform: translateY(0)    rotate(0deg)   rotateX(0deg)   scale(1); }
+    15%  { transform: translateY(-16px) rotate(80deg)  rotateX(120deg) scale(1.1); }
+    30%  { transform: translateY(4px)  rotate(160deg) rotateX(240deg) scale(0.9); }
+    45%  { transform: translateY(-20px) rotate(220deg) rotateX(360deg) scale(1.12); }
+    60%  { transform: translateY(2px)  rotate(280deg) rotateX(480deg) scale(0.94); }
+    80%  { transform: translateY(-10px) rotate(330deg) rotateX(600deg) scale(1.05); }
+    100% { transform: translateY(0)    rotate(360deg) rotateX(720deg) scale(1); }
+  }
+  .dice.settle{ animation: diceSettle .4s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes diceSettle{
+    0%  { transform: scale(1.4) rotate(14deg); }
+    55% { transform: scale(0.85) rotate(-6deg); }
+    100%{ transform: scale(1) rotate(0deg); }
+  }
+
   button.primary{
-    font-family:'Noto Serif JP', serif;
     font-weight:700;
     font-size:1rem;
     padding:12px 30px;
@@ -161,19 +178,27 @@
     color:#2c1d10;
     background:linear-gradient(180deg, var(--gold-light), var(--gold));
     box-shadow:0 4px 0 #a67a10, 0 8px 18px rgba(0,0,0,.35);
-    transition:transform .08s ease;
   }
   button.primary:active{ transform:translateY(3px); box-shadow:0 1px 0 #a67a10; }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
-  .hint{ font-size:.78rem; color:#c9d3ea; text-align:center; min-height:1.2em; }
+  button.secondary{
+    font-weight:500;
+    padding:9px 18px;
+    border-radius:999px;
+    border:1.5px solid var(--gold);
+    background:transparent;
+    color:var(--gold-light);
+    cursor:pointer;
+    margin:4px;
+  }
+  button.secondary:disabled{ opacity:.4; cursor:not-allowed; }
+  .hint{ font-size:.78rem; color:#e6d9c2; text-align:center; min-height:1.2em; }
 
   .overlay{
     position:fixed; inset:0; background:rgba(10,14,26,.75);
     display:flex; align-items:center; justify-content:center;
     padding:18px; z-index:50;
-    animation:fadein .2s ease;
   }
-  @keyframes fadein{ from{opacity:0} to{opacity:1} }
   .card{
     background:var(--parchment);
     color:var(--ink);
@@ -185,71 +210,63 @@
     text-align:center;
     max-height:88vh; overflow-y:auto;
   }
-  .card h2{ font-family:'Noto Serif JP', serif; font-size:1.2rem; margin:0 0 10px; }
-  .card p{ font-size:.9rem; line-height:1.7; margin:0 0 12px; }
+  .card h2{ font-size:1.2rem; margin:0 0 10px; }
+  .card p{ font-size:.92rem; line-height:1.7; margin:0 0 12px; }
   .badge{
     display:inline-block; font-size:.68rem; font-weight:700;
     background:var(--accent); color:#fff; padding:3px 10px; border-radius:999px;
-    margin-bottom:10px; letter-spacing:.05em;
+    margin-bottom:10px; letter-spacing:.03em;
   }
-  .badge.boss{ background:#8b2635; }
-  .lesson-tag{ font-size:.7rem; color:#7a6a5a; margin-bottom:2px; }
-  .qtext{ font-family:'Noto Serif JP', serif; font-size:1.08rem; font-weight:700; margin:6px 0 16px; line-height:1.6; }
+  .qtext{ font-size:1.08rem; font-weight:700; margin:6px 0 16px; line-height:1.6; }
   .choices{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:6px; }
   .choice-btn{
-    font-family:'Noto Sans JP', sans-serif;
     font-size:.92rem;
     padding:12px 6px;
     border-radius:12px;
     border:2px solid var(--accent);
     background:#fff;
     cursor:pointer;
-    transition:transform .1s ease, background .15s ease;
   }
-  .choice-btn:hover:not(:disabled){ transform:translateY(-2px); background:#eef6ee; }
   .choice-btn:disabled{ cursor:default; }
   .choice-btn.correct{ background:var(--accent); color:#fff; border-color:var(--accent); }
   .choice-btn.wrong{ background:#8b2635; color:#fff; border-color:#8b2635; }
-
   .feedback{ font-size:.88rem; margin-top:10px; min-height:1.4em; font-weight:700; }
-  .feedback.ok{ color:var(--accent); }
+  .feedback.ok{ color:#3f6644; }
   .feedback.no{ color:#8b2635; }
-  .feedback.shield{ color:#5a4a8a; }
-
-  .final-emoji{ font-size:2.8rem; margin-bottom:8px; }
-  .stat-row{ display:flex; justify-content:center; gap:20px; margin:14px 0; flex-wrap:wrap; }
-  .stat{ text-align:center; }
-  .stat b{ display:block; font-size:1.2rem; color:var(--accent); font-family:'Noto Serif JP',serif; }
-  .stat span{ font-size:.7rem; color:#6a5a4a; }
-
-  .bosslife{ display:flex; justify-content:center; gap:5px; margin:10px 0 16px; flex-wrap:wrap; }
-  .bosslife span{ font-size:1.3rem; filter:drop-shadow(0 0 3px rgba(139,38,53,.5)); }
-
-  ruby rt{ font-size:.6em; color:#9aa6c4; }
-  .card ruby rt{ color:#8a7a6a; }
-
-  @media (max-width:420px){
-    .tile{ font-size:.5rem; }
-    .tile .icon{ font-size:.95rem; }
+  .final-emoji{ font-size:2.6rem; margin-bottom:8px; }
+  .shop-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid var(--parchment-dark); text-align:left; }
+  .shop-row:last-child{ border-bottom:none; }
+  .shop-row .name{ font-size:.9rem; font-weight:700; }
+  .shop-row .price{ font-size:.8rem; color:#6a5a4a; }
+  .name-input{
+    width:100%;
+    font-size:1rem;
+    padding:10px 12px;
+    border-radius:10px;
+    border:2px solid var(--accent);
+    background:#fff;
+    color:var(--ink);
+    box-sizing:border-box;
+    margin-top:4px;
   }
+  .name-input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
 </style>
 </head>
-<body class="world0">
+<body class="lang-vi">
 <div class="stars"></div>
+<button class="devbtn" id="accountBtn" style="right:54px;" title="Account">👤</button>
+<button class="devbtn" id="devBtn" title="Dev settings">⚙</button>
 <div class="app">
 
   <header class="top">
-    <h1>⚔️ <ruby>勇者<rt>ゆうしゃ</rt></ruby>の<ruby>日本語<rt>にほんご</rt></ruby><ruby>冒険<rt>ぼうけん</rt></ruby> 🐉</h1>
-    <p>みんなの日本語 初級 LV1〜LV35 総復習の旅</p>
+    <h1 id="titleText">⚔️ Cuộc Phiêu Lưu Của Dũng Sĩ</h1>
+    <p id="subtitleText">Bản đồ 1: Thị Trấn Hoàng Gia (LV0〜LV3)</p>
   </header>
 
-  <div class="worldbar" id="worldBar"></div>
-
   <div class="hud">
-    <div class="hearts" id="heartsDisplay"></div>
-    <div class="shields" id="shieldsDisplay"></div>
-    <div class="equip" id="equipDisplay"></div>
-    <div class="progress" id="progressLabel">草原の世界 / LV1</div>
+    <div class="stat">❤️ <span id="lblLife">Sinh lực</span>: <b id="lifeVal">5</b>/<span id="lifeMaxVal">25</span></div>
+    <div class="stat">🌟 <span id="lblExp">Kinh nghiệm</span>: <b id="expVal">0</b>/100</div>
+    <div class="stat">💰 <span id="lblGold">Vàng</span>: <b id="goldVal">0</b></div>
   </div>
 
   <div class="board-wrap">
@@ -257,8 +274,8 @@
   </div>
 
   <div class="controls">
-    <button class="primary" id="advanceBtn">🚶 すすむ</button>
-    <div class="hint" id="hint">「はじめる」を押して冒険に出発しよう</div>
+    <div class="dice-wrap"><div class="dice" id="dice" role="button" tabindex="0" aria-label="Roll dice">🎲</div></div>
+    <div class="hint" id="hint">Nhấn vào xúc xắc để bắt đầu cuộc phiêu lưu</div>
   </div>
 
 </div>
@@ -270,539 +287,454 @@
   "use strict";
 
   /* =========================================================
-     ワールド定義
+     i18n
   ========================================================= */
-  const WORLDS = [
-    { key:"grass", name:"草原の世界", icon:"🌿", lvRange:[1,7],
-      guardianName:"草原の番人", guardianTitle:"グラスウォリアー", guardianIcon:"🦁" },
-    { key:"water", name:"水の世界", icon:"🌊", lvRange:[8,14],
-      guardianName:"水の番人", guardianTitle:"アクアサーペント", guardianIcon:"🐍" },
-    { key:"fire", name:"炎の世界", icon:"🔥", lvRange:[15,21],
-      guardianName:"炎の番人", guardianTitle:"フレイムナイト", guardianIcon:"🔥" },
-    { key:"desert", name:"砂漠の世界", icon:"🏜️", lvRange:[22,28],
-      guardianName:"砂漠の番人", guardianTitle:"サンドタイタン", guardianIcon:"🦂" },
-    { key:"forest", name:"樹木の世界", icon:"🌳", lvRange:[29,35],
-      guardianName:"樹木の番人", guardianTitle:"エンシェントツリー", guardianIcon:"🌳" },
-  ];
-
-  const MIDBOSS = {
-    14:{ name:"ウォーターゴーレム", icon:"💧👹" },
-    17:{ name:"サラマンダー", icon:"🦎🔥" },
-    18:{ name:"イフリート", icon:"👹🔥" },
-    22:{ name:"スコーピオンキング", icon:"🦂👑" },
-    27:{ name:"サンドリーパー", icon:"🏜️💀", reward:"sword" },
-    31:{ name:"ダークエント", icon:"🌳👹", reward:"shield" },
-    33:{ name:"もりのせいれい", icon:"🌲✨", reward:"armor" },
-  };
-
-  // 中ボス撃破報酬の説明テキスト
-  const REWARD_INFO = {
-    sword:{ icon:"⚔️", title:"勇者の剣を手に入れた！",
-      text:"剣の力が宿った！これからは正解のたびに敵に与えるダメージが2倍になる（1問正解で敵のライフが2減る）。" },
-    shield:{ icon:"🛡️", title:"勇者の盾を手に入れた！",
-      text:"盾を装備した！攻撃を2回まで防いでくれる。3回目のダメージを受けると盾は壊れてしまう。" },
-    armor:{ icon:"🥋", title:"勇者の鎧を手に入れた！",
-      text:"鎧を身にまとった！攻撃を3回まで防いでくれる。4回目のダメージを受けると鎧は壊れてしまう。" },
-  };
-
-  /* =========================================================
-     35レベル分の問題データ（各レベル：normal x3, hard x2）
-  ========================================================= */
-  const LEVELS = [
-  {lv:1, lesson:"だい1か", title:"これ／それ／あれ・です", normal:[
-    {q:"「これは ほんです。」の「これ」が指すのは？", c:["話し手に近いもの","聞き手に近いもの","両方から遠いもの","場所"], a:0},
-    {q:"「わたし＿がくせいです。」＿に入る助詞は？", c:["は","を","に","へ"], a:0},
-    {q:"「はじめまして」の意味は？", c:["Goodbye","Nice to meet you","Thank you","Excuse me"], a:1}],
-    hard:[
-    {q:"「あれは たなかさんの かさですか。」の「あれ」が正しく使えるのは？", c:["話し手に近い物","聞き手に近い物","両方から遠い物","質問する時だけ"], a:2},
-    {q:"A「これは何ですか」B「それは とけいです。」Bにとって「それ」の位置は？", c:["Bに近い","Aに近い","二人から遠い","分からない"], a:1}]},
-
-  {lv:2, lesson:"だい2か", title:"この／その／あの＋名詞・の(所有)", normal:[
-    {q:"「この ほんは わたしのです。」の「この」の後には何が来る？", c:["動詞","名詞","形容詞","助詞のみ"], a:1},
-    {q:"「たなかさんの かさ」の「の」の働きは？", c:["場所","所有","時間","方向"], a:1},
-    {q:"「そこ」が指すのは？", c:["自分の近く","相手の近く","両方から遠い","疑問"], a:1}],
-    hard:[
-    {q:"「あの ひとは だれの せんせいですか。」の「あの」が正しいのは？", c:["話し手の近くの人","聞き手の近くの人","二人から離れた人","架空の人物"], a:2},
-    {q:"「これは わたしの かばんで、それは やまださんのです。」後半「それ」が省略している名詞は？", c:["ほん","かさ","かばん","くつ"], a:2}]},
-
-  {lv:3, lesson:"だい3か", title:"あります／います", normal:[
-    {q:"人や動物がいることを言う時に使う動詞は？", c:["あります","います","します","たべます"], a:1},
-    {q:"「つくえの うえに ほんが＿。」＿に入るのは？", c:["います","あります","いります","わかります"], a:1},
-    {q:"「にわに ねこが＿。」＿に入るのは？", c:["あります","います","します","みます"], a:1}],
-    hard:[
-    {q:"「きょうしつに がくせいが 5にん＿。」正しい動詞は？", c:["あります","います","します","みます"], a:1},
-    {q:"物と人で動詞を使い分ける理由として正しいのは？", c:["生き物には「います」を使う文法規則があるから","意味は同じでどちらでもいいから","地域差があるだけ","古い言い方だから"], a:0}]},
-
-  {lv:4, lesson:"だい4か", title:"数字・時間表現", normal:[
-    {q:"「いま なんじですか」の答えとして正しい形は？", c:["3じです","3にちです","3かいです","3ばんです"], a:0},
-    {q:"「9じから 5じまで」の「から」の意味は？", c:["終わり","始まり","方向","場所"], a:1},
-    {q:"「はん」の意味は？", c:["半分(30分)","1時間","午前","午後"], a:0}],
-    hard:[
-    {q:"「ぎんこうは 9じはんから 3じまでです。」営業時間として正しいのは？", c:["9:30〜15:00","9:00〜15:30","15:00〜9:30","終日営業"], a:0},
-    {q:"「なんじに おきますか」の「に」の役割は？", c:["場所を表す","時間の一点を表す","方向を表す","手段を表す"], a:1}]},
-
-  {lv:5, lesson:"だい5か", title:"動詞ます形(行く・来る・帰る)・へ", normal:[
-    {q:"「がっこう＿いきます。」＿に入る助詞は？", c:["へ","を","で","と"], a:0},
-    {q:"「らいねん にほんへ いきます。」の「らいねん」の意味は？", c:["来年","去年","今年","来月"], a:0},
-    {q:"「なにで がっこうへ いきますか」の「で」が表すのは？", c:["場所","手段(交通手段)","時間","相手"], a:1}],
-    hard:[
-    {q:"「せんしゅう くにへ かえりました。」の時制は？", c:["未来","現在","過去","習慣"], a:2},
-    {q:"徒歩で行くことを言う自然な表現は？", c:["あるきます","あるいてで","あるいて","あるくで"], a:2}]},
-
-  {lv:6, lesson:"だい6か", title:"動詞ます形(する・たべる等)・を", normal:[
-    {q:"「ばんごはんを＿。」に入る自然な動詞は？", c:["たべます","いきます","あります","います"], a:0},
-    {q:"「なにを しますか」の「を」の役割は？", c:["対象(目的語)を表す","場所を表す","時間を表す","方向を表す"], a:0},
-    {q:"「でんわを かけます」の意味は？", c:["電話を切る","電話をかける","電話を待つ","電話を売る"], a:1}],
-    hard:[
-    {q:"「まいあさ しんぶんを よみます。」の「まいあさ」の意味に近いのは？", c:["毎晩","毎朝","毎週","毎年"], a:1},
-    {q:"目的語(を)を伴うのに不自然な文はどれ？", c:["ほんを よみます","ごはんを たべます","を たべます(動詞なし)","しんぶんを よみます"], a:2}]},
-
-  {lv:7, lesson:"だい7か", title:"あげます／もらいます・〜がほしいです", normal:[
-    {q:"「わたしは たなかさんに はなを あげました。」花を渡したのは誰？", c:["たなかさん","わたし","第三者","不明"], a:1},
-    {q:"「もらいます」の反対の意味に近いのは？", c:["あげます","かいます","うります","たべます"], a:0},
-    {q:"「あたらしい かばんが ほしいです。」の意味は？", c:["新しいかばんを持っている","新しいかばんが欲しい","新しいかばんを捨てた","新しいかばんを売った"], a:1}],
-    hard:[
-    {q:"「わたしは たなかさんに ほんを もらいました。」本を渡したのは誰？", c:["わたし","たなかさん","わからない","二人とも"], a:1},
-    {q:"「あげます」と「もらいます」の使い分けで正しいのは？", c:["あげますは受け取る側,もらいますは渡す側","あげますは渡す側,もらいますは受け取る側","どちらも同じ意味","文法的に誤り"], a:1}]},
-
-  {lv:8, lesson:"だい8か", title:"い形容詞・な形容詞", normal:[
-    {q:"「あたらしい」はどちらの形容詞？", c:["い形容詞","な形容詞","動詞","名詞"], a:0},
-    {q:"「しずかな へや」の「しずかな」は？", c:["い形容詞","な形容詞","動詞","副詞"], a:1},
-    {q:"「あかくて おいしいです。」の「あかくて」の形は？", c:["い形容詞のて形(くて)","な形容詞のて形","動詞のて形","名詞のて形"], a:0}],
-    hard:[
-    {q:"な形容詞をて形にする正しい形は？(例:きれい)", c:["きれいくて","きれいで","きれいて","きれいだ"], a:1},
-    {q:"「べんりだ」を丁寧な否定形にすると？", c:["べんりじゃありません","べんりくないです","べんりないです","べんりでは"], a:0}]},
-
-  {lv:9, lesson:"だい9か", title:"好き・嫌い・上手・下手・わかります", normal:[
-    {q:"「わたしは すしが すきです。」の「が」の役割は？", c:["対象を表す","場所を表す","時間を表す","方向を表す"], a:0},
-    {q:"「にほんごが わかります。」の意味は？", c:["日本語が話せる","日本語が理解できる","日本語を書く","日本語を教える"], a:1},
-    {q:"「じょうずです」の反対語は？", c:["すきです","へたです","きらいです","わかりません"], a:1}],
-    hard:[
-    {q:"「にほんごが すこし わかります。」の「すこし」の意味は？", c:["たくさん","少し","全然","もっと"], a:1},
-    {q:"好き嫌い・上手下手・わかる、で共通して使われる助詞は？", c:["を","が","に","で"], a:1}]},
-
-  {lv:10, lesson:"だい10か", title:"位置語(上・下・中・前・後ろ)", normal:[
-    {q:"「つくえの うえ」の意味は？", c:["机の下","机の上","机の中","机の前"], a:1},
-    {q:"「はこの なか」の意味は？", c:["箱の外","箱の中","箱の上","箱の後ろ"], a:1},
-    {q:"「いすの した」の意味は？", c:["椅子の上","椅子の下","椅子の前","椅子の後ろ"], a:1}],
-    hard:[
-    {q:"「テレビの まえに いすが あります。」から分かる位置は？", c:["椅子はテレビの後ろ","椅子はテレビの前","椅子はテレビの中","不明"], a:1},
-    {q:"「ほんだなと つくえの あいだ」の「あいだ」の意味は？", c:["間","上","下","横"], a:0}]},
-
-  {lv:11, lesson:"だい11か", title:"助数詞(個・枚・冊・匹)", normal:[
-    {q:"りんごを数える助数詞は？", c:["まい","こ","さつ","ひき"], a:1},
-    {q:"紙を数える助数詞は？", c:["こ","ひき","まい","さつ"], a:2},
-    {q:"本を数える助数詞は？", c:["まい","さつ","こ","ひき"], a:1}],
-    hard:[
-    {q:"小さい動物を数える助数詞は？", c:["ひき","まい","さつ","こ"], a:0},
-    {q:"「りんごを 3＿ ください。」正しい助数詞は？", c:["さつ","こ","まい","ひき"], a:1}]},
-
-  {lv:12, lesson:"だい12か", title:"比較(〜より〜方が)・一番", normal:[
-    {q:"「バスより でんしゃの ほうが はやいです。」速いのは？", c:["バス","でんしゃ","同じ","不明"], a:1},
-    {q:"「いちばん」の意味は？", c:["二番目","一番","最後","半分"], a:1},
-    {q:"比較の「より」の役割は？", c:["比較の基準を表す","場所を表す","時間を表す","方向を表す"], a:0}],
-    hard:[
-    {q:"「くだものの なかで りんごが いちばん すきです。」から分かることは？", c:["りんごが一番嫌い","果物の中でりんごが一番好き","りんごだけ好き","果物は嫌い"], a:1},
-    {q:"「AよりBのほうが〜」でAとBを入れ替えると意味は？", c:["変わらない","逆になる","無意味になる","誤り"], a:1}]},
-
-  {lv:13, lesson:"だい13か", title:"〜たいです・〜がほしいです", normal:[
-    {q:"「にほんへ いきたいです。」の意味は？", c:["日本へ行った","日本へ行きたい","日本から来た","日本が好き"], a:1},
-    {q:"「〜たいです」が接続するのは？", c:["名詞","動詞ます形の語幹","形容詞","助詞"], a:1},
-    {q:"「なにが たべたいですか」への自然な答えは？", c:["すしが たべたいです","すしを たべます","すしです","すしが すきです"], a:0}],
-    hard:[
-    {q:"「〜たいです」と「〜がほしいです」の違いは？", c:["両方とも物を欲しがる時のみ","たいですは動作,ほしいですは物","たいですは物,ほしいですは動作","意味は完全に同じ"], a:1},
-    {q:"「やすみが ほしいです。」の「やすみ」は？", c:["動詞","名詞","形容詞","助詞"], a:1}]},
-
-  {lv:14, lesson:"だい14か", title:"動詞て形・〜てください【中ボス】", normal:[
-    {q:"「たべます」のて形は？", c:["たべて","たべって","たべいて","たべんで"], a:0},
-    {q:"「よみます」のて形は？", c:["よんで","よみて","よんて","よいて"], a:0},
-    {q:"「まって ください」の意味は？", c:["待たないでください","待ってください","待ちました","待ちます"], a:1}],
-    hard:[
-    {q:"「かきます」の正しいて形は？", c:["かいて","かきて","かって","かんで"], a:0},
-    {q:"「いそいで ください」の元の動詞は？", c:["いきます","いそぎます","いいます","いれます"], a:1}]},
-
-  {lv:15, lesson:"だい15か", title:"〜ています(進行・習慣)", normal:[
-    {q:"「いま たべています。」の意味は？", c:["これから食べる","今食べている最中","もう食べた","食べない"], a:1},
-    {q:"「まいあさ 6じに おきています。」は何を表す？", c:["一回だけの行動","習慣","過去","禁止"], a:1},
-    {q:"「けっこんしています」の意味は？", c:["結婚する予定","結婚している状態","結婚を考えている","独身"], a:1}],
-    hard:[
-    {q:"「〜ています」が状態の継続を表すのはどんな動詞の時？", c:["すべての動詞","結婚する・住む等の変化動詞","形容詞","名詞"], a:1},
-    {q:"「まどが あいています。」の意味は？", c:["誰かが窓を開けている最中","窓が開いた状態が続いている","窓を閉めた","窓がない"], a:1}]},
-
-  {lv:16, lesson:"だい16か", title:"〜てもいいです・〜てはいけません", normal:[
-    {q:"「しゃしんを とっても いいですか。」の意味は？", c:["撮ってはいけない","撮ってもよいか許可を求める","撮らなければならない","撮った"], a:1},
-    {q:"「たばこを すっては いけません。」の意味は？", c:["吸ってもよい","吸ってはいけない","吸いたい","タバコがない"], a:1},
-    {q:"許可を表す文型はどれ？", c:["〜てはいけません","〜てもいいです","〜ないでください","〜なければなりません"], a:1}],
-    hard:[
-    {q:"「くるまを とめては いけません。」を許可の形にすると？", c:["とめてもいいです","とめてはいけません","とめました","とめたいです"], a:0},
-    {q:"許可・禁止の文型に共通して使われる動詞の形は？", c:["て形","ます形","辞書形","名詞化"], a:0}]},
-
-  {lv:17, lesson:"だい17か", title:"動詞ない形・〜ないでください【中ボス】", normal:[
-    {q:"「たべます」のない形は？", c:["たべない","たべません","たべなくて","たべんない"], a:0},
-    {q:"「いきません」の普通形(ない形)は？", c:["いかない","いきない","いくない","いっない"], a:0},
-    {q:"「むりを しないで ください。」の意味は？", c:["無理をしてください","無理をしないでください","無理です","無理をしました"], a:1}],
-    hard:[
-    {q:"「のみます」の正しいない形は？", c:["のまない","のみない","のんない","のむない"], a:0},
-    {q:"「しんぱいしないでください」の元の動詞は？", c:["しんぱいします","しんぱいでした","しんぱいましょう","しんぱいたいです"], a:0}]},
-
-  {lv:18, lesson:"だい18か", title:"動詞辞書形・〜ことができます【中ボス】", normal:[
-    {q:"「たべます」の辞書形は？", c:["たべる","たべます","たべた","たべて"], a:0},
-    {q:"「にほんごを はなす ことが できます。」の意味は？", c:["日本語を話したい","日本語が話せる(能力)","日本語を話した","日本語を話しません"], a:1},
-    {q:"「いきます」の辞書形は？", c:["いく","いった","いって","いき"], a:0}],
-    hard:[
-    {q:"「およぎます」の辞書形は？", c:["およぐ","およぎる","およんだ","およいで"], a:0},
-    {q:"「〜ことができます」の前に来る動詞の形は？", c:["ます形","辞書形","て形","ない形"], a:1}]},
-
-  {lv:19, lesson:"だい19か", title:"動詞た形・〜たことがあります", normal:[
-    {q:"「たべます」のた形は？", c:["たべた","たべて","たべない","たべます"], a:0},
-    {q:"「にほんへ いった ことが あります。」の意味は？", c:["日本へ行く予定がある","日本へ行った経験がある","日本へ行きたい","日本へ行かない"], a:1},
-    {q:"「ほんを よんだり えいがを みたり します。」が表すのは？", c:["一つの動作だけ","いくつかの動作の例示","過去の一回の出来事","禁止"], a:1}],
-    hard:[
-    {q:"「のみます」のた形は？", c:["のんだ","のみた","のった","のいた"], a:0},
-    {q:"「〜たり〜たりします」で使う動詞の形は？", c:["ます形","た形","辞書形","ない形"], a:1}]},
-
-  {lv:20, lesson:"だい20か", title:"普通形・〜と思います", normal:[
-    {q:"「あした あめが ふると おもいます。」の意味は？", c:["事実として断定","話し手の推測・意見","相手への命令","過去の事実"], a:1},
-    {q:"「たべる」はそのまま普通形として使えるか？", c:["はい,そのまま普通形","いいえ,ます形にする必要がある","名詞にする必要がある","て形にする必要がある"], a:0},
-    {q:"「がくせいだと おもいます。」の「だ」の役割は？", c:["普通形の名詞述語","丁寧形","過去形","禁止形"], a:0}],
-    hard:[
-    {q:"普通形が多く使われるのはどんな時？", c:["丁寧な場面のみ","独り言や文の中に埋め込む時","手紙だけ","歌の歌詞だけ"], a:1},
-    {q:"「おもしろく ないと おもいます。」否定はどこにある？", c:["おもいますの部分","おもしろくないの部分","えいがの部分","あのの部分"], a:1}]},
-
-  {lv:21, lesson:"だい21か", title:"普通形＋名詞修飾(関係節)", normal:[
-    {q:"「きのう かった ほん」の意味は？", c:["明日買う本","昨日買った本","今買っている本","買わなかった本"], a:1},
-    {q:"「にほんごを はなす ひと」の「はなす」は何を修飾？", c:["わたし","ひと","にほんご","はなす"], a:1},
-    {q:"名詞修飾節で動詞はどの形になる？", c:["ます形","普通形","て形のみ","命令形"], a:1}],
-    hard:[
-    {q:"「よんでいる ひとは だれですか。」の修飾されている名詞は？", c:["ほん","ひと","あそこ","よんでいる"], a:1},
-    {q:"形容詞が名詞を修飾する時の位置は？", c:["名詞の前","名詞の後","助詞のを必要","接続詞が必要"], a:0}]},
-
-  {lv:22, lesson:"だい22か", title:"〜つもりです・〜まえに・〜てから【中ボス】", normal:[
-    {q:"「らいねん にほんへ いく つもりです。」の意味は？", c:["日本へ行った","日本へ行くつもり","日本へ行きたくない","日本へ行けない"], a:1},
-    {q:"「たべる まえに てを あらいます。」の順序は？", c:["食べた後に手を洗う","食べる前に手を洗う","同時に行う","関係ない"], a:1},
-    {q:"「しごとが おわってから かえります。」の「てから」の意味は？", c:["〜する前に","〜した後で","〜しながら","〜する代わりに"], a:1}],
-    hard:[
-    {q:"「〜まえに」の前に来る動詞の形は？", c:["辞書形","た形","ない形","ます形のみ"], a:0},
-    {q:"「〜てから」の前に来る動詞の形は？", c:["辞書形","て形","ない形","普通形"], a:1}]},
-
-  {lv:23, lesson:"だい23か", title:"〜ば(条件形)・なら", normal:[
-    {q:"「やすければ かいます。」の意味は？", c:["安かったら買う","安くても買わない","高ければ買う","買わない"], a:0},
-    {q:"「にほんに いくなら、きょうとが いいです。」の「なら」は？", c:["過去の事実","相手の話を受けた提案・条件","禁止","命令"], a:1},
-    {q:"い形容詞のば形の作り方は？", c:["語幹+ければ","語幹+れば","そのまま+ば","語幹+たら"], a:0}],
-    hard:[
-    {q:"「じかんが あれば てつだいます。」の「あれば」の元の形は？", c:["あります","ある","あった","あって"], a:1},
-    {q:"五段動詞「よむ」のば形は？", c:["よめば","よむば","よみば","よんば"], a:0}]},
-
-  {lv:24, lesson:"だい24か", title:"意向形・〜そうです(様態)", normal:[
-    {q:"「いきましょう」と同じ意味の意向形は？", c:["いこう","いくよう","いきよう","いこ"], a:0},
-    {q:"「あめが ふりそうです。」の意味は？", c:["雨が降った","雨が降りそう(推測)","雨が止んだ","雨が好き"], a:1},
-    {q:"「たべます」の意向形は？", c:["たべよう","たべろう","たべあう","たべいよう"], a:0}],
-    hard:[
-    {q:"「このケーキは おいしそうです。」の「そうです」は？", c:["伝聞","様態(見た目から推測)","過去の経験","命令"], a:1},
-    {q:"五段動詞「はなす」の意向形は？", c:["はなそう","はなすよう","はなしよう","はなさよう"], a:0}]},
-
-  {lv:25, lesson:"だい25か", title:"〜そうです(伝聞)・〜かもしれません", normal:[
-    {q:"「てんきよほうによると あした あめが ふるそうです。」の「そうです」は？", c:["様態","伝聞(聞いた情報)","意志","禁止"], a:1},
-    {q:"「あした あめが ふるかもしれません。」の意味は？", c:["確実に降る","降る可能性がある","降らない","雨が好き"], a:1},
-    {q:"伝聞の「そうです」の前に来る形は？", c:["普通形","ます形","て形のみ","語幹のみ"], a:0}],
-    hard:[
-    {q:"様態と伝聞の「そうです」の違いは？", c:["接続が違う(様態は語幹,伝聞は普通形)","意味は同じ","様態は過去のみ","伝聞は未来のみ"], a:0},
-    {q:"「かれは いそがしいかもしれません。」の確信度は？", c:["100%確実","可能性がある程度","0%あり得ない","過去の事実"], a:1}]},
-
-  {lv:26, lesson:"だい26か", title:"〜んです", normal:[
-    {q:"「どうして あそこに いるんですか。」の「んです」のニュアンスは？", c:["単なる疑問","理由・状況を尋ねるニュアンス","命令","禁止"], a:1},
-    {q:"「ちょっと つかれているんです。」の役割は？", c:["理由の説明","場所の説明","時間の説明","禁止の説明"], a:0},
-    {q:"な形容詞・名詞に「んです」が続く時の形は？", c:["んです","なんです","んですだ","のですます"], a:1}],
-    hard:[
-    {q:"「あたまが いたいんです。」への自然な返答は？", c:["それは よかったですね","だいじょうぶですか","おいしいですね","たのしいですね"], a:1},
-    {q:"「んです」の口語的な短縮形は？", c:["のです","んだ","です","ます"], a:1}]},
-
-  {lv:27, lesson:"だい27か", title:"〜すぎます・〜方がいいです", normal:[
-    {q:"「たべすぎました。」の意味は？", c:["少し食べた","食べ過ぎた","食べなかった","食べたい"], a:1},
-    {q:"「はやく ねた ほうが いいです。」の意味は？", c:["早く寝るのはよくない","早く寝る方が良い","早く寝てはいけない","早く寝た経験がある"], a:1},
-    {q:"い形容詞を「すぎます」に接続する形は？", c:["語幹+すぎます","そのまま+すぎます","た形+すぎます","て形+すぎます"], a:0}],
-    hard:[
-    {q:"「のみすぎないほうが いいです。」のアドバイスは？", c:["たくさん飲むことを勧める","飲みすぎないことを勧める","飲むことを法的に禁止","無関係"], a:1},
-    {q:"動詞ます形+すぎますの接続は？", c:["ます形の語幹に付ける","辞書形にそのまま付ける","て形に付ける","ない形に付ける"], a:0}]},
-
-  {lv:28, lesson:"だい28か", title:"〜てあげます／もらいます／くれます", normal:[
-    {q:"「わたしは ともだちに ほんを かして あげました。」貸したのは誰？", c:["わたし","ともだち","第三者","不明"], a:0},
-    {q:"「ともだちが てつだって くれました。」助けてくれたのは誰？", c:["わたし","ともだち","先生","家族"], a:1},
-    {q:"「〜てもらいます」は誰の視点？", c:["行動をする側","恩恵を受ける側","第三者","無関係の人"], a:1}],
-    hard:[
-    {q:"「くれます」と「あげます」の主な違いは？", c:["くれますは自分側への行為,あげますは他者への行為","意味は完全に同じ","くれますは物のみ","あげますは動作のみ"], a:0},
-    {q:"「せんせいが ほんを かして くれました。」の敬意ある言い換えは？", c:["くださいました","あげました","もらいました","いただきました"], a:0}]},
-
-  {lv:29, lesson:"だい29か", title:"受身形(passive)", normal:[
-    {q:"「よみます」の受身形は？", c:["よまれます","よみられます","よんれます","よみます"], a:0},
-    {q:"「せんせいに しかられました。」の意味は？", c:["わたしが先生を叱った","わたしが先生に叱られた","先生が褒めた","先生が笑った"], a:1},
-    {q:"受身形が使われる典型的な場面は？", c:["自分の意志の行動","他者から影響・行為を受けた時","未来の予定","願望"], a:1}],
-    hard:[
-    {q:"「たべます」の受身形は？", c:["たべられます","たべれます","たべます","たべさせます"], a:0},
-    {q:"「この うたは みんなに あいされています。」の意味は？", c:["歌がみんなを愛している","歌がみんなから愛されている","歌が嫌われている","誰も知らない"], a:1}]},
-
-  {lv:30, lesson:"だい30か", title:"〜てしまいます・〜と(自動条件)", normal:[
-    {q:"「わすれものを してしまいました。」のニュアンスは？", c:["嬉しい気持ち","残念・後悔の気持ち","誇らしい気持ち","無関心"], a:1},
-    {q:"「はるに なると、はなが さきます。」の「と」の意味は？", c:["条件・自然な結果","過去の一回の出来事","禁止","願望"], a:0},
-    {q:"「ケーキを ぜんぶ たべて しまいました。」の意味は？", c:["少し残した","全部食べ終えてしまった","ケーキを作った","ケーキを買った"], a:1}],
-    hard:[
-    {q:"「〜てしまいます」が示すニュアンスとして正しいのは？", c:["予定通りの完了のみ","意図せず・残念な完了を含むことが多い","未来の予定","禁止"], a:1},
-    {q:"「みぎに まがると、ゆうびんきょくが あります。」の「と」の用法は？", c:["逆接","一般的・機械的な条件結果","理由","並列"], a:1}]},
-
-  {lv:31, lesson:"だい31か", title:"使役形(causative)", normal:[
-    {q:"「たべます」の使役形は？", c:["たべさせます","たべられます","たべます","たべれます"], a:0},
-    {q:"「せんせいは がくせいに ほんを よませました。」の意味は？", c:["先生が本を読んだ","先生が学生に読ませた","学生が先生に読ませた","学生が読みたい"], a:1},
-    {q:"使役形が使われる場面は？", c:["誰かに何かをさせる・許可を与える","自分がされる","過去の後悔","比較"], a:0}],
-    hard:[
-    {q:"「いきます」の使役形は？", c:["いかせます","いきさせます","いけさせます","いっさせます"], a:0},
-    {q:"使役形と「〜てください」の違いは？", c:["使役形は上から下にさせる,てくださいは依頼","意味は同じ","使役形は依頼のみ","てくださいは強制のみ"], a:0}]},
-
-  {lv:32, lesson:"だい32か", title:"使役受身形", normal:[
-    {q:"使役受身形が表すのは？", c:["自分から進んでする行為","嫌々させられる行為","相手に許可を与える行為","未来の予定"], a:1},
-    {q:"「せんせいに さくぶんを かかされました。」の意味は？", c:["先生が作文を書いた","わたしが嫌々書かされた","わたしが先生に書かせた","先生が読んだ"], a:1},
-    {q:"「まちます」の使役受身形は？", c:["またされます","まちさせられます","またせます","まちます"], a:0}],
-    hard:[
-    {q:"使役受身形の作り方の基本ステップは？", c:["使役形を作ってから受身形にする","受身形をそのまま使う","辞書形に直接つける","て形につける"], a:0},
-    {q:"「のみます」の使役受身形は？", c:["のまされます","のみさせられます","のませられます","のむされます"], a:0}]},
-
-  {lv:33, lesson:"だい33か", title:"尊敬語", normal:[
-    {q:"「いきます」の尊敬語は？", c:["いらっしゃいます","まいります","いただきます","もうします"], a:0},
-    {q:"尊敬語を使う場面は？", c:["自分をへりくだる時","目上の人の動作を高める時","友達との会話","独り言"], a:1},
-    {q:"「たべます」の尊敬語は？", c:["めしあがります","いただきます","もうします","まいります"], a:0}],
-    hard:[
-    {q:"「する」の尊敬語は？", c:["なさいます","いたします","もうします","まいります"], a:0},
-    {q:"尊敬の意味を加えた依頼表現は？", c:["おV(ます形)ください","Vてください","Vさせてください","Vていただきます"], a:0}]},
-
-  {lv:34, lesson:"だい34か", title:"謙譲語", normal:[
-    {q:"「いきます」の謙譲語は？", c:["まいります","いらっしゃいます","なさいます","めしあがります"], a:0},
-    {q:"謙譲語を使う場面は？", c:["目上の人の動作を高める時","自分の動作をへりくだって言う時","独り言","命令する時"], a:1},
-    {q:"「します」の謙譲語は？", c:["いたします","なさいます","いらっしゃいます","めしあがります"], a:0}],
-    hard:[
-    {q:"「もらいます」の謙譲語は？", c:["いただきます","めしあがります","なさいます","いらっしゃいます"], a:0},
-    {q:"「いいます」の謙譲語は？", c:["もうします","なさいます","いらっしゃいます","いただきます"], a:0}]},
-
-  {lv:35, lesson:"だい35か", title:"敬語まとめ・手紙表現", normal:[
-    {q:"手紙の書き出しでよく使われる表現は？", c:["拝啓","了解","じゃあね","バイバイ"], a:0},
-    {q:"目上の人へのメールで自分の行動を述べる時に適切なのは？", c:["尊敬語","謙譲語","タメ口","命令形"], a:1},
-    {q:"敬語のまとめとして正しいのは？", c:["尊敬語=相手を高める,謙譲語=自分を低める,丁寧語=丁寧に言う","すべて同じ意味","尊敬語だけでよい","謙譲語は友達に使う"], a:0}],
-    hard:[
-    {q:"ビジネスメールの結びとして自然なのは？", c:["よろしくお願いいたします","じゃあね","バイバイ","了解です"], a:0},
-    {q:"「お世話になっております」が使われる場面は？", c:["親しい友人とのチャット","ビジネスメールの冒頭の挨拶","独り言","子供への言葉"], a:1}]},
-  ];
-
-  const LEVEL_BY_LV = {};
-  LEVELS.forEach(l=>{ LEVEL_BY_LV[l.lv]=l; });
-
-  function worldIndexForLv(lv){
-    for(let i=0;i<WORLDS.length;i++){
-      const [s,e]=WORLDS[i].lvRange;
-      if(lv>=s && lv<=e) return i;
+  const I18N = {
+    vi:{
+      title:"⚔️ Cuộc Phiêu Lưu Của Dũng Sĩ",
+      subtitle:"Bản đồ 1: Thị Trấn Hoàng Gia (LV0〜LV3)",
+      life:"Sinh lực", exp:"Kinh nghiệm", gold:"Vàng",
+      roll:"Tung xúc xắc",
+      hintStart:"Nhấn vào xúc xắc để bắt đầu cuộc phiêu lưu",
+      hintRoll:"Nhấn để tung xúc xắc",
+      rolled:(n)=>`Xúc xắc ra số ${n}!`,
+      introTitle:"Mở đầu câu chuyện",
+      introText:"Công chúa đã bị Ma Vương Rồng bắt cóc! Quốc vương đang tìm kiếm một dũng sĩ can đảm để giải cứu công chúa. Bạn quyết định lên đường trở thành dũng sĩ ấy.<br><br>Trước tiên, hãy đi qua Thị Trấn Hoàng Gia: gặp Quốc Vương, luyện tập tại 3 võ đường, rồi thử sức với quái vật luyện tập trước khi thực sự lên đường phiêu lưu.",
+      startBtn:"⚔️ Bắt đầu phiêu lưu",
+      kingTitle:"Yết kiến Quốc Vương",
+      askNameTitle:"Quốc Vương hỏi tên bạn",
+      askNameText:"Quốc Vương: “Trước khi giao trọng trách, hãy cho ta biết — tên của ngươi là gì, hỡi dũng sĩ trẻ tuổi?”",
+      nameInputPlaceholder:"Nhập tên của bạn...",
+      nameConfirmBtn:"Xác nhận",
+      defaultHeroName:"Dũng Sĩ",
+      kingTextFirst:(name)=>`Quốc Vương nói: "Dũng sĩ ${name}, ta trao cho ngươi Chiếu Chỉ này, và một ít lộ phí. Hãy đến ba võ đường phía trước để luyện tập trước khi lên đường!"<br><br>Nhận được: <b>📜 Chiếu Chỉ Nhà Vua</b> + <b>💰 15 Vàng</b>`,
+      kingTextAgain:(name)=>`Quốc Vương mỉm cười: "Hãy chăm chỉ luyện tập ở các võ đường, dũng sĩ ${name}."`,
+      dojoCombatTitle:"Võ đường Chiến Đấu",
+      dojoDefenseTitle:"Võ đường Phòng Thủ",
+      dojoItemTitle:"Võ đường Vật Phẩm",
+      dojoNeedScroll:"Bạn cần có <b>Chiếu Chỉ Nhà Vua</b> trước! Bạn bị đưa trở lại điểm xuất phát (ô số 1) để đi gặp Quốc Vương ở ô số 6.",
+      dojoNeedGold:(cost)=>`Không đủ vàng! Cần <b>${cost} Vàng</b> để luyện tập tại đây.`,
+      dojoDoneAlready:"Bạn đã luyện tập xong ở võ đường này rồi.",
+      dojoCombatDesc:"Học cách ra đòn chính xác. Từ nay, mỗi khi trả lời đúng, sinh lực của kẻ địch sẽ giảm đi.",
+      dojoDefenseDesc:"Học cách né tránh đòn tấn công. Từ nay, gặp quái vật luyện tập sẽ không còn bị mất sinh lực ngay lập tức nữa.",
+      dojoItemDesc:"Được giới thiệu về các loại vật phẩm. Từ nay bạn có thể sử dụng được các vật phẩm nhặt được.",
+      dojoTrainBtn:(cost)=>`Luyện tập (${cost} Vàng)`,
+      dojoTrainedMsg:"Bạn đã luyện tập thành công!",
+      enemyTitle:"Quái vật luyện tập xuất hiện!",
+      guardianTitle:"Người Gác Cổng xuất hiện!",
+      untrainedHurt:"Bạn chưa học phòng thủ nên bị thương ngay lập tức! Sinh lực -1.",
+      sentBack:"Bạn chưa luyện tập đầy đủ nên bị đưa trở lại ô số 8 để luyện tập thêm!",
+      sentBackCastle:"Bạn chưa học cả cách tấn công lẫn cách phòng thủ nên bị đưa thẳng về đầu Thị Trấn Hoàng Gia để chuẩn bị lại từ đầu!",
+      correct:"✅ Chính xác!",
+      wrong:"❌ Sai rồi…",
+      noDamagePractice:"(Đây là khu vực luyện tập nên sinh lực không bị giảm)",
+      practiceDefeatNote:(g)=>`(Đây là khu vực luyện tập nên sinh lực không bị giảm) Nhận được +${g} 💰`,
+      enemyDamage:"Kẻ địch mất 1 điểm sinh lực!",
+      enemyNoTrainNote:"(Bạn chưa học chiến đấu nên đòn đánh không có tác dụng với kẻ địch)",
+      enemyDefeated:"Bạn đã đánh bại quái vật luyện tập!",
+      guardianDefeated:"Bạn đã đánh bại Người Gác Cổng luyện tập! Bản đồ 1 hoàn thành!",
+      pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
+      shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
+      lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
+      tailwindTitle:"Gió thuận!", tailwindText:"Gió thuận chiều đưa bạn tiến lên 2 ô!",
+      stepFwdTitle:"Bước nhỏ", stepFwdText:"Một điều may mắn nhỏ, tiến lên 1 ô.",
+      stepBackTitle:"Bước hụt", stepBackText:"Một điều xui xẻo nhỏ, lùi lại 1 ô.",
+      herbTitle:"Nhặt được Thảo Dược!", herbTextHeal:"Bạn dùng thảo dược, hồi phục 1 sinh lực!", herbTextFull:"Bạn tìm thấy thảo dược nhưng sinh lực đã đầy nên không dùng.",
+      herbTextLocked:"Bạn nhặt được thảo dược, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      shopTitle:"Cửa hàng lưu động",
+      shopIntro:"Một thương nhân đang bán các vật phẩm quý hiếm:",
+      shopBuy:"Mua",
+      shopNotEnough:"Không đủ vàng!",
+      shopBought:(name)=>`Đã mua: ${name}`,
+      shopClose:"Rời cửa hàng",
+      itemHerb:"🌿 Thảo Dược", itemElixir:"🧪 Elixir Thần Kỳ", itemBoots:"👢 Ủng Có Cánh", itemLifeWater:"💧 Nước Sinh Mệnh",
+      itemLockedNote:"(Bạn chưa học ở Võ đường Vật Phẩm nên vật phẩm này chưa có tác dụng)",
+      elixirReadyNote:"(Elixir sẽ tự động hồi sinh bạn nếu sinh lực về 0)",
+      lifeWaterTextHeal:"Bạn dùng Nước Sinh Mệnh, sinh lực +1!",
+      lifeWaterTextLocked:"Bạn nhận được Nước Sinh Mệnh, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      bootsTitle:"Ủng Có Cánh phát huy tác dụng!",
+      bootsText:"Đôi ủng đưa bạn bay thẳng đến ô cuối cùng của bản đồ!",
+      elixirTitle:"Elixir phát huy tác dụng!",
+      elixirText:"Elixir đã hồi sinh bạn với 3 sinh lực!",
+      continueBtn:"Tiếp tục",
+      gameOverTitle:"Dũng sĩ đã gục ngã…",
+      gameOverText:"Sinh lực của bạn đã cạn kiệt. Hãy thử lại từ đầu!",
+      retryBtn:"🔁 Thử lại",
+      mapClearTitle:"Bản đồ 1 hoàn thành!",
+      mapClearText:"Bạn đã sẵn sàng rời khỏi Thị Trấn Hoàng Gia để bước vào cuộc phiêu lưu thực sự. (Bản đồ 2: Thảo Nguyên sẽ được bổ sung ở phiên bản tiếp theo.)",
+      statLifeShort:"Sinh lực", statExpShort:"KN", statGoldShort:"Vàng",
+      devTitle:"Cài đặt nhà phát triển",
+      devLangLabel:"Ngôn ngữ hiển thị",
+      devToJa:"Chuyển sang Tiếng Nhật",
+      devToVi:"Chuyển sang Tiếng Việt",
+      devClose:"Đóng",
+      accountTitle:"Tài khoản",
+      accountGuestNote:"Bạn có thể chơi mà không cần đăng nhập. Đăng nhập bằng email để lưu và tiếp tục tiến trình chơi ở lần sau.",
+      accountEmailPlaceholder:"Nhập địa chỉ email...",
+      accountSendLinkBtn:"Gửi liên kết đăng nhập",
+      accountSending:"Đang gửi...",
+      accountLinkSentTitle:"Đã gửi liên kết!",
+      accountLinkSentText:(email)=>`Chúng tôi đã gửi một liên kết đăng nhập đến <b>${email}</b>. Hãy mở email và bấm vào liên kết đó trên chính thiết bị/trình duyệt này để đăng nhập.`,
+      accountLinkErrorPrefix:"Không thể gửi liên kết: ",
+      accountLoggedInAs:(email)=>`Đã đăng nhập: <b>${email}</b>`,
+      accountSaveNowBtn:"💾 Lưu tiến trình ngay",
+      accountLogoutBtn:"Đăng xuất",
+      accountSaveSuccess:"Đã lưu tiến trình!",
+      accountSaveError:"Lưu thất bại. Vui lòng thử lại sau.",
+      accountLoadError:"Không thể tải dữ liệu đã lưu.",
+      accountSavedAt:(t)=>`Lần lưu gần nhất: ${t}`,
+      accountNoSaveYet:"Chưa có dữ liệu đã lưu.",
+      continuePromptTitle:"Tìm thấy tiến trình đã lưu!",
+      continuePromptText:"Bạn có muốn tiếp tục từ lần chơi trước không?",
+      continueYesBtn:"Tiếp tục",
+      continueNoBtn:"Chơi mới từ đầu",
+      welcomeBackText:(name)=>`Chào mừng trở lại, ${name}!`,
+    },
+    ja:{
+      title:"⚔️ 勇者の冒険",
+      subtitle:"マップ1：城下町 (LV0〜LV3)",
+      life:"ライフ", exp:"経験値", gold:"ゴールド",
+      roll:"サイコロを振る",
+      hintStart:"サイコロをクリックして冒険をはじめよう",
+      hintRoll:"サイコロを振ってね",
+      rolled:(n)=>`${n}が出た！`,
+      introTitle:"物語のはじまり",
+      introText:"姫が魔王ドラゴンにさらわれてしまった！国王は勇気ある冒険者を探している。あなたはその勇者になることを決意した。<br><br>まずは城下町へ。国王に謁見し、3つの道場で修行を積み、練習用のモンスターと戦ってから本当の冒険に旅立とう。",
+      startBtn:"⚔️ 冒険をはじめる",
+      kingTitle:"国王への謁見",
+      askNameTitle:"国王が名前を尋ねる",
+      askNameText:"国王「使命を授ける前に、若き勇者よ、そなたの名を聞かせてくれ」",
+      nameInputPlaceholder:"名前を入力してください...",
+      nameConfirmBtn:"決定",
+      defaultHeroName:"勇者",
+      kingTextFirst:(name)=>`国王「${name}よ、そなたにこの命令書と、当座の資金を授けよう。旅立つ前に、この先にある3つの道場で修行するのだ！」<br><br>入手: <b>📜 王の命令書</b> + <b>💰 15ゴールド</b>`,
+      kingTextAgain:(name)=>`国王「道場での修行に励むのだぞ、${name}よ。」`,
+      dojoCombatTitle:"戦い方の道場",
+      dojoDefenseTitle:"守り方の道場",
+      dojoItemTitle:"アイテムの道場",
+      dojoNeedScroll:"まず<b>王の命令書</b>が必要です！スタート地点(1マス目)まで強制的に送り返され、6マス目の国王に会いに行くことになる。",
+      dojoNeedGold:(cost)=>`ゴールドが足りません！ここで修行するには<b>${cost}ゴールド</b>必要です。`,
+      dojoDoneAlready:"この道場での修行はすでに終えています。",
+      dojoCombatDesc:"正しい戦い方を学ぶ。以後、正解するたびに敵のライフが減るようになる。",
+      dojoDefenseDesc:"身の守り方を学ぶ。以後、練習用モンスターに遭遇しても即座にライフが減らなくなる。",
+      dojoItemDesc:"アイテムについて紹介を受ける。以後、拾ったアイテムを実際に使えるようになる。",
+      dojoTrainBtn:(cost)=>`修行する（${cost}ゴールド）`,
+      dojoTrainedMsg:"修行に成功した！",
+      enemyTitle:"練習用モンスターが現れた！",
+      guardianTitle:"番人が現れた！",
+      untrainedHurt:"守り方を学んでいないので、即座に傷を負ってしまった！ライフ-1。",
+      sentBack:"修行が足りないため、8マス目まで連れ戻されてしまった！",
+      sentBackCastle:"戦い方も守り方もまだ学んでいないため、城下町の入り口まで送り返されてしまった！最初から準備をやり直そう。",
+      correct:"✅ 正解！",
+      wrong:"❌ 残念…",
+      noDamagePractice:"（練習エリアのためライフは減らない）",
+      practiceDefeatNote:(g)=>`（練習エリアのためライフは減らない）+${g} 💰 獲得！`,
+      enemyDamage:"敵のライフが1減った！",
+      enemyNoTrainNote:"（戦い方を学んでいないため、敵に攻撃が通らない）",
+      enemyDefeated:"練習用モンスターを倒した！",
+      guardianDefeated:"練習用の番人を倒した！マップ1クリア！",
+      pitTitle:"落とし穴！", pitText:"落とし穴に落ちてしまった！ライフ-1。",
+      shortcutTitle:"近道！", shortcutText:"近道を見つけた！3マス進む。",
+      lostTitle:"迷い道！", lostText:"道に迷ってしまった！3マス戻る。",
+      tailwindTitle:"追い風！", tailwindText:"追い風に乗って2マス進む！",
+      stepFwdTitle:"小さな幸運", stepFwdText:"ちょっとした幸運で1マス進む。",
+      stepBackTitle:"小さな不運", stepBackText:"ちょっとした不運で1マス戻る。",
+      herbTitle:"薬草を見つけた！", herbTextHeal:"薬草を使い、ライフが1回復した！", herbTextFull:"薬草を見つけたが、ライフが満タンなので使わなかった。",
+      herbTextLocked:"薬草を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      shopTitle:"移動商人のお店",
+      shopIntro:"商人が珍しいアイテムを売っている:",
+      shopBuy:"購入",
+      shopNotEnough:"ゴールドが足りません！",
+      shopBought:(name)=>`購入した: ${name}`,
+      shopClose:"お店を出る",
+      itemHerb:"🌿 薬草", itemElixir:"🧪 エリクサー", itemBoots:"👢 翼のあるブーツ", itemLifeWater:"💧 生命の水",
+      itemLockedNote:"（まだアイテムの道場で学んでいないため、この効果は発動しない）",
+      elixirReadyNote:"（ライフが0になったとき、自動的に生き返らせてくれる）",
+      lifeWaterTextHeal:"生命の水を使い、ライフが1増えた！",
+      lifeWaterTextLocked:"生命の水を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      bootsTitle:"翼のあるブーツの効果発動！",
+      bootsText:"ブーツの力でマップの最後のマスまで一気に飛んだ！",
+      elixirTitle:"エリクサーの効果発動！",
+      elixirText:"エリクサーの力でライフ3の状態で生き返った！",
+      continueBtn:"つづける",
+      gameOverTitle:"勇者は力尽きた…",
+      gameOverText:"ライフがなくなってしまった。最初からやり直そう！",
+      retryBtn:"🔁 もう一度挑戦する",
+      mapClearTitle:"マップ1クリア！",
+      mapClearText:"城下町を出て、本当の冒険へ旅立つ準備が整った。（マップ2：草原は次のバージョンで追加予定です。）",
+      statLifeShort:"ライフ", statExpShort:"経験値", statGoldShort:"ゴールド",
+      devTitle:"開発者向け設定",
+      devLangLabel:"表示言語",
+      devToJa:"日本語に切り替える",
+      devToVi:"ベトナム語に切り替える",
+      devClose:"閉じる",
+      accountTitle:"アカウント",
+      accountGuestNote:"ログインしなくても遊べます。メールでログインすると、進行状況を保存して次回続きから再開できます。",
+      accountEmailPlaceholder:"メールアドレスを入力...",
+      accountSendLinkBtn:"ログインリンクを送信",
+      accountSending:"送信中...",
+      accountLinkSentTitle:"リンクを送信しました！",
+      accountLinkSentText:(email)=>`<b>${email}</b> 宛にログインリンクを送信しました。同じ端末・ブラウザでメールを開き、リンクをクリックしてログインしてください。`,
+      accountLinkErrorPrefix:"リンクを送信できませんでした: ",
+      accountLoggedInAs:(email)=>`ログイン中: <b>${email}</b>`,
+      accountSaveNowBtn:"💾 今すぐ保存",
+      accountLogoutBtn:"ログアウト",
+      accountSaveSuccess:"保存しました！",
+      accountSaveError:"保存に失敗しました。しばらくしてからお試しください。",
+      accountLoadError:"保存データを読み込めませんでした。",
+      accountSavedAt:(t)=>`最終保存: ${t}`,
+      accountNoSaveYet:"まだ保存データがありません。",
+      continuePromptTitle:"保存データが見つかりました！",
+      continuePromptText:"前回の続きから再開しますか？",
+      continueYesBtn:"続きから再開",
+      continueNoBtn:"最初から始める",
+      welcomeBackText:(name)=>`おかえりなさい、${name}！`,
     }
-    return 0;
+  };
+
+  function t(key, ...args){
+    const dict = I18N[state.lang];
+    const v = dict[key];
+    if(typeof v === "function") return v(...args);
+    return v;
   }
 
   /* =========================================================
-     マス目パターン(各世界のイベント配置)
-     ・各世界: 冒頭のストーリー1マス + (LVマス + イベント3マス)×7レベル + 番人1マス
-       = 合計30マス前後。番人1人が待つ「1ページ分」の広さを再現する。
+     問題データ (LV0〜LV3)
   ========================================================= */
-  // type: quiz(lvから自動判定) / midboss(lvから自動判定) / heart / item / bonus / trap / story / guardian / elixir
+  const LEVELS = {
+    0:{ title:"ひらがな・カタカナ", normal:[
+        {q:"Cách đọc của 「あ」 là gì?", c:["a","i","u","e"], a:0},
+        {q:"Cách đọc của 「か」 là gì?", c:["ka","sa","ta","na"], a:0},
+        {q:"Cách đọc của 「ん」 là gì?", c:["n","r","w","m"], a:0},
+        {q:"Chữ hiragana tương ứng với katakana 「ア」 là chữ nào?", c:["あ","い","う","え"], a:0},
+        {q:"「さくら」 nếu viết toàn bộ bằng hiragana thì viết như thế nào?", c:["さくら","サクラ","さクら","サくら"], a:0}],
+      hard:[
+        {q:"Trong từ katakana 「コーヒー」, vai trò của dấu 「ー」 là gì?", c:["Kéo dài nguyên âm phía trước","Thay đổi phụ âm","Có thể bỏ qua, không cần để ý","Giống với 「っ」 nhỏ"], a:0},
+        {q:"Cách phân biệt sử dụng chính giữa 「ひらがな」 và 「カタカナ」 là gì?", c:["Hiragana dùng cho từ thuần Nhật, katakana dùng cho từ ngoại lai v.v.","Hiragana chỉ dùng để ghi cách đọc (furigana) của chữ Hán","Katakana chỉ dùng trong văn bản hành chính","Không có sự phân biệt nào"], a:0}]},
+    1:{ title:"自己紹介・～は～です", normal:[
+        {q:"Trong câu 「わたしは ミラーです。」, mẫu câu 「Aは Bです」 dùng để làm gì?", c:["A và B là hai vật khác nhau","A là B (giới thiệu/khẳng định)","A không phải là B","Đặt câu hỏi về A"], a:1},
+        {q:"Trong câu 「サントスさんは ブラジル人です。」, từ 「ブラジル人」 cho biết điều gì về サントスさん?", c:["Nghề nghiệp","Quốc tịch","Tuổi","Tên công ty"], a:1},
+        {q:"Muốn nói \"Tôi không phải là giáo viên\", câu nào đúng theo mẫu đã học?", c:["わたしは せんせいです。","わたしは せんせいでした。","わたしは せんせいじゃ ありません。","わたしは せんせいでしょう。"], a:2}],
+      hard:[
+        {q:"Trong câu 「ミラーさんも かいしゃいんです。」, trợ từ 「も」 được dùng khi nào?", c:["Khi thông tin giống với người/vật đã nói trước đó","Khi phủ định câu trước","Khi đặt câu hỏi","Khi so sánh hơn kém"], a:0},
+        {q:"「わたしは IMCの ミラーです。」 Trong câu này, 「の」 nằm giữa 2 danh từ có vai trò gì?", c:["Sở hữu đồ vật","Thể hiện nơi thuộc về (công ty/tổ chức)","Chỉ địa điểm","Chỉ thời gian"], a:1}]},
+    2:{ title:"これ／それ／あれ・所有(の)", normal:[
+        {q:"Trong câu 「これは わたしの かさです。」, 「これ」 chỉ vật ở vị trí nào so với người nói?", c:["Gần người nói","Gần người nghe","Xa cả hai người","Không xác định"], a:0},
+        {q:"Trong câu 「それは にほんごの ほんです。」, cụm 「にほんごの ほん」 nghĩa là gì?", c:["Sách tiếng Nhật","Sách của người Nhật","Sách viết ở Nhật Bản","Sách dành cho người dạy tiếng Nhật"], a:0},
+        {q:"Trong câu 「この かさは たなかさんのです。」, 「たなかさんの」 đang lược bỏ danh từ nào phía sau?", c:["ひと","かさ","くに","なまえ"], a:1}],
+      hard:[
+        {q:"Sự khác nhau giữa 「これ」 và 「この＋名詞」 là gì?", c:["「これ」đứng một mình thay cho danh từ, còn 「この＋名詞」 phải đi kèm danh từ theo sau","Không có sự khác nhau","「これ」 chỉ dùng cho người, 「この」 chỉ dùng cho vật","「この」 lịch sự hơn 「これ」"], a:0},
+        {q:"「あれは だれの かばんですか。」 Từ để hỏi 「だれ」 trong câu này dùng để hỏi về điều gì?", c:["Địa điểm","Người sở hữu","Giá tiền","Thời gian"], a:1}]},
+    3:{ title:"ここ／そこ／あそこ・いくらですか", normal:[
+        {q:"Trong câu 「ここは かいぎしつです。」, 「ここ」 chỉ về điều gì?", c:["Một địa điểm gần người nói","Một đồ vật","Một người","Một khoảng thời gian"], a:0},
+        {q:"Muốn hỏi giá tiền của một món đồ, mẫu câu nào đúng?", c:["これは 何ですか。","これは いくらですか。","これは だれのですか。","これは どこですか。"], a:1},
+        {q:"Trong câu 「トイレは あそこです。」, 「あそこ」 chỉ vị trí như thế nào?", c:["Gần người nói","Gần người nghe","Xa cả người nói lẫn người nghe","Ngay tại đây"], a:2}],
+      hard:[
+        {q:"A「すみません、けいたいうりばは どこですか。」 B「エレベーターの まえです。」 Trong hội thoại này, câu hỏi 「どこ」 dùng để tìm gì?", c:["Giá tiền của một món hàng","Vị trí của một địa điểm/khu vực","Tên của một người","Thời gian đóng cửa"], a:1},
+        {q:"「これは 1,500えんです。」 Câu hỏi ban đầu hợp lý nhất để nhận được câu trả lời này là gì?", c:["これは 何ですか。","これは いくらですか。","これは だれですか。","これは いつですか。"], a:1}]},
+  };
 
-  const WORLD_INTRO = [
-    {icon:"🌾", label:"しゅっぱつ", text:"村を出発し、広い草原に足を踏み入れた。冒険がはじまる！"},
-    {icon:"🌊", label:"すいこく", text:"川沿いを進むと、きらめく水の世界にたどり着いた。"},
-    {icon:"🔥", label:"ほのおのくに", text:"炎の世界に足を踏み入れた。熱気が肌を刺す。"},
-    {icon:"🏜️", label:"さばく", text:"見渡す限りの砂漠。強い日差しが照りつける。"},
-    {icon:"🌳", label:"じゅもくのもり", text:"巨大な木々が立ち並ぶ、樹木の世界に入った。"},
-  ];
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]]=[a[j],a[i]];
+    }
+    return a;
+  }
 
-  // 各世界で繰り返し登場するイベント(物語・回復・道具・近道・罠)。世界ごとに9種類を巡回させ、
-  // 長い道のりでも単調にならないよう変化をつける。
-  const WORLD_FILLERS = [
-    // 草原
-    [
-      {t:"story", icon:"🌾", label:"のどかな道", text:"風がそよぐ草原を、鳥のさえずりを聞きながら進んでいく。"},
-      {t:"heart", icon:"🍀", label:"クローバー", text:"四つ葉のクローバーを見つけた！元気が回復した。"},
-      {t:"item",  icon:"🪄", label:"魔法の杖", text:"古い杖を拾った！お守りの力が宿っている(お守り+1)。"},
-      {t:"bonus", icon:"🌟", label:"ちかみち", text:"近道を見つけた！2マス進む！"},
-      {t:"trap",  icon:"🌿", label:"しげみ", text:"茂みに迷い込んでしまった…2マス戻る。"},
-      {t:"story", icon:"🐦", label:"小鳥の案内", text:"小鳥たちが道案内するように飛んでいく。"},
-      {t:"heart", icon:"🌼", label:"花の香り", text:"花畑を通り抜けると、なぜか元気が湧いてきた！"},
-      {t:"item",  icon:"🍯", label:"森のはちみつ", text:"甘い蜂蜜を見つけた！お守りとして持ち帰ろう(お守り+1)。"},
-      {t:"trap",  icon:"🕳️", label:"おとしあな", text:"落とし穴に落ちてしまった…2マス戻る。"},
-    ],
-    // 水
-    [
-      {t:"story", icon:"🌊", label:"さざなみ", text:"川沿いのさざなみが、静かに歩みを後押ししてくれる。"},
-      {t:"heart", icon:"💧", label:"いずみ", text:"清らかな泉の水を飲んで元気になった！"},
-      {t:"item",  icon:"🐚", label:"貝がらのお守り", text:"光る貝がらを見つけた！お守りとして持ち帰ろう(お守り+1)。"},
-      {t:"bonus", icon:"🌊", label:"おいなみ", text:"追い波に乗って2マス進む！"},
-      {t:"trap",  icon:"🌀", label:"うずしお", text:"渦潮に巻き込まれた…2マス戻る。"},
-      {t:"story", icon:"🐬", label:"いるかの案内", text:"イルカの群れが、まるで道案内するように跳ねていく。"},
-      {t:"heart", icon:"🐟", label:"ぎょぐんのひかり", text:"銀色の魚の群れを見ていると、なぜか元気が湧いてきた！"},
-      {t:"item",  icon:"🦪", label:"しんじゅ", text:"貝の中から真珠を見つけた！お守りとして持ち帰ろう(お守り+1)。"},
-      {t:"trap",  icon:"🌊", label:"しおさい", text:"満ちてきた潮に足を取られた…2マス戻る。"},
-    ],
-    // 炎
-    [
-      {t:"story", icon:"🔥", label:"ねつき", text:"炎の粉が舞う道を、汗をぬぐいながら進む。"},
-      {t:"heart", icon:"🧊", label:"こおりのいずみ", text:"灼熱の中で見つけた氷の泉！体力が回復した。"},
-      {t:"item",  icon:"🔥", label:"炎のお守り", text:"燃え盛るお守りを手に入れた！(お守り+1)"},
-      {t:"bonus", icon:"🌋", label:"ふんかのいきおい", text:"噴火の勢いに乗って2マス進む！"},
-      {t:"trap",  icon:"🌋", label:"ようがん", text:"溶岩に行く手を阻まれた…2マス戻る。"},
-      {t:"story", icon:"💨", label:"たちこめるけむり", text:"立ちこめる煙の中、かすかな光を頼りに進む。"},
-      {t:"heart", icon:"♨️", label:"おんせん", text:"熱い温泉に足をひたすと、疲れが吹き飛んだ！"},
-      {t:"item",  icon:"🪨", label:"ようがんせきのお守り", text:"黒く輝く溶岩石を見つけた！お守りとして持ち帰ろう(お守り+1)。"},
-      {t:"trap",  icon:"🔥", label:"ひのこ", text:"飛んできた火の粉に驚いて後ずさりした…2マス戻る。"},
-    ],
-    // 砂漠
-    [
-      {t:"story", icon:"🏜️", label:"さばくのみち", text:"見渡す限りの砂丘。強い日差しが照りつける。"},
-      {t:"item",  icon:"🏺", label:"古いつぼ", text:"砂に埋もれた壺の中からお守りを見つけた！(お守り+1)"},
-      {t:"heart", icon:"🌵", label:"サボテンの実", text:"サボテンの実を食べて元気が回復した！"},
-      {t:"bonus", icon:"🐫", label:"らくだ", text:"ラクダに乗せてもらい2マス進む！"},
-      {t:"trap",  icon:"🏜️", label:"すなあらし", text:"砂嵐に行く手を阻まれた…2マス戻る。"},
-      {t:"story", icon:"🌅", label:"しんきろう", text:"遠くに揺らめく蜃気楼が見える。まだ先は長そうだ。"},
-      {t:"heart", icon:"💦", label:"オアシスの水", text:"オアシスの水を飲んで元気が回復した！"},
-      {t:"item",  icon:"📿", label:"じゅずのお守り", text:"旅人が落とした数珠を見つけた！お守りとして持ち帰ろう(お守り+1)。"},
-      {t:"trap",  icon:"🦂", label:"さそりのすみか", text:"サソリの巣を踏んでしまった…2マス戻る。"},
-    ],
-    // 樹木
-    [
-      {t:"story", icon:"🌳", label:"じゅもくのみち", text:"巨大な木々が立ち並ぶ、樹木の世界の奥へと進む。"},
-      {t:"heart", icon:"🍄", label:"やくそうキノコ", text:"薬草キノコを見つけて食べた！体力が回復した。"},
-      {t:"item",  icon:"🍯", label:"ようせいのはちみつ", text:"妖精のはちみつを見つけた！お守りの力を感じる(お守り+1)。"},
-      {t:"bonus", icon:"🍃", label:"おいかぜ", text:"追い風に乗って2マス進む！"},
-      {t:"trap",  icon:"🌲", label:"つた", text:"蔦に足を絡めとられた…2マス戻る。"},
-      {t:"story", icon:"🦉", label:"ふくろうの声", text:"梢の奥からふくろうの声が響き、道を示してくれた。"},
-      {t:"heart", icon:"🌰", label:"どんぐりのちから", text:"どんぐりを拾って食べると、なぜか元気が湧いてきた！"},
-      {t:"item",  icon:"🍂", label:"おちばのお守り", text:"色づいた落ち葉を集めるとお守りになった！(お守り+1)"},
-      {t:"trap",  icon:"🌲", label:"ねっこ", text:"木の根につまずいてしまった…2マス戻る。"},
-    ],
-  ];
+  // 指定した cellsAsc（昇順のセル番号配列）に events（同じ長さのイベント種別配列）を
+  // ランダムに割り当てるが、隣接するセル番号(n, n+1)が同じ種別にならないようにする。
+  function assignNoAdjacentDup(cellsAsc, events, maxAttempts){
+    maxAttempts = maxAttempts || 400;
+    function isValid(map){
+      for(const c of cellsAsc){
+        if(map[c+1]!==undefined && map[c]===map[c+1]) return false;
+      }
+      return true;
+    }
+    for(let attempt=0; attempt<maxAttempts; attempt++){
+      const shuffledEvents = shuffle(events);
+      const map = {};
+      cellsAsc.forEach((c,i)=>{ map[c] = shuffledEvents[i]; });
+      if(isValid(map)) return map;
+    }
+    // フォールバック: 隣接衝突を検出したら他のセルと入れ替えて修復する
+    const shuffledEvents = shuffle(events);
+    const map = {};
+    cellsAsc.forEach((c,i)=>{ map[c] = shuffledEvents[i]; });
+    for(let pass=0; pass<30; pass++){
+      let fixedAny = false;
+      for(const c of cellsAsc){
+        if(map[c+1]!==undefined && map[c]===map[c+1]){
+          for(const other of cellsAsc){
+            if(other===c || other===c+1) continue;
+            if(map[other]===map[c+1]) continue;
+            if(map[other-1]===map[c+1] || map[other+1]===map[c+1]) continue;
+            const tmp = map[other];
+            map[other] = map[c+1];
+            map[c+1] = tmp;
+            fixedAny = true;
+            break;
+          }
+        }
+      }
+      if(!fixedAny) break;
+    }
+    return map;
+  }
 
-  const FINAL_ICON = "🐉";
+  function randomQuestion(pool="normal"){
+    const lvKeys = Object.keys(LEVELS);
+    const lv = lvKeys[Math.floor(Math.random()*lvKeys.length)];
+    const bank = LEVELS[lv][pool];
+    return bank[Math.floor(Math.random()*bank.length)];
+  }
+  function randomHardQuestion(){ return randomQuestion("hard"); }
 
   /* =========================================================
-     状態管理
+     状態
   ========================================================= */
   const state = {
-    worldIdx:0,
-    tileIdx:0,
-    tiles:[],
-    hearts:5,
-    maxHearts:5,
-    shields:0,
-    hasSword:false,
-    shieldUses:0,
-    shieldMax:0,
-    armorUses:0,
-    armorMax:0,
-    elixirReady:false,
-    correct:0,
-    answered:0,
+    lang:"vi",
+    cellIdx:0, // 0-indexed, 0 = セル1
+    life:5, maxLife:25,
+    exp:0,
+    gold:0,
+    heroName:"",
+    hasOrderScroll:false,
+    dojoCombatDone:false,
+    dojoDefenseDone:false,
+    dojoItemDone:false,
+    hasElixir:false,
     busy:false,
-    clearedFlags:[],
-    inFinalBoss:false,
+    cellMap:{},
+    lastDiceRoll:null,
   };
 
-  function buildWorldTiles(worldIdx){
-    const [start, end] = WORLDS[worldIdx].lvRange;
-    const bank = WORLD_FILLERS[worldIdx];
-    const tiles = [];
-    tiles.push({t:"story", ...WORLD_INTRO[worldIdx]});
-    let fi = 0;
-    const FILLERS_PER_LEVEL = 3;
-    for(let lv=start; lv<=end; lv++){
-      tiles.push({t:"lv", lv});
-      for(let k=0;k<FILLERS_PER_LEVEL;k++){
-        tiles.push({...bank[fi % bank.length]});
-        fi++;
-      }
+  function heroDisplayName(){ return state.heroName && state.heroName.trim() ? state.heroName.trim() : t("defaultHeroName"); }
+
+  function itemsUsable(){ return state.dojoItemDone; }
+
+  const TOTAL_CELLS = 30;
+  const FIXED = { king:6, dojoCombat:8, dojoDefense:12, dojoItem:16, guardian:30 };
+
+  const SHOP_CATALOG = [
+    {key:"herb", nameKey:"itemHerb", price:5},
+    {key:"boots", nameKey:"itemBoots", price:50},
+    {key:"elixir", nameKey:"itemElixir", price:100},
+    {key:"lifeWater", nameKey:"itemLifeWater", price:200},
+  ];
+
+  function buildMap1(){
+    // 17〜29マス(道場3つより後のエリア)。落とし穴・敵はここにのみ配置する。
+    const HIGH_ZONE = []; for(let i=17;i<=29;i++) HIGH_ZONE.push(i);
+    // 2〜15マス(道場より前のエリア。6,8,12は固定マスなので除外)。
+    const LOW_ZONE = [2,3,4,5,7,9,10,11,13,14,15];
+
+    const highPool = shuffle(HIGH_ZONE);
+    const enemyCells = highPool.slice(0,10);
+    const leftoverHigh = highPool.slice(10); // 3マス分の余り(HIGH_ZONE 13 - 敵10)
+
+    // 余り3マスのうち2マスを「落とし穴」に、残り1マスをその他イベント用にする。
+    // できるだけ落とし穴どうしが隣接しないマスの組み合わせを選ぶ。
+    const sortedLeftover = leftoverHigh.slice().sort((a,b)=>a-b);
+    let otherHighCell = null;
+    for(const candidate of sortedLeftover){
+      const rest = sortedLeftover.filter(c=>c!==candidate);
+      if(Math.abs(rest[0]-rest[1]) !== 1){ otherHighCell = candidate; break; }
     }
-    tiles.push({t:"guardian"});
-    // 砂漠の世界だけ「エリクサー」を1つ追加し、オアシスの水を見つけた直後に配置する
-    if(worldIdx===3){
-      const oasisIdx = tiles.findIndex(t=>t.label==="オアシスの水");
-      if(oasisIdx>=0){
-        tiles.splice(oasisIdx+1, 0, {t:"elixir", icon:"🧪", label:"エリクサー", text:"オアシスの奥で光る秘薬「エリクサー」を見つけた！力尽きた時、一度だけ体力3で復活できる。"});
-      }
+    if(otherHighCell===null) otherHighCell = sortedLeftover[Math.floor(Math.random()*sortedLeftover.length)];
+    const pitCells = sortedLeftover.filter(c=>c!==otherHighCell);
+
+    // 落とし穴以外のイベント(道場より前のエリア + HIGH_ZONEの余り1マス)を、
+    // 隣接マスで同じ種類が連続しないように配置する。
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("herb",2); pushN("shop",2); pushN("shortcut",2);
+    pushN("lost",2); pushN("tailwind",2); pushN("step",2);
+
+    const otherCellsAsc = [...LOW_ZONE, otherHighCell].sort((a,b)=>a-b);
+    const otherAssignment = assignNoAdjacentDup(otherCellsAsc, events);
+
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.king] = {type:"king"};
+    cellMap[FIXED.dojoCombat] = {type:"dojo", dojo:"combat"};
+    cellMap[FIXED.dojoDefense] = {type:"dojo", dojo:"defense"};
+    cellMap[FIXED.dojoItem] = {type:"dojo", dojo:"item"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+    enemyCells.forEach(c=>{ cellMap[c] = {type:"enemy"}; });
+    pitCells.forEach(c=>{ cellMap[c] = {type:"pit"}; });
+    otherCellsAsc.forEach(c=>{
+      const ev = otherAssignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    for(let c=1;c<=TOTAL_CELLS;c++){
+      if(!cellMap[c]) cellMap[c] = {type:"blank"};
     }
-    return tiles;
+    return cellMap;
   }
 
   /* =========================================================
-     描画: ワールドバー
-  ========================================================= */
-  function renderWorldBar(){
-    const el = document.getElementById("worldBar");
-    el.innerHTML = WORLDS.map((w,i)=>{
-      let cls = "worldchip";
-      if(i < state.worldIdx) cls += " done";
-      else if(i === state.worldIdx) cls += " current";
-      return `<span class="${cls}">${w.icon} ${w.name}</span>`;
-    }).join("") + (state.inFinalBoss ? `<span class="worldchip current">🐉 竜王の間</span>` : "");
-  }
-
-  /* =========================================================
-     盤面描画
+     描画
   ========================================================= */
   const boardEl = document.getElementById("board");
   const COLS = 6;
 
-  function tileVisual(tileObj){
-    switch(tileObj.t){
-      case "story": return {cls:"story", icon:tileObj.icon, label:tileObj.label};
-      case "lv": {
-        const lvData = LEVEL_BY_LV[tileObj.lv];
-        const isMid = !!MIDBOSS[tileObj.lv];
-        return {cls: isMid? "midboss":"quiz", icon: isMid? MIDBOSS[tileObj.lv].icon : "📖", label:"LV"+tileObj.lv};
-      }
-      case "heart": return {cls:"heart", icon:tileObj.icon, label:tileObj.label};
-      case "item": return {cls:"item", icon:tileObj.icon, label:tileObj.label};
-      case "elixir": return {cls:"elixir", icon:tileObj.icon, label:tileObj.label};
-      case "bonus": return {cls:"bonus", icon:tileObj.icon, label:tileObj.label};
-      case "trap": return {cls:"trap", icon:tileObj.icon, label:tileObj.label};
-      case "guardian": {
-        const w = WORLDS[state.worldIdx];
-        return {cls:"guardian", icon:w.guardianIcon, label:"番人"};
-      }
-      default: return {cls:"quiz", icon:"❓", label:""};
+  const ICONS = {
+    start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🛡️",
+    pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
+    herb:"🌿", shop:"🛒", blank:"·",
+  };
+
+  function tileVisual(cellNum){
+    const ev = state.cellMap[cellNum];
+    let cls = ev.type;
+    let icon = ICONS[ev.type] || "❓";
+    let label = "";
+    if(ev.type==="dojo"){
+      label = ev.dojo==="combat" ? "⚔️" : ev.dojo==="defense" ? "🛡️" : "🎒";
     }
+    return {cls, icon, label};
   }
 
   function buildBoard(){
     boardEl.innerHTML = "";
-    state.tiles.forEach((tileObj, i)=>{
-      const row = Math.floor(i/COLS);
-      const posInRow = i % COLS;
+    for(let i=1;i<=TOTAL_CELLS;i++){
+      const row = Math.floor((i-1)/COLS);
+      const posInRow = (i-1) % COLS;
       const col = (row % 2 === 0) ? posInRow : (COLS-1-posInRow);
-      const totalRows = Math.ceil(state.tiles.length/COLS);
+      const totalRows = Math.ceil(TOTAL_CELLS/COLS);
       const gridRow = totalRows - row;
 
-      const v = tileVisual(tileObj);
+      const v = tileVisual(i);
       const div = document.createElement("div");
-      div.className = "tile icon-big " + v.cls;
+      div.className = "tile " + v.cls;
       div.style.gridColumn = (col+1);
       div.style.gridRow = gridRow;
-      div.id = "tile-"+i;
+      div.id = "cell-"+i;
       div.innerHTML = `<span class="num">${i}</span><span class="icon">${v.icon}</span><span>${v.label}</span>`;
       boardEl.appendChild(div);
-    });
+    }
     placeToken();
+    syncDiceSize();
   }
 
   function placeToken(){
-    document.querySelectorAll(".tile").forEach(t=>{
-      t.classList.remove("current");
-      const tok = t.querySelector(".token");
+    document.querySelectorAll(".tile").forEach(el=>{
+      el.classList.remove("current");
+      const tok = el.querySelector(".token");
       if(tok) tok.remove();
     });
-    for(let i=0;i<state.tileIdx;i++){
-      const t = document.getElementById("tile-"+i);
-      if(t) t.classList.add("cleared");
+    const curNum = state.cellIdx+1;
+    for(let i=1;i<curNum;i++){
+      const el = document.getElementById("cell-"+i);
+      if(el) el.classList.add("cleared");
     }
-    const cur = document.getElementById("tile-"+state.tileIdx);
+    const cur = document.getElementById("cell-"+curNum);
     if(!cur) return;
     cur.classList.add("current");
     const tok = document.createElement("div");
@@ -810,106 +742,63 @@
     tok.textContent = "🧝";
     cur.appendChild(tok);
     cur.scrollIntoView({behavior:"smooth", block:"center", inline:"center"});
+    scheduleAutoSave();
   }
 
-  function renderHearts(){
-    const el = document.getElementById("heartsDisplay");
-    let s = "";
-    for(let i=0;i<state.maxHearts;i++){
-      s += i < state.hearts ? "<span>❤️</span>" : "<span>🖤</span>";
-    }
-    el.innerHTML = s;
+  function renderHUD(){
+    document.getElementById("lifeVal").textContent = state.life;
+    document.getElementById("lifeMaxVal").textContent = state.maxLife;
+    document.getElementById("expVal").textContent = state.exp;
+    document.getElementById("goldVal").textContent = state.gold;
+    scheduleAutoSave();
   }
-  function renderShields(){
-    const el = document.getElementById("shieldsDisplay");
-    el.textContent = state.shields>0 ? "🛡️ お守り x"+state.shields : "";
-  }
-  function renderEquipment(){
-    const el = document.getElementById("equipDisplay");
-    const parts = [];
-    if(state.hasSword) parts.push("⚔️ 勇者の剣");
-    if(state.shieldUses>0) parts.push("🛡️ 盾(のこり"+state.shieldUses+")");
-    if(state.armorUses>0) parts.push("🥋 鎧(のこり"+state.armorUses+")");
-    if(state.elixirReady) parts.push("🧪 エリクサー");
-    el.innerHTML = parts.map(p=>`<span>${p}</span>`).join("");
-  }
-  function renderProgress(){
-    const el = document.getElementById("progressLabel");
-    if(state.inFinalBoss){ el.innerHTML = "🐉 <b>竜王の間</b>"; return; }
-    const w = WORLDS[state.worldIdx];
-    el.innerHTML = `${w.icon} ${w.name} / <b>マス ${state.tileIdx}</b>`;
+
+  function renderStaticText(){
+    document.getElementById("titleText").textContent = t("title");
+    document.getElementById("subtitleText").textContent = t("subtitle");
+    document.getElementById("lblLife").textContent = t("life");
+    document.getElementById("lblExp").textContent = t("exp");
+    document.getElementById("lblGold").textContent = t("gold");
+    document.body.className = "lang-"+state.lang;
   }
 
   /* =========================================================
      モーダル
   ========================================================= */
   const modalRoot = document.getElementById("modalRoot");
+  // 現在表示中のイベント/画面を「もう一度描画する関数」を覚えておく。
+  // 開発者設定パネルを開いてもこれは上書きされず、言語切替後に同じ画面へ戻れるようにする。
+  let activeModalRenderer = null;
   function openModal(html){ modalRoot.innerHTML = `<div class="overlay">${html}</div>`; }
-  function closeModal(){ modalRoot.innerHTML = ""; }
+  function closeModal(){ modalRoot.innerHTML = ""; activeModalRenderer = null; }
+  // renderFn: 現在の言語設定で画面を描画する関数(引数なし、内部でt()を呼ぶこと)
+  function showEvent(renderFn){ activeModalRenderer = renderFn; renderFn(); }
 
-  function showIntro(){
+  function showFlavor(icon, title, html, onDone){
     openModal(`
       <div class="card">
-        <div class="badge">STORY</div>
-        <div class="final-emoji">🧝 → 🌿🌊🔥🏜️🌳 → 🐉 → 👸</div>
-        <h2>物語のはじまり</h2>
-        <p>悪い<ruby>竜王<rt>りゅうおう</rt></ruby>が姫をさらい、五つの世界の奥深くにある城に閉じ込めてしまった。<br>
-        あなたは<ruby>勇者<rt>ゆうしゃ</rt></ruby>となり、草原・水・炎・砂漠・樹木の世界を巡りながら日本語の力を試される。<br>
-        各世界の最後には<b>番人</b>が立ちはだかり、難しい問題を出してくる。番人を倒せば次の世界へ進める。<br>
-        道の途中では中ボスとの戦いや、体力回復・お守り(反撃無効化)入手のチャンスもある。<br>
-        すべての世界を制覇し、ゴールで待つ<b>竜王</b>を打ち倒して姫を救い出そう！</p>
-        <button class="primary" id="startBtn">⚔️ 冒険をはじめる</button>
+        <div class="final-emoji">${icon}</div>
+        <h2>${title}</h2>
+        <p>${html}</p>
+        <button class="primary" id="okBtn">${t("continueBtn")}</button>
       </div>
     `);
-    document.getElementById("startBtn").onclick = ()=>{ closeModal(); };
+    document.getElementById("okBtn").onclick = ()=>{ closeModal(); onDone(); };
   }
 
-  /* =========================================================
-     ダメージ処理: お守り(消費型) → 盾(耐久2) → 鎧(耐久3) → 体力
-  ========================================================= */
-  function applyDamage(){
-    if(state.shields>0){
-      state.shields--;
-      renderShields();
-      return {type:"amulet", msg:"🛡️ お守りが身を守った！体力は減らない。"};
+  function gainExp(n){
+    state.exp += n;
+    while(state.exp >= 100){
+      state.exp -= 100;
+      state.life = Math.min(state.maxLife, state.life+1);
     }
-    if(state.shieldUses>0){
-      state.shieldUses--;
-      renderEquipment();
-      const broke = state.shieldUses<=0;
-      return {type:"shield", msg: broke ? "🛡️ 盾が攻撃を防いだ！…が、力尽きて盾は壊れてしまった。" : "🛡️ 盾が攻撃を防いだ！(のこり"+state.shieldUses+"回)"};
-    }
-    if(state.armorUses>0){
-      state.armorUses--;
-      renderEquipment();
-      const broke = state.armorUses<=0;
-      return {type:"armor", msg: broke ? "🥋 鎧が攻撃を防いだ！…が、鎧は壊れてしまった。" : "🥋 鎧が攻撃を防いだ！(のこり"+state.armorUses+"回)"};
-    }
-    state.hearts = Math.max(0, state.hearts-1);
-    renderHearts();
-    return {type:"heart", msg:"❌ 残念…体力が減った。"};
+    renderHUD();
   }
 
-  // 体力が0になっていないか確認。0ならエリクサーで復活、なければゲームオーバー。
-  // 体力が残っていれば afterContinue() をすぐ呼ぶ。
-  function handleDefeatCheck(afterContinue){
-    if(state.hearts>0){ afterContinue(); return; }
-    if(state.elixirReady){
-      state.elixirReady = false;
-      state.hearts = 3;
-      renderHearts();
-      renderEquipment();
-      showFlavor("🧪✨", "エリクサーの力！", "たおれかけたその瞬間、エリクサーの力で体力が3回復した！戦いを続けよう。", afterContinue);
-    } else {
-      showGameOver();
-    }
-  }
-
-  function showQuiz(question, lessonLabel, onDone){
+  function showQuiz(question, badgeText, onDone){
     openModal(`
       <div class="card">
-        <div class="badge">📖 もんだい</div>
-        <div class="lesson-tag">${lessonLabel||""}</div>
+        <div class="badge">${badgeText}</div>
         <div class="qtext">${question.q}</div>
         <div class="choices" id="choicesWrap">
           ${question.c.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${c}</span></button>`).join("")}
@@ -923,379 +812,801 @@
       btn.onclick = ()=>{
         wrap.querySelectorAll(".choice-btn").forEach(b=>b.disabled=true);
         const i = Number(btn.dataset.i);
-        state.answered++;
         const isCorrect = (i===question.a);
         if(isCorrect){
           btn.classList.add("correct");
-          fb.textContent = "✅ 正解！";
+          fb.textContent = t("correct");
           fb.className = "feedback ok";
-          state.correct++;
-          setTimeout(()=>{ closeModal(); onDone(true); }, 850);
         } else {
           btn.classList.add("wrong");
           wrap.children[question.a].classList.add("correct");
-          const res = applyDamage();
-          fb.textContent = res.msg;
-          fb.className = res.type==="heart" ? "feedback no" : "feedback shield";
-          setTimeout(()=>{ closeModal(); onDone(false); }, 1000);
+          fb.textContent = t("wrong");
+          fb.className = "feedback no";
         }
+        setTimeout(()=>{ closeModal(); onDone(isCorrect); }, 850);
       };
     });
   }
 
-  function showFlavor(icon, title, text, onDone){
-    openModal(`
-      <div class="card">
-        <div class="final-emoji">${icon}</div>
-        <h2>${title}</h2>
-        <p>${text}</p>
-        <button class="primary" id="okBtn">つづける</button>
-      </div>
-    `);
-    document.getElementById("okBtn").onclick = ()=>{ closeModal(); onDone(); };
-  }
-
-  function showBossIntro(boss, onDone){
-    openModal(`
-      <div class="card">
-        <div class="badge boss">⚔️ BOSS BATTLE</div>
-        <div class="final-emoji">${boss.icon}</div>
-        <h2>${boss.name}が あらわれた！</h2>
-        <p>${boss.flavor||""}</p>
-        <div class="bosslife">${"❤️".repeat(boss.life)}</div>
-        <button class="primary" id="fightBtn">戦う！</button>
-      </div>
-    `);
-    document.getElementById("fightBtn").onclick = ()=>{ closeModal(); onDone(); };
-  }
-
   function showGameOver(){
+    activeModalRenderer = showGameOver;
     openModal(`
       <div class="card">
         <div class="final-emoji">💔</div>
-        <h2>力尽きてしまった…</h2>
-        <p>体力がなくなってしまった。もう一度、村から挑戦しよう！</p>
-        <div class="stat-row">
-          <div class="stat"><b>${state.correct}</b><span>せいかい</span></div>
-          <div class="stat"><b>${state.answered}</b><span>かいとう</span></div>
-        </div>
-        <button class="primary" id="retryBtn">🔁 もう一度挑戦する</button>
+        <h2>${t("gameOverTitle")}</h2>
+        <p>${t("gameOverText")}</p>
+        <button class="primary" id="retryBtn">${t("retryBtn")}</button>
       </div>
     `);
     document.getElementById("retryBtn").onclick = resetGame;
   }
 
-  function showWorldClear(world, onDone){
+  function showMapClear(){
+    activeModalRenderer = showMapClear;
     openModal(`
       <div class="card">
         <div class="final-emoji">🏆</div>
-        <h2>${world.guardianName}を倒した！</h2>
-        <p>${world.name}を制覇した！体力が全回復した。次の世界へ進もう。</p>
-        <button class="primary" id="nextBtn">次の世界へ</button>
+        <h2>${t("mapClearTitle")}</h2>
+        <p>${t("mapClearText")}</p>
+        <button class="primary" id="retryBtn">${t("retryBtn")}</button>
       </div>
     `);
-    document.getElementById("nextBtn").onclick = ()=>{ closeModal(); onDone(); };
+    document.getElementById("retryBtn").onclick = resetGame;
   }
 
-  function showVictory(){
-    const acc = state.answered ? Math.round((state.correct/state.answered)*100) : 0;
-    openModal(`
-      <div class="card">
-        <div class="badge">THE END</div>
-        <div class="final-emoji">🧝⚔️🐉→👸✨</div>
-        <h2>竜王を倒し、姫を救い出した！</h2>
-        <p>五つの世界を制覇した勇者は、ついに竜王の城で姫を救い出した。<br>あなたの日本語の力が、二人を結びつけた。</p>
-        <div class="stat-row">
-          <div class="stat"><b>${state.correct}</b><span>せいかい</span></div>
-          <div class="stat"><b>${state.answered}</b><span>かいとう</span></div>
-          <div class="stat"><b>${acc}%</b><span>せいかいりつ</span></div>
-        </div>
-        <button class="primary" id="playAgainBtn">🔁 もう一度遊ぶ</button>
-      </div>
-    `);
-    document.getElementById("playAgainBtn").onclick = resetGame;
+  function loseLife(n){
+    state.life = Math.max(0, state.life-n);
+    renderHUD();
   }
 
-  /* =========================================================
-     問題プール(通常・ハード)ユーティリティ
-  ========================================================= */
-  function shuffle(arr){
-    const a = arr.slice();
-    for(let i=a.length-1;i>0;i--){
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i],a[j]]=[a[j],a[i]];
+  function checkDeath(afterContinue){
+    if(state.life>0){ afterContinue(); return; }
+    if(state.hasElixir && itemsUsable()){
+      state.hasElixir = false;
+      state.life = 3;
+      renderHUD();
+      showEvent(()=> showFlavor("🧪", t("elixirTitle"), t("elixirText"), afterContinue));
+      return;
     }
-    return a;
-  }
-
-  function makeCyclingPool(items){
-    let pool = shuffle(items);
-    let idx = 0;
-    return function next(){
-      if(idx >= pool.length){ pool = shuffle(items); idx = 0; }
-      return pool[idx++];
-    };
+    showGameOver();
   }
 
   /* =========================================================
-     ボス戦フレームワーク(番人・中ボス・ラスボス共通)
+     イベント解決
   ========================================================= */
-  function runBossBattle(boss, onWin){
-    const nextQ = makeCyclingPool(boss.pool);
-    let life = boss.life;
-
-    function ask(){
-      const q = nextQ();
-      const swordNote = state.hasSword ? "　⚔️剣の力でダメージ2倍" : "";
-      showQuiz(q, boss.name+" との戦い (のこりライフ "+life+")"+swordNote, (correct)=>{
-        handleDefeatCheck(()=>{
-          if(correct){
-            life -= state.hasSword ? 2 : 1;
-            if(life<=0){
-              onWin();
-              return;
-            }
-          }
-          setTimeout(ask, 150);
-        });
-      });
-    }
-    ask();
-  }
-
-  /* =========================================================
-     移動・進行ロジック
-  ========================================================= */
-  const advanceBtn = document.getElementById("advanceBtn");
+  const diceEl = document.getElementById("dice");
   const hintEl = document.getElementById("hint");
+  const DICE_FACES = ["⚀","⚁","⚂","⚃","⚄","⚅"];
 
-  function setBusy(b){ state.busy = b; advanceBtn.disabled = b; }
-
-  function stepForward(n, cb){
-    let remaining = n;
-    const timer = setInterval(()=>{
-      if(remaining<=0 || state.tileIdx >= state.tiles.length-1){
-        clearInterval(timer);
-        placeToken();
-        renderProgress();
-        cb();
-        return;
-      }
-      state.tileIdx++;
-      remaining--;
-      placeToken();
-      renderProgress();
-    }, 220);
+  // サイコロの絵をマスと同じ大きさに揃える(盤面はレスポンシブなので実測して合わせる)
+  function syncDiceSize(){
+    const tile = boardEl.querySelector(".tile");
+    if(!tile) return;
+    const rect = tile.getBoundingClientRect();
+    const size = Math.round(Math.min(rect.width, rect.height));
+    if(size <= 0) return;
+    diceEl.style.width = size + "px";
+    diceEl.style.height = size + "px";
+    diceEl.style.fontSize = Math.max(14, Math.round(size * 0.5)) + "px";
+    diceEl.style.borderRadius = Math.max(6, Math.round(size * 0.18)) + "px";
   }
-  function stepBackward(n, cb){
-    let remaining = n;
+  window.addEventListener("resize", syncDiceSize);
+
+  // 直前に出た目と同じ目が連続で出ないようにする
+  function rollFinalValue(){
+    const candidates = [1,2,3,4,5,6].filter(v => v !== state.lastDiceRoll);
+    const roll = candidates[Math.floor(Math.random()*candidates.length)];
+    state.lastDiceRoll = roll;
+    return roll;
+  }
+
+  function setBusy(b){ state.busy = b; diceEl.classList.toggle("disabled", b); }
+
+  function stepMove(delta, cb){
+    const dir = delta>0?1:-1;
+    let remaining = Math.abs(delta);
     const timer = setInterval(()=>{
-      if(remaining<=0 || state.tileIdx<=0){
+      const nextCell = state.cellIdx+1+dir;
+      if(remaining<=0 || nextCell<1 || nextCell>TOTAL_CELLS){
         clearInterval(timer);
         placeToken();
-        renderProgress();
         cb();
         return;
       }
-      state.tileIdx--;
+      state.cellIdx += dir;
       remaining--;
       placeToken();
-      renderProgress();
-    }, 220);
+    }, 200);
+  }
+
+  function warpTo(cellNum, cb){
+    state.cellIdx = cellNum-1;
+    placeToken();
+    cb();
   }
 
   function endTurn(){
     setBusy(false);
-    hintEl.textContent = "「すすむ」を押して先へ進もう";
+    hintEl.textContent = t("hintRoll");
   }
 
-  function goNextWorld(){
-    if(state.worldIdx >= WORLDS.length-1){
-      // すべての世界を制覇 -> 最終ゴールへ
-      state.inFinalBoss = true;
-      renderWorldBar();
-      renderProgress();
-      triggerFinalBoss();
+  function trainedForPractice(){ return state.dojoCombatDone && state.dojoDefenseDone; }
+
+  function resolveEnemyLike(isGuardian){
+    const life = isGuardian ? 3 : 1;
+    const getTitle = ()=> isGuardian ? t("guardianTitle") : t("enemyTitle");
+    const icon = isGuardian ? "🛡️" : "👹";
+
+    // 戦い方も守り方も未修行 → 即ダメージ + 城(1マス目)まで送還。戻ったマスのイベントも再生する。
+    if(!state.dojoDefenseDone && !state.dojoCombatDone){
+      loseLife(1);
+      showEvent(()=> showFlavor(icon, getTitle(), t("untrainedHurt")+"<br>"+t("sentBackCastle"), ()=>{
+        warpTo(1, ()=>{
+          checkDeath(()=>{ resolveCell(); });
+        });
+      }));
       return;
     }
-    state.worldIdx++;
-    state.tileIdx = 0;
-    state.tiles = buildWorldTiles(state.worldIdx);
-    document.body.className = "world"+state.worldIdx;
-    renderWorldBar();
-    buildBoard();
-    renderProgress();
+    // 守り方 未修行 → 即ダメージ + 8マス目へ送還。戻ったマスのイベントも再生する。
+    if(!state.dojoDefenseDone){
+      loseLife(1);
+      showEvent(()=> showFlavor(icon, getTitle(), t("untrainedHurt")+"<br>"+t("sentBack"), ()=>{
+        warpTo(FIXED.dojoCombat, ()=>{
+          checkDeath(()=>{ resolveCell(); });
+        });
+      }));
+      return;
+    }
+    // 戦い方 未修行 → 練習中は安全だが送還される。戻ったマスのイベントも再生する。
+    if(!state.dojoCombatDone){
+      showEvent(()=> showFlavor(icon, getTitle(), t("enemyNoTrainNote")+"<br>"+t("sentBack"), ()=>{
+        warpTo(FIXED.dojoCombat, ()=>{ resolveCell(); });
+      }));
+      return;
+    }
+
+    // 両方修行済み → 通常の練習戦闘(ライフは減らない、正解で敵ライフ減少)
+    let remainingLife = life;
+    function ask(){
+      const q = isGuardian ? randomHardQuestion() : randomQuestion("normal");
+      showEvent(()=> showQuiz(q, isGuardian ? "🛡️ "+t("guardianTitle") : "👹 "+t("enemyTitle"), (correct)=>{
+        if(correct){
+          remainingLife--;
+          gainExp(1);
+          if(remainingLife<=0){
+            const goldGain = isGuardian ? 5 : 1;
+            state.gold += goldGain;
+            renderHUD();
+            showEvent(()=> showFlavor("🏆", isGuardian? t("guardianDefeated") : t("enemyDefeated"), t("practiceDefeatNote", goldGain), ()=>{
+              if(isGuardian){ showMapClear(); }
+              else { endTurn(); }
+            }));
+            return;
+          }
+        }
+        setTimeout(ask, 150);
+      }));
+    }
+    ask();
+  }
+
+  function openShop(){
+    function render(msg){
+      // 言語切替後の復帰時は一時的なフィードバック文言(msg)を持ち越さず、素の店の画面に戻す。
+      activeModalRenderer = ()=> render();
+      const rows = SHOP_CATALOG.map(item=>{
+        return `<div class="shop-row">
+          <div><div class="name">${t(item.nameKey)}</div><div class="price">💰 ${item.price}</div></div>
+          <button class="secondary" data-key="${item.key}" data-price="${item.price}" ${state.gold<item.price?"disabled":""}>${t("shopBuy")}</button>
+        </div>`;
+      }).join("");
+      openModal(`
+        <div class="card">
+          <div class="badge">🛒 ${t("shopTitle")}</div>
+          <p>${t("shopIntro")}</p>
+          ${rows}
+          <div class="feedback ok" id="shopMsg">${msg||""}</div>
+          <button class="primary" id="shopCloseBtn" style="margin-top:14px;">${t("shopClose")}</button>
+        </div>
+      `);
+      document.querySelectorAll("[data-key]").forEach(btn=>{
+        btn.onclick = ()=>{
+          const price = Number(btn.dataset.price);
+          if(state.gold < price) return;
+          const item = SHOP_CATALOG.find(x=>x.key===btn.dataset.key);
+          state.gold -= price;
+          renderHUD();
+          const usable = itemsUsable();
+
+          if(item.key==="boots"){
+            if(usable){
+              closeModal();
+              showEvent(()=> showFlavor("👢", t("bootsTitle"), t("bootsText"), ()=>{
+                warpTo(TOTAL_CELLS, resolveCell);
+              }));
+            } else {
+              render(t("shopBought", t(item.nameKey))+" "+t("itemLockedNote"));
+            }
+            return;
+          }
+          if(item.key==="elixir"){
+            state.hasElixir = true;
+            render(t("shopBought", t(item.nameKey))+" "+(usable ? t("elixirReadyNote") : t("itemLockedNote")));
+            return;
+          }
+          if(item.key==="herb"){
+            if(!usable){ render(t("herbTextLocked")); return; }
+            if(state.life<state.maxLife){
+              state.life = Math.min(state.maxLife, state.life+1);
+              renderHUD();
+              render(t("herbTextHeal"));
+            } else {
+              render(t("herbTextFull"));
+            }
+            return;
+          }
+          if(item.key==="lifeWater"){
+            if(!usable){ render(t("lifeWaterTextLocked")); return; }
+            state.life = Math.min(state.maxLife, state.life+1);
+            renderHUD();
+            render(t("lifeWaterTextHeal"));
+            return;
+          }
+          render();
+        };
+      });
+      document.getElementById("shopCloseBtn").onclick = ()=>{ closeModal(); endTurn(); };
+    }
+    render();
+  }
+
+  function resolveCell(){
+    const cellNum = state.cellIdx+1;
+    const ev = state.cellMap[cellNum];
+
+    if(ev.type==="start" || ev.type==="blank"){ endTurn(); return; }
+
+    if(ev.type==="king"){
+      if(!state.hasOrderScroll){
+        function renderAskName(){
+          openModal(`
+            <div class="card">
+              <div class="final-emoji">👑</div>
+              <h2>${t("askNameTitle")}</h2>
+              <p>${t("askNameText")}</p>
+              <input type="text" id="heroNameInput" class="name-input" maxlength="12" placeholder="${t("nameInputPlaceholder")}" value="${(state.heroName||"").replace(/"/g,"&quot;")}">
+              <br><button class="primary" id="nameConfirmBtn" style="margin-top:12px;">${t("nameConfirmBtn")}</button>
+            </div>
+          `);
+          const input = document.getElementById("heroNameInput");
+          input.focus();
+          function confirmName(){
+            state.heroName = input.value.trim();
+            state.hasOrderScroll = true;
+            state.gold += 15;
+            renderHUD();
+            showEvent(()=> showFlavor("👑", t("kingTitle"), t("kingTextFirst", heroDisplayName()), endTurn));
+          }
+          document.getElementById("nameConfirmBtn").onclick = confirmName;
+          input.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); confirmName(); } });
+        }
+        showEvent(renderAskName);
+      } else {
+        showEvent(()=> showFlavor("👑", t("kingTitle"), t("kingTextAgain", heroDisplayName()), endTurn));
+      }
+      return;
+    }
+
+    if(ev.type==="dojo"){
+      const titleKey = ev.dojo==="combat" ? "dojoCombatTitle" : ev.dojo==="defense" ? "dojoDefenseTitle" : "dojoItemTitle";
+      const descKey = ev.dojo==="combat" ? "dojoCombatDesc" : ev.dojo==="defense" ? "dojoDefenseDesc" : "dojoItemDesc";
+      const doneFlag = ev.dojo==="combat" ? "dojoCombatDone" : ev.dojo==="defense" ? "dojoDefenseDone" : "dojoItemDone";
+      const cost = 5;
+
+      if(!state.hasOrderScroll){
+        showEvent(()=> showFlavor("🏯", t(titleKey), t("dojoNeedScroll"), ()=>{
+          warpTo(1, ()=>{ resolveCell(); });
+        }));
+        return;
+      }
+      if(state[doneFlag]){
+        showEvent(()=> showFlavor("🏯", t(titleKey), t("dojoDoneAlready"), endTurn));
+        return;
+      }
+      function renderDojoCard(){
+        openModal(`
+          <div class="card">
+            <div class="badge">🏯 ${t(titleKey)}</div>
+            <p>${t(descKey)}</p>
+            <p style="font-size:.8rem;color:#6a5a4a;">💰 ${t("gold")}: ${state.gold}</p>
+            <button class="primary" id="trainBtn" ${state.gold<cost?"disabled":""}>${t("dojoTrainBtn", cost)}</button>
+            <br><button class="secondary" id="skipBtn">${t("shopClose")}</button>
+          </div>
+        `);
+        document.getElementById("trainBtn").onclick = ()=>{
+          if(state.gold<cost) return;
+          state.gold -= cost;
+          state[doneFlag] = true;
+          renderHUD();
+          closeModal();
+          showEvent(()=> showFlavor("✅", t(titleKey), t("dojoTrainedMsg"), endTurn));
+        };
+        document.getElementById("skipBtn").onclick = ()=>{ closeModal(); endTurn(); };
+      }
+      showEvent(renderDojoCard);
+      return;
+    }
+
+    if(ev.type==="enemy"){ resolveEnemyLike(false); return; }
+    if(ev.type==="guardian"){ resolveEnemyLike(true); return; }
+
+    if(ev.type==="pit"){
+      loseLife(1);
+      showEvent(()=> showFlavor(ICONS.pit, t("pitTitle"), t("pitText"), ()=>{ checkDeath(endTurn); }));
+      return;
+    }
+    if(ev.type==="shortcut"){
+      showEvent(()=> showFlavor(ICONS.shortcut, t("shortcutTitle"), t("shortcutText"), ()=>{
+        stepMove(3, ()=>{ resolveCell(); });
+      }));
+      return;
+    }
+    if(ev.type==="lost"){
+      showEvent(()=> showFlavor(ICONS.lost, t("lostTitle"), t("lostText"), ()=>{
+        stepMove(-3, ()=>{ resolveCell(); });
+      }));
+      return;
+    }
+    if(ev.type==="tailwind"){
+      showEvent(()=> showFlavor(ICONS.tailwind, t("tailwindTitle"), t("tailwindText"), ()=>{
+        stepMove(2, ()=>{ resolveCell(); });
+      }));
+      return;
+    }
+    if(ev.type==="step"){
+      if(ev.dir>0){
+        showEvent(()=> showFlavor(ICONS.step, t("stepFwdTitle"), t("stepFwdText"), ()=>{ stepMove(1, ()=>{ resolveCell(); }); }));
+      } else {
+        showEvent(()=> showFlavor(ICONS.step, t("stepBackTitle"), t("stepBackText"), ()=>{ stepMove(-1, ()=>{ resolveCell(); }); }));
+      }
+      return;
+    }
+    if(ev.type==="herb"){
+      if(!itemsUsable()){
+        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextLocked"), endTurn));
+        return;
+      }
+      if(state.life<state.maxLife){
+        state.life = Math.min(state.maxLife, state.life+1);
+        renderHUD();
+        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextHeal"), endTurn));
+      } else {
+        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextFull"), endTurn));
+      }
+      return;
+    }
+    if(ev.type==="shop"){ openShop(); return; }
+
     endTurn();
   }
 
-  function triggerFinalBoss(){
+  /* =========================================================
+     サイコロ
+  ========================================================= */
+  function rollDice(){
+    if(state.busy) return;
+    if(state.cellIdx >= TOTAL_CELLS-1){
+      setBusy(true);
+      resolveCell();
+      return;
+    }
     setBusy(true);
     hintEl.textContent = "";
-    const allHard = [];
-    LEVELS.forEach(l=> allHard.push(...l.hard));
-    const boss = {
-      name:"竜王",
-      icon: FINAL_ICON,
-      life:30,
-      flavor:"五つの世界を制覇した勇者の前に、姫をさらった竜王が姿を現した。これが最後の戦いだ！",
-      pool: allHard,
-    };
-    showBossIntro(boss, ()=>{
-      runBossBattle(boss, ()=>{
-        showVictory();
+    diceEl.classList.remove("settle");
+    diceEl.classList.add("rolling");
+    let ticks = 0;
+    const maxTicks = 14;
+    const tickTimer = setInterval(()=>{
+      diceEl.textContent = DICE_FACES[Math.floor(Math.random()*6)];
+      ticks++;
+      if(ticks>=maxTicks){
+        clearInterval(tickTimer);
+        diceEl.classList.remove("rolling");
+        const roll = rollFinalValue();
+        diceEl.textContent = DICE_FACES[roll-1];
+        diceEl.classList.add("settle");
+        setTimeout(()=>diceEl.classList.remove("settle"), 420);
+        hintEl.textContent = t("rolled", roll);
+        stepMove(roll, ()=>{ resolveCell(); });
+      }
+    }, 90);
+  }
+
+  /* =========================================================
+     アカウント / Supabase連携（マジックリンクログイン・進行状況の保存）
+     - REST APIを直接fetchで叩く実装(SDK不要)。
+     - ログインは任意。ログインしなくても遊べる(ゲストプレイ)。
+     - ログインすると、進行状況が自動保存(デバウンス)され、次回訪問時に続きから再開できる。
+  ========================================================= */
+  const SUPABASE_URL = "https://hghymcaoburxnvzrfhki.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_9805k1U3xMtWgtyiW5lKVQ_IdLpjw2p";
+  const AUTH_URL = SUPABASE_URL + "/auth/v1";
+  const REST_URL = SUPABASE_URL + "/rest/v1";
+  const REFRESH_TOKEN_KEY = "adv_refresh_token";
+  const MAP_KEY = "map1";
+
+  const auth = { accessToken:null, refreshToken:null, user:null, lastSavedAt:null };
+  const accountBtn = document.getElementById("accountBtn");
+
+  function persistRefreshToken(){
+    try{
+      if(auth.refreshToken){ localStorage.setItem(REFRESH_TOKEN_KEY, auth.refreshToken); }
+      else { localStorage.removeItem(REFRESH_TOKEN_KEY); }
+    }catch(e){ /* localStorageが使えない環境では無視してゲストプレイを継続 */ }
+  }
+
+  function updateAccountBtnState(){
+    if(accountBtn) accountBtn.classList.toggle("logged-in", !!auth.user);
+  }
+
+  async function authRequest(path, body){
+    const res = await fetch(AUTH_URL + path, {
+      method:"POST",
+      headers:{ "apikey":SUPABASE_ANON_KEY, "Content-Type":"application/json" },
+      body: JSON.stringify(body||{})
+    });
+    const data = await res.json().catch(()=>({}));
+    if(!res.ok){ throw new Error(data.error_description || data.msg || data.error || ("HTTP "+res.status)); }
+    return data;
+  }
+
+  async function fetchAuthUser(){
+    if(!auth.accessToken) return null;
+    try{
+      const res = await fetch(AUTH_URL + "/user", {
+        headers:{ "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+auth.accessToken }
       });
+      if(!res.ok) return null;
+      return await res.json();
+    }catch(e){ return null; }
+  }
+
+  async function setSessionFromTokens(accessToken, refreshToken){
+    auth.accessToken = accessToken;
+    auth.refreshToken = refreshToken;
+    persistRefreshToken();
+    auth.user = await fetchAuthUser();
+    updateAccountBtnState();
+  }
+
+  async function restoreSessionFromLocal(){
+    let refreshToken = null;
+    try{ refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY); }catch(e){}
+    if(!refreshToken) return false;
+    try{
+      const data = await authRequest("/token?grant_type=refresh_token", { refresh_token: refreshToken });
+      await setSessionFromTokens(data.access_token, data.refresh_token);
+      return !!auth.user;
+    }catch(e){
+      try{ localStorage.removeItem(REFRESH_TOKEN_KEY); }catch(e2){}
+      return false;
+    }
+  }
+
+  // マジックリンクをクリックして戻ってきた時、URLの#にトークンが付与される。それを読み取ってログイン状態にする。
+  async function handleMagicLinkRedirect(){
+    const hash = window.location.hash;
+    if(!hash || hash.indexOf("access_token") === -1) return false;
+    const params = new URLSearchParams(hash.slice(1));
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    if(!accessToken || !refreshToken) return false;
+    try{
+      await setSessionFromTokens(accessToken, refreshToken);
+      return !!auth.user;
+    }catch(e){ return false; }
+  }
+
+  function sendMagicLink(email){
+    return authRequest("/otp", {
+      email: email,
+      create_user: true,
+      options: { email_redirect_to: window.location.href.split("#")[0] }
     });
   }
 
-  function resolveTile(){
-    const tileObj = state.tiles[state.tileIdx];
+  async function signOutAccount(){
+    if(auth.accessToken){
+      try{
+        await fetch(AUTH_URL+"/logout", {
+          method:"POST",
+          headers:{ "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+auth.accessToken }
+        });
+      }catch(e){}
+    }
+    auth.accessToken = null; auth.refreshToken = null; auth.user = null; auth.lastSavedAt = null;
+    persistRefreshToken();
+    updateAccountBtnState();
+  }
 
-    if(tileObj.t === "story"){
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, endTurn);
-      return;
-    }
-    if(tileObj.t === "heart"){
-      state.hearts = Math.min(state.maxHearts, state.hearts+1);
-      renderHearts();
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, endTurn);
-      return;
-    }
-    if(tileObj.t === "item"){
-      state.shields++;
-      renderShields();
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, endTurn);
-      return;
-    }
-    if(tileObj.t === "elixir"){
-      state.elixirReady = true;
-      renderEquipment();
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, endTurn);
-      return;
-    }
-    if(tileObj.t === "bonus"){
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, ()=>{
-        stepForward(2, ()=>{ resolveTile(); });
+  function captureStateSnapshot(){
+    return {
+      lang: state.lang,
+      cellIdx: state.cellIdx,
+      life: state.life, maxLife: state.maxLife,
+      exp: state.exp, gold: state.gold,
+      heroName: state.heroName,
+      hasOrderScroll: state.hasOrderScroll,
+      dojoCombatDone: state.dojoCombatDone,
+      dojoDefenseDone: state.dojoDefenseDone,
+      dojoItemDone: state.dojoItemDone,
+      hasElixir: state.hasElixir,
+      cellMap: state.cellMap,
+    };
+  }
+
+  function applyStateSnapshot(snap){
+    state.lang = snap.lang || state.lang;
+    state.cellIdx = snap.cellIdx || 0;
+    state.life = (snap.life!=null) ? snap.life : 5;
+    state.maxLife = snap.maxLife || 25;
+    state.exp = snap.exp || 0;
+    state.gold = snap.gold || 0;
+    state.heroName = snap.heroName || "";
+    state.hasOrderScroll = !!snap.hasOrderScroll;
+    state.dojoCombatDone = !!snap.dojoCombatDone;
+    state.dojoDefenseDone = !!snap.dojoDefenseDone;
+    state.dojoItemDone = !!snap.dojoItemDone;
+    state.hasElixir = !!snap.hasElixir;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap : buildMap1();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+  }
+
+  async function saveProgress(){
+    if(!auth.user) return false;
+    try{
+      const res = await fetch(REST_URL + "/game_saves", {
+        method:"POST",
+        headers:{
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+auth.accessToken,
+          "Content-Type":"application/json",
+          "Prefer":"resolution=merge-duplicates"
+        },
+        body: JSON.stringify([{
+          user_id: auth.user.id,
+          map_key: MAP_KEY,
+          state: captureStateSnapshot(),
+          updated_at: new Date().toISOString()
+        }])
       });
-      return;
-    }
-    if(tileObj.t === "trap"){
-      showFlavor(tileObj.icon, tileObj.label, tileObj.text, ()=>{
-        stepBackward(2, endTurn);
+      if(!res.ok) return false;
+      auth.lastSavedAt = new Date();
+      return true;
+    }catch(e){ return false; }
+  }
+
+  async function loadProgress(){
+    if(!auth.user) return null;
+    try{
+      const res = await fetch(REST_URL + "/game_saves?user_id=eq."+encodeURIComponent(auth.user.id)+"&map_key=eq."+MAP_KEY+"&select=state,updated_at", {
+        headers:{ "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+auth.accessToken }
       });
-      return;
-    }
-    if(tileObj.t === "lv"){
-      const lvData = LEVEL_BY_LV[tileObj.lv];
-      const isMid = !!MIDBOSS[tileObj.lv];
-      if(isMid){
-        const mb = MIDBOSS[tileObj.lv];
-        const boss = {
-          name: mb.name,
-          icon: mb.icon,
-          life: 5,
-          flavor: lvData.lesson+"「"+lvData.title+"」の力を試す中ボスが現れた！",
-          pool: shuffle([...lvData.normal, ...lvData.hard]),
-        };
-        setBusy(true);
-        showBossIntro(boss, ()=>{
-          runBossBattle(boss, ()=>{
-            if(mb.reward && REWARD_INFO[mb.reward]){
-              const r = REWARD_INFO[mb.reward];
-              if(mb.reward==="sword"){ state.hasSword = true; }
-              else if(mb.reward==="shield"){ state.shieldUses = 2; state.shieldMax = 2; }
-              else if(mb.reward==="armor"){ state.armorUses = 3; state.armorMax = 3; }
-              renderEquipment();
-              showFlavor(r.icon, r.title, mb.name+"を倒した！"+r.text, endTurn);
-            } else {
-              showFlavor("🏆", mb.name+"を倒した！", "中ボスとの戦いに勝利した！先へ進もう。", endTurn);
-            }
-          });
-        });
-        return;
-      } else {
-        const pool = shuffle(lvData.normal);
-        const q = pool[0];
-        showQuiz(q, lvData.lesson+" 「"+lvData.title+"」", (correct)=>{
-          handleDefeatCheck(endTurn);
-        });
-        return;
-      }
-    }
-    if(tileObj.t === "guardian"){
-      const w = WORLDS[state.worldIdx];
-      const pool = [];
-      const [s,e] = w.lvRange;
-      for(let lv=s; lv<=e; lv++){ pool.push(...LEVEL_BY_LV[lv].hard); }
-      const boss = {
-        name: w.guardianName+"「"+w.guardianTitle+"」",
-        icon: w.guardianIcon,
-        life: 3,
-        flavor: w.name+"の最深部で番人が待ち構えている。3つの難問を突破せよ！",
-        pool: shuffle(pool),
+      if(!res.ok) return null;
+      const rows = await res.json();
+      return (rows && rows[0]) ? rows[0] : null;
+    }catch(e){ return null; }
+  }
+
+  let autoSaveTimer = null;
+  function scheduleAutoSave(){
+    if(!auth.user) return;
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(()=>{ saveProgress(); }, 1500);
+  }
+
+  /* -------- アカウントパネルUI -------- */
+  let returnToAfterAccount = null;
+
+  function renderAccountPanel(msg){
+    activeModalRenderer = ()=> renderAccountPanel();
+    if(auth.user){
+      const savedLabel = auth.lastSavedAt
+        ? t("accountSavedAt", auth.lastSavedAt.toLocaleTimeString())
+        : t("accountNoSaveYet");
+      openModal(`
+        <div class="card">
+          <div class="badge">👤 ${t("accountTitle")}</div>
+          <p>${t("accountLoggedInAs", auth.user.email)}</p>
+          <p style="font-size:.78rem;color:#6a5a4a;">${savedLabel}</p>
+          <button class="primary" id="saveNowBtn">${t("accountSaveNowBtn")}</button>
+          <div class="feedback ok" id="accountMsg">${msg||""}</div>
+          <br><button class="secondary" id="logoutBtn">${t("accountLogoutBtn")}</button>
+          <br><button class="secondary" id="accountCloseBtn">${t("devClose")}</button>
+        </div>
+      `);
+      document.getElementById("saveNowBtn").onclick = async ()=>{
+        const ok = await saveProgress();
+        renderAccountPanel(ok ? t("accountSaveSuccess") : t("accountSaveError"));
       };
-      setBusy(true);
-      showBossIntro(boss, ()=>{
-        runBossBattle(boss, ()=>{
-          state.hearts = state.maxHearts;
-          renderHearts();
-          showWorldClear(w, goNextWorld);
-        });
-      });
-      return;
+      document.getElementById("logoutBtn").onclick = async ()=>{
+        await signOutAccount();
+        renderAccountPanel();
+      };
+      document.getElementById("accountCloseBtn").onclick = ()=>{
+        if(returnToAfterAccount){ returnToAfterAccount(); } else { closeModal(); }
+      };
+    } else {
+      openModal(`
+        <div class="card">
+          <div class="badge">👤 ${t("accountTitle")}</div>
+          <p>${t("accountGuestNote")}</p>
+          <input type="email" id="accountEmailInput" class="name-input" placeholder="${t("accountEmailPlaceholder")}">
+          <br><button class="primary" id="sendLinkBtn" style="margin-top:10px;">${t("accountSendLinkBtn")}</button>
+          <div class="feedback ok" id="accountMsg">${msg||""}</div>
+          <br><button class="secondary" id="accountCloseBtn">${t("devClose")}</button>
+        </div>
+      `);
+      document.getElementById("sendLinkBtn").onclick = async ()=>{
+        const input = document.getElementById("accountEmailInput");
+        const email = (input.value||"").trim();
+        if(!email) return;
+        const msgEl = document.getElementById("accountMsg");
+        const btn = document.getElementById("sendLinkBtn");
+        btn.disabled = true;
+        msgEl.textContent = t("accountSending");
+        msgEl.className = "feedback ok";
+        try{
+          await sendMagicLink(email);
+          openModal(`
+            <div class="card">
+              <div class="final-emoji">📧</div>
+              <h2>${t("accountLinkSentTitle")}</h2>
+              <p>${t("accountLinkSentText", email)}</p>
+              <button class="primary" id="accountCloseBtn2">${t("continueBtn")}</button>
+            </div>
+          `);
+          document.getElementById("accountCloseBtn2").onclick = ()=>{
+            if(returnToAfterAccount){ returnToAfterAccount(); } else { closeModal(); }
+          };
+        }catch(e){
+          btn.disabled = false;
+          msgEl.textContent = t("accountLinkErrorPrefix") + e.message;
+          msgEl.className = "feedback no";
+        }
+      };
+      document.getElementById("accountCloseBtn").onclick = ()=>{
+        if(returnToAfterAccount){ returnToAfterAccount(); } else { closeModal(); }
+      };
     }
-    // fallback
-    endTurn();
   }
 
-  function onAdvance(){
-    if(state.busy) return;
-    if(state.tileIdx >= state.tiles.length-1){
-      // 既にワールド最後のマス(番人)にいる場合はそのまま解決
-      setBusy(true);
-      resolveTile();
-      return;
-    }
-    setBusy(true);
-    hintEl.textContent = "";
-    stepForward(1, ()=>{ resolveTile(); });
+  function openAccountPanel(){
+    returnToAfterAccount = activeModalRenderer;
+    renderAccountPanel();
   }
+  accountBtn.addEventListener("click", openAccountPanel);
+
+  /* =========================================================
+     Dev設定パネル
+  ========================================================= */
+  function openDevPanel(){
+    // 開発者パネルを開く前に表示されていたイベント/画面を覚えておき、
+    // 言語切替後やパネルを閉じた後にそこへ戻れるようにする(そうしないと
+    // ショップ等のイベント中に操作不能になってしまう)。
+    const returnTo = activeModalRenderer;
+    openModal(`
+      <div class="card">
+        <div class="badge">⚙ ${t("devTitle")}</div>
+        <p>${t("devLangLabel")}: <b>${state.lang.toUpperCase()}</b></p>
+        <button class="primary" id="langToggleBtn">${state.lang==="vi" ? t("devToJa") : t("devToVi")}</button>
+        <br><button class="secondary" id="devCloseBtn">${t("devClose")}</button>
+      </div>
+    `);
+    document.getElementById("langToggleBtn").onclick = ()=>{
+      state.lang = state.lang==="vi" ? "ja" : "vi";
+      renderStaticText();
+      if(returnTo){ returnTo(); } else { closeModal(); }
+    };
+    document.getElementById("devCloseBtn").onclick = ()=>{
+      if(returnTo){ returnTo(); } else { closeModal(); }
+    };
+  }
+  document.getElementById("devBtn").addEventListener("click", openDevPanel);
 
   /* =========================================================
      初期化
   ========================================================= */
+  function showIntro(){
+    activeModalRenderer = showIntro;
+    openModal(`
+      <div class="card">
+        <div class="badge">STORY</div>
+        <div class="final-emoji">🧝 → 🏰 → 🐉 → 👸</div>
+        <h2>${t("introTitle")}</h2>
+        <p>${t("introText")}</p>
+        <button class="primary" id="startBtn">${t("startBtn")}</button>
+      </div>
+    `);
+    document.getElementById("startBtn").onclick = closeModal;
+  }
+
   function resetGame(){
-    state.worldIdx = 0;
-    state.tileIdx = 0;
-    state.hearts = 5;
-    state.maxHearts = 5;
-    state.shields = 0;
-    state.hasSword = false;
-    state.shieldUses = 0;
-    state.shieldMax = 0;
-    state.armorUses = 0;
-    state.armorMax = 0;
-    state.elixirReady = false;
-    state.correct = 0;
-    state.answered = 0;
+    state.cellIdx = 0;
+    state.life = 5; state.maxLife = 25;
+    state.exp = 0;
+    state.gold = 0;
+    state.heroName = "";
+    state.hasOrderScroll = false;
+    state.dojoCombatDone = false;
+    state.dojoDefenseDone = false;
+    state.dojoItemDone = false;
+    state.hasElixir = false;
     state.busy = false;
-    state.inFinalBoss = false;
-    state.tiles = buildWorldTiles(0);
-    document.body.className = "world0";
-    renderWorldBar();
+    state.lastDiceRoll = null;
+    state.cellMap = buildMap1();
+    renderStaticText();
     buildBoard();
-    renderHearts();
-    renderShields();
-    renderEquipment();
-    renderProgress();
-    advanceBtn.disabled = false;
-    hintEl.textContent = "「すすむ」を押して先へ進もう";
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintStart");
     closeModal();
   }
 
-  advanceBtn.addEventListener("click", onAdvance);
+  diceEl.addEventListener("click", rollDice);
+  diceEl.addEventListener("keydown", (e)=>{
+    if(e.key==="Enter" || e.key===" "){ e.preventDefault(); rollDice(); }
+  });
 
-  resetGame();
-  showIntro();
+  function showContinuePrompt(savedState){
+    function render(){
+      activeModalRenderer = render;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">💾</div>
+          <h2>${t("continuePromptTitle")}</h2>
+          <p>${t("continuePromptText")}</p>
+          <button class="primary" id="continueYesBtn">${t("continueYesBtn")}</button>
+          <br><button class="secondary" id="continueNoBtn" style="margin-top:10px;">${t("continueNoBtn")}</button>
+        </div>
+      `);
+      document.getElementById("continueYesBtn").onclick = ()=>{
+        applyStateSnapshot(savedState);
+        closeModal();
+        showEvent(()=> showFlavor("🧝", t("welcomeBackText", heroDisplayName()||"..."), t("hintRoll"), ()=>{}));
+      };
+      document.getElementById("continueNoBtn").onclick = ()=>{
+        resetGame();
+        showIntro();
+      };
+    }
+    render();
+  }
+
+  async function init(){
+    // まずローカルで新しいゲームを構築(ネットワーク不通/未ログイン時のフォールバック)
+    resetGame();
+    let loggedIn = await handleMagicLinkRedirect();
+    if(!loggedIn){ loggedIn = await restoreSessionFromLocal(); }
+    updateAccountBtnState();
+    if(loggedIn){
+      const saved = await loadProgress();
+      if(saved && saved.state && saved.state.heroName){
+        showContinuePrompt(saved.state);
+        return;
+      }
+    }
+    showIntro();
+  }
+
+  init();
 })();
 </script>
 </body>
