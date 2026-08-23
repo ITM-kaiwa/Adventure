@@ -53,6 +53,24 @@
     --accent:#c9a227; --accent-light:#e8c869;
     --bg1:#6b5220; --bg2:#3a2c10; --bg3:#140f04;
   }
+  /* マップ8「樹木(アマゾンの密林)」のテーマカラー(暗い緑色基調)。ユーザー指定。 */
+  body.map8{
+    --gold:#5c9c4a; --gold-light:#8ecb72;
+    --accent:#2d5423; --accent-light:#4f7a3e;
+    --bg1:#1b3315; --bg2:#0e1c0a; --bg3:#050d03;
+  }
+  /* マップ9「砂漠」のテーマカラー(黄色基調)。ユーザー指定。 */
+  body.map9{
+    --gold:#f0c419; --gold-light:#ffe066;
+    --accent:#b8860b; --accent-light:#d9a521;
+    --bg1:#8a6d1f; --bg2:#4a3a10; --bg3:#1a1404;
+  }
+  /* マップ10「魔王城」のテーマカラー(石造りの建物、灰色基調)。ユーザー指定。 */
+  body.map10{
+    --gold:#9aa1ab; --gold-light:#c4cad2;
+    --accent:#5a616b; --accent-light:#7e8590;
+    --bg1:#2e3238; --bg2:#181b1f; --bg3:#08090a;
+  }
   /* マップ3限定: 現在地から3マス先までしか見えない「霧」の演出。
      元のタイル種別のクラス(enemy/pit/guardian等)は残したまま、背景色だけを
      一律の暗色で上書きして種別が見た目からわからないようにする。 */
@@ -298,6 +316,15 @@
   body.map7 button.primary{ box-shadow:0 4px 0 #6b5220, 0 8px 18px rgba(0,0,0,.35); }
   body.map7 button.primary:active{ box-shadow:0 1px 0 #6b5220; }
   body.map7 .controls{ border-color:rgba(201,162,39,.4); }
+  body.map8 button.primary{ box-shadow:0 4px 0 #1b3315, 0 8px 18px rgba(0,0,0,.5); }
+  body.map8 button.primary:active{ box-shadow:0 1px 0 #1b3315; }
+  body.map8 .controls{ border-color:rgba(93,156,74,.4); }
+  body.map9 button.primary{ box-shadow:0 4px 0 #8a6d1f, 0 8px 18px rgba(0,0,0,.35); }
+  body.map9 button.primary:active{ box-shadow:0 1px 0 #8a6d1f; }
+  body.map9 .controls{ border-color:rgba(240,196,25,.4); }
+  body.map10 button.primary{ box-shadow:0 4px 0 #2e3238, 0 8px 18px rgba(0,0,0,.5); }
+  body.map10 button.primary:active{ box-shadow:0 1px 0 #2e3238; }
+  body.map10 .controls{ border-color:rgba(154,161,171,.4); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
     font-weight:500;
@@ -359,6 +386,24 @@
   .feedback.ok{ color:#3f6644; }
   .feedback.no{ color:#8b2635; }
   .final-emoji{ font-size:2.6rem; margin-bottom:8px; }
+  /* ドラゴン(ラスボス)戦専用の戦闘画面(2026-08-22・22回目追加)。
+     ドラゴンクエストシリーズのような構図: 上部にドラゴンの絵を大きく表示し、
+     その下にライフバー・戦闘中の質問/選択肢を配置する(通常の戦闘は画面中央の
+     小さいカードのみだが、ドラゴン戦だけこの専用レイアウトに切り替わる)。 */
+  .dragon-battle-card{ max-width:560px; background:#14171c; color:#f0eee8; border-color:#5a616b; }
+  .dragon-img{
+    width:100%; max-height:34vh; object-fit:contain;
+    border-radius:12px; margin-bottom:12px;
+    background:#000; box-shadow:0 10px 28px rgba(0,0,0,.6);
+  }
+  .dragon-life-wrap{ margin-bottom:12px; }
+  .dragon-life-label{ font-size:.78rem; font-weight:700; margin-bottom:4px; opacity:.85; }
+  .dragon-life-bar{ height:14px; border-radius:999px; background:#3a1010; overflow:hidden; border:1px solid #000; }
+  .dragon-life-fill{ height:100%; background:linear-gradient(90deg,#d43a2f,#f2694a); transition:width .3s ease; }
+  .dragon-battle-card .qtext{ color:#f0eee8; }
+  .dragon-battle-card .choice-btn{ background:#22262c; color:#f0eee8; border-color:#5a616b; }
+  .dragon-battle-card .choice-btn.correct{ background:#3f6644; border-color:#3f6644; }
+  .dragon-battle-card .choice-btn.wrong{ background:#8b2635; border-color:#8b2635; }
   .shop-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; margin-bottom:8px; border:2px solid #4a2f18; border-radius:8px; text-align:left; }
   .shop-row:last-child{ margin-bottom:0; }
   .shop-row .name{ font-size:.9rem; font-weight:700; }
@@ -604,15 +649,52 @@
       map7WelcomeTitle:"Chào mừng đến Thiên Giới!",
       map7WelcomeText:(name)=>`${name} bước lên những đám mây bồng bềnh ánh vàng. Một làn gió nhẹ nhàng nâng bước, đưa ${name} tiến về phía trước...`,
       map7ClearTitle:"Bản đồ 7 hoàn thành!",
-      map7ClearText:"Bạn đã vượt qua Thiên Giới một cách an toàn! (Bản đồ 8 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      map7ClearText:"Bạn đã vượt qua Thiên Giới một cách an toàn! Phía xa, một khu rừng rậm rạp xanh thẫm đang chờ đón...",
       subtitleMap7:"Bản đồ 7: Thiên Giới (LV26〜LV28)",
+      proceedMap8Btn:"➡️ Đến Bản đồ 8: Rừng Rậm",
+      map8WelcomeTitle:"Chào mừng đến Rừng Rậm!",
+      map8WelcomeText:(name)=>`${name} bước vào một khu rừng rậm rạp, tối tăm như rừng Amazon. Cây cối um tùm che khuất tầm nhìn, rất dễ bị lạc đường...`,
+      map8ClearTitle:"Bản đồ 8 hoàn thành!",
+      map8ClearText:"Bạn đã vượt qua khu rừng rậm một cách an toàn. Phía trước là một sa mạc vàng rực trải dài vô tận...",
+      subtitleMap8:"Bản đồ 8: Rừng Rậm (LV29〜LV31)",
+      proceedMap9Btn:"➡️ Đến Bản đồ 9: Sa Mạc",
+      map9WelcomeTitle:"Chào mừng đến Sa Mạc!",
+      map9WelcomeText:(name)=>`${name} đặt chân lên vùng cát vàng mênh mông. Cát lún dưới chân khiến việc tiến về phía trước trở nên rất khó khăn...`,
+      map9ClearTitle:"Bản đồ 9 hoàn thành!",
+      map9ClearText:"Bạn đã vượt qua sa mạc một cách an toàn! Phía xa, một tòa lâu đài u ám bằng đá xám hiện lên — đó chính là Lâu đài Ma Vương, nơi công chúa đang bị giam giữ...",
+      subtitleMap9:"Bản đồ 9: Sa Mạc (LV32〜LV33)",
+      proceedMap10Btn:"➡️ Đến Bản đồ 10: Lâu đài Ma Vương",
+      map10WelcomeTitle:"Chào mừng đến Lâu đài Ma Vương!",
+      map10WelcomeText:(name)=>`${name} bước vào lâu đài đá xám lạnh lẽo của Ma Vương. Bóng tối bao trùm, tầm nhìn bị hạn chế rất nhiều, và những hành lang ngoằn ngoèo rất dễ khiến người ta lạc lối...`,
+      subtitleMap10:"Bản đồ 10: Lâu đài Ma Vương (LV34〜LV35)",
+      dragonTitle:"Rồng - Trùm cuối cùng",
+      dragonLifeLabel:"Sinh lực của Rồng",
+      dragonDefeatedTitle:"Đã đánh bại Rồng!",
+      dragonDefeatedText:"Con rồng gầm lên đau đớn rồi gục ngã bất động. Trận chiến cuối cùng đã kết thúc!",
+      princessRescueTitle:"Giải cứu công chúa!",
+      princessRescueText:(name)=>`${name} phá vỡ xiềng xích giam cầm công chúa. "Cảm ơn chàng đã đến cứu ta..." công chúa nói với ánh mắt biết ơn.`,
+      kingAudienceTitle:"Yết kiến Quốc vương",
+      kingAudienceText:(name)=>`Trở về vương thành, ${name} được Quốc vương đón tiếp nồng hậu. "Con đã hoàn thành sứ mệnh vĩ đại. Giờ đây, con muốn kết hôn cùng công chúa và an hưởng thái bình, hay tiếp tục lên đường chinh phục những cuộc phiêu lưu mới?"`,
+      endingChoiceTitle:"Con đường phía trước",
+      endingChoiceText:"Hãy chọn con đường của chàng.",
+      marryBtn:"💍 Kết hôn cùng công chúa",
+      adventureBtn:"🗺️ Tiếp tục cuộc phiêu lưu",
+      weddingEndingTitle:"Đám cưới hoàng gia",
+      weddingEndingText:(name)=>`${name} và công chúa đã tổ chức hôn lễ linh đình trước sự chúc phúc của cả vương quốc. Cuộc phiêu lưu đã khép lại trong hạnh phúc trọn vẹn. — HẾT —`,
+      adventureEndingTitle:"Cuộc phiêu lưu mới",
+      adventureEndingText:"Dũng sĩ đã tích lũy thêm kinh nghiệm và lên đường cho một cuộc phiêu lưu mới.",
       drownTitle:"Suýt chết đuối!",
       drownText:"Dòng nước bất ngờ cuốn bạn xuống sâu. Bạn mất 1 Sinh lực.",
       fireTitle:"Bị lửa thiêu!",
       fireText:"Một ngọn lửa bùng lên bất ngờ. Bạn mất 1 Sinh lực.",
+      cactusTitle:"Bị xương rồng đâm!",
+      cactusText:"Bạn vô tình chạm phải một bụi xương rồng. Bạn mất 1 Sinh lực.",
       rolledWaterMove:(roll,steps)=>`Xúc xắc ra ${roll}, nhưng vì dòng nước cản trở nên chỉ tiến được ${steps} bước.`,
       waterStuckTitle:"Không thể tiến lên!",
       waterStuckText:(roll)=>`Xúc xắc ra ${roll}, nhưng dòng nước quá mạnh nên bạn không thể tiến lên được.`,
+      rolledSandMove:(roll,steps)=>`Xúc xắc ra ${roll}, nhưng vì cát lún cản trở nên chỉ tiến được ${steps} bước.`,
+      sandStuckTitle:"Không thể tiến lên!",
+      sandStuckText:(roll)=>`Xúc xắc ra ${roll}, nhưng cát quá lún nên bạn không thể tiến lên được.`,
       statLifeShort:"Sinh lực", statExpShort:"KN", statGoldShort:"Vàng",
       devTitle:"Cài đặt nhà phát triển",
       devLangLabel:"Ngôn ngữ hiển thị",
@@ -628,7 +710,7 @@
       adminPasswordText:"Nhập mật khẩu quản trị viên để tiếp tục.",
       adminPasswordWrong:"Mật khẩu không đúng.",
       adminPanelTitle:"Chế độ quản trị viên",
-      adminMapJumpLabel:"Nhập số bản đồ (1〜7) để di chuyển đến đó ngay:",
+      adminMapJumpLabel:"Nhập số bản đồ (1〜10) để di chuyển đến đó ngay:",
       adminMapJumpBtn:"🚀 Di chuyển đến bản đồ",
       adminMapJumpInvalid:"Số bản đồ không hợp lệ.",
       accountTitle:"Tài khoản",
@@ -774,15 +856,52 @@
       map7WelcomeTitle:"天上界へようこそ！",
       map7WelcomeText:(name)=>`${name}は金色に輝く雲の上へ足を踏み入れた。やわらかな追い風が背中を押し、${name}を前へと運んでいく……`,
       map7ClearTitle:"マップ7クリア！",
-      map7ClearText:"天上界を無事に抜けた！（マップ8は次のバージョンで追加予定です。）",
+      map7ClearText:"天上界を無事に抜けた！はるか彼方には、鬱蒼と茂る深緑の密林が広がっている……",
       subtitleMap7:"マップ7：天上界 (LV26〜LV28)",
+      proceedMap8Btn:"➡️ マップ8:密林へ進む",
+      map8WelcomeTitle:"密林へようこそ！",
+      map8WelcomeText:(name)=>`${name}はアマゾンの密林のような、鬱蒼と茂る暗い森へ足を踏み入れた。木々が視界を遮り、迷い込みやすい……`,
+      map8ClearTitle:"マップ8クリア！",
+      map8ClearText:"密林を無事に抜けた。この先には、黄金色に輝く砂漠が果てしなく広がっている……",
+      subtitleMap8:"マップ8：密林 (LV29〜LV31)",
+      proceedMap9Btn:"➡️ マップ9:砂漠へ進む",
+      map9WelcomeTitle:"砂漠へようこそ！",
+      map9WelcomeText:(name)=>`${name}は黄色い砂が広がる砂漠へ足を踏み入れた。足元の砂が崩れ、なかなか前に進めない……`,
+      map9ClearTitle:"マップ9クリア！",
+      map9ClearText:"砂漠を無事に抜けた！　遠くに、灰色の石造りの不気味な城が見える……あれこそ魔王城、姫が囚われている場所だ。",
+      subtitleMap9:"マップ9：砂漠 (LV32〜LV33)",
+      proceedMap10Btn:"➡️ マップ10：魔王城へ進む",
+      map10WelcomeTitle:"魔王城へようこそ！",
+      map10WelcomeText:(name)=>`${name}は石造りの冷たい魔王城に足を踏み入れた。あたりは薄暗く、見渡せる範囲はごくわずか。入り組んだ通路は、気を抜けばすぐに迷ってしまいそうだ……`,
+      subtitleMap10:"マップ10：魔王城 (LV34〜LV35)",
+      dragonTitle:"ドラゴン(ラスボス)",
+      dragonLifeLabel:"ドラゴンの体力",
+      dragonDefeatedTitle:"ドラゴンを倒した！",
+      dragonDefeatedText:"ドラゴンは苦しげな咆哮をあげ、地に崩れ落ちた。ついに最後の戦いが終わった！",
+      princessRescueTitle:"姫の救出！",
+      princessRescueText:(name)=>`${name}は姫を繋いでいた鎖を断ち切った。「助けに来てくれて、ありがとう……」姫は感謝の眼差しを向けた。`,
+      kingAudienceTitle:"国王への謁見",
+      kingAudienceText:(name)=>`王城に帰還した${name}を、国王は温かく迎えた。「よくぞ大役を果たしてくれた。姫と結婚してこの国で安らかに暮らすか、それとも新たな冒険へと旅立つか、お前が決めるがよい。」`,
+      endingChoiceTitle:"これからの道",
+      endingChoiceText:"あなたの選ぶ道は？",
+      marryBtn:"💍 姫と結婚する",
+      adventureBtn:"🗺️ 新たな冒険に出る",
+      weddingEndingTitle:"王家の婚礼",
+      weddingEndingText:(name)=>`${name}と姫は、国中の祝福を受けて盛大な結婚式を挙げた。冒険の物語は、幸せな結末を迎えた。──おわり──`,
+      adventureEndingTitle:"新たな旅立ち",
+      adventureEndingText:"勇者は経験を得て、さらなる冒険へと旅立った。",
       drownTitle:"溺れかけた！",
       drownText:"急な水の流れに引き込まれた。ライフを1失った。",
       fireTitle:"炎に焼かれた！",
       fireText:"突然、炎が燃え上がった。ライフを1失った。",
+      cactusTitle:"サボテンに刺さった！",
+      cactusText:"うっかりサボテンに触れてしまった。ライフを1失った。",
       rolledWaterMove:(roll,steps)=>`${roll}が出たが、水の抵抗で${steps}マスしか進めなかった。`,
       waterStuckTitle:"前に進めない！",
       waterStuckText:(roll)=>`${roll}が出たが、水の勢いが強すぎて前に進めなかった。`,
+      rolledSandMove:(roll,steps)=>`${roll}が出たが、砂に足を取られて${steps}マスしか進めなかった。`,
+      sandStuckTitle:"前に進めない！",
+      sandStuckText:(roll)=>`${roll}が出たが、砂が深すぎて前に進めなかった。`,
       statLifeShort:"ライフ", statExpShort:"経験値", statGoldShort:"ゴールド",
       devTitle:"開発者向け設定",
       devLangLabel:"表示言語",
@@ -798,7 +917,7 @@
       adminPasswordText:"管理者パスワードを入力してください。",
       adminPasswordWrong:"パスワードが違います。",
       adminPanelTitle:"管理者モード",
-      adminMapJumpLabel:"移動したいマップ番号(1〜7)を入力:",
+      adminMapJumpLabel:"移動したいマップ番号(1〜10)を入力:",
       adminMapJumpBtn:"🚀 このマップへ移動",
       adminMapJumpInvalid:"無効なマップ番号です。",
       accountTitle:"アカウント",
@@ -1041,6 +1160,55 @@
       hard:[
         {q:"So sánh 「音楽を 聞きながら、勉強します。」(ながら, đồng thời) và 「音楽を 聞いたり、勉強したり します。」(たり, liệt kê một vài việc), điểm khác biệt chính là gì?", c:["「ながら」diễn tả 2 hành động xảy ra ĐỒNG THỜI bởi cùng một người, còn 「たり」chỉ liệt kê một vài hành động tiêu biểu(có thể không đồng thời)","Cả hai hoàn toàn giống nhau","「ながら」chỉ dùng cho quá khứ","「たり」chỉ dùng được với đúng 2 hành động"], a:0},
         {q:"「どうして この 会社に 入りたいんですか。」「給料も いいし、仕事も 面白いし、休みも 多いですから。」 vì sao câu trả lời liệt kê liên tiếp nhiều 「し」 thay vì chỉ dùng 「から」 một lần?", c:["Để nhấn mạnh có NHIỀU lý do cùng đóng góp vào quyết định, chứ không chỉ một lý do duy nhất(như から thường ngụ ý)","Vì し bắt buộc phải dùng ít nhất 2 lần trong mọi câu","Vì から không thể dùng để trả lời câu hỏi どうして","Không có sự khác biệt nào so với から"], a:0}]},
+    29:{ title:"自動詞＋ています(状態)・Vてしまいます/ました", normal:[
+        {q:"「窓が 開いています。」 mẫu 「自動詞＋ています」 ở đây diễn tả điều gì?", c:["Trạng thái KẾT QUẢ hiện tại(cửa sổ hiện đang ở trạng thái mở), không phải hành động đang diễn ra","Hành động 'mở cửa sổ' đang diễn ra ngay lúc nói","Kinh nghiệm đã từng mở cửa sổ trong quá khứ","Kế hoạch sẽ mở cửa sổ"], a:0},
+        {q:"「宿題を してしまいました。」 mẫu 「Vてしまいました」 trong câu này diễn tả điều gì?", c:["Việc đó đã hoàn thành trọn vẹn, xong hẳn, không còn dở dang","Việc đó vẫn đang tiếp diễn","Việc đó sắp bắt đầu","Việc đó bị hủy bỏ giữa chừng"], a:0},
+        {q:"「財布を なくしてしまいました。」 mẫu 「Vてしまいました」 trong câu này, ngoài ý nghĩa 'hoàn thành', còn mang thêm sắc thái gì?", c:["Sắc thái tiếc nuối/hối hận về việc đã xảy ra(làm mất ví, việc không mong muốn)","Sắc thái vui mừng","Một lời mời lịch sự","Một mệnh lệnh"], a:0}],
+      hard:[
+        {q:"So sánh 「ドアが 閉まっています。」(自動詞＋ています、chỉ trạng thái) với 「ドアを 閉めます。」(hành động đóng cửa), điểm khác biệt cốt lõi là gì?", c:["「閉まっています」miêu tả TRẠNG THÁI kết quả hiện tại của sự vật(cửa đang đóng), không nói ai đã làm; 「閉めます」là HÀNH ĐỘNG của người thực hiện","Cả hai hoàn toàn giống nhau về nghĩa","「閉まっています」chỉ dùng ở thì quá khứ","「閉めます」là thể khả năng của 「閉まります」"], a:0},
+        {q:"「もう レポートを 書いてしまいました。」 và 「電車の中に 傘を 忘れてしまいました。」, cả hai đều dùng 「てしまいました」 nhưng sắc thái khác nhau ở điểm nào?", c:["Câu đầu chỉ đơn thuần nhấn mạnh sự HOÀN THÀNH(không có ý tiếc nuối), còn câu sau mang thêm sắc thái TIẾC NUỐI vì đó là việc không mong muốn","Cả hai đều mang sắc thái tiếc nuối như nhau","Câu đầu mang sắc thái tiếc nuối, câu sau thì không","Không có sự khác biệt nào giữa hai câu"], a:0}]},
+    30:{ title:"～てあります(状態・目的)・Vておきます(準備/措置/放置)", normal:[
+        {q:"「壁に 絵が 掛けてあります。」 mẫu 「Nが 他動詞＋てあります」 diễn tả điều gì?", c:["Trạng thái kết quả do AI ĐÓ đã cố ý làm(ai đó đã treo tranh lên tường với mục đích), khác với tự nhiên xảy ra","Hành động treo tranh đang diễn ra ngay lúc nói","Bức tranh tự nhiên rơi xuống","Một mệnh lệnh phải treo tranh"], a:0},
+        {q:"「飲み物を 冷やしておきます。」 mẫu 「Vておきます」 ở đây mang ý nghĩa gì?", c:["Chuẩn bị trước cho một việc sẽ xảy ra sau này(làm lạnh đồ uống trước để sẵn sàng dùng)","Việc đã hoàn thành xong hoàn toàn, không liên quan tương lai","Một kinh nghiệm trong quá khứ","Một lời mời lịch sự"], a:0},
+        {q:"「窓を 開けておきます。」 trong ngữ cảnh 'phòng hơi ngột ngạt nên cứ để cửa sổ mở', mẫu 「Vておきます」 ở đây mang sắc thái nào?", c:["Giữ nguyên trạng thái đó(để yên như vậy) vì có lý do/mục đích, không phải chuẩn bị cho việc khác","Chỉ đơn thuần là hành động mở cửa một lần","Kinh nghiệm đã từng mở cửa trong quá khứ","Mệnh lệnh phải đóng cửa ngay"], a:0}],
+      hard:[
+        {q:"So sánh 「ドアが 開いています。」(自動詞ています、chỉ trạng thái đơn thuần) với 「ドアが 開けてあります。」(他動詞てある), điểm khác biệt chính là gì?", c:["「開けてあります」ngụ ý có NGƯỜI đã cố ý mở cửa với một MỤC ĐÍCH nào đó, còn 「開いています」chỉ miêu tả trạng thái hiện tại mà không nói rõ nguyên nhân/mục đích","Cả hai hoàn toàn giống nhau về nghĩa và cách dùng","「開けてあります」chỉ dùng cho thì quá khứ","「開いています」bắt buộc phải có tân ngữ đi kèm"], a:0},
+        {q:"「Vておきます」 có thể mang 2 sắc thái chính là 'chuẩn bị trước'(例:ビールを買っておきます) và 'giữ nguyên/để mặc như vậy'(例:そのままにしておきます). Điều gì quyết định sắc thái nào được hiểu?", c:["Phụ thuộc vào ngữ cảnh của câu(có đang chuẩn bị cho việc tương lai hay chỉ đang duy trì trạng thái hiện có)","Luôn luôn chỉ mang nghĩa 'chuẩn bị trước', không có nghĩa khác","Luôn luôn chỉ mang nghĩa 'giữ nguyên', không có nghĩa khác","Phụ thuộc vào việc câu đó là câu hỏi hay câu khẳng định"], a:0}]},
+    31:{ title:"意向形・Vようと思っています・まだVていません・つもり/予定", normal:[
+        {q:"「日本語を 勉強しようと 思っています。」 mẫu 「意向形＋と思っています」 diễn tả điều gì?", c:["Ý định/dự định đã có TỪ TRƯỚC và vẫn đang được ấp ủ liên tục(khác với quyết định tức thời)","Một quyết định vừa mới nghĩ ra ngay lúc nói","Kinh nghiệm trong quá khứ","Một mệnh lệnh"], a:0},
+        {q:"「まだ 宿題を していません。」 mẫu 「まだ＋Vていません」 diễn tả điều gì?", c:["Việc đó vẫn CHƯA được thực hiện tính đến thời điểm hiện tại(nhưng có khả năng sẽ làm sau)","Việc đó đã hoàn thành xong rồi","Việc đó không bao giờ được làm","Việc đó đang diễn ra ngay lúc nói"], a:0},
+        {q:"「今年 結婚するつもりです。」 mẫu 「V-る＋つもりです」 diễn tả điều gì?", c:["Ý định/kế hoạch mang tính CÁ NHÂN của người nói(quyết tâm sẽ làm việc đó)","Một quy định bắt buộc","Kinh nghiệm trong quá khứ","Một lời mời người khác cùng làm"], a:0}],
+      hard:[
+        {q:"So sánh 「今年 結婚するつもりです。」(つもり、ý định cá nhân) và 「来月 出張の予定です。」(予定、kế hoạch đã định sẵn), điểm khác biệt chính giữa 「つもり」 và 「予定」 là gì?", c:["「つもり」thể hiện Ý ĐỊNH CHỦ QUAN của bản thân người nói(chưa chắc đã được sắp xếp chính thức), còn 「予定」thể hiện một KẾ HOẠCH đã được quyết định/sắp xếp một cách khách quan hơn(ví dụ: đã có trong lịch công tác)","Cả hai hoàn toàn giống nhau, dùng từ nào cũng được","「つもり」chỉ dùng cho việc trong quá khứ","「予定」chỉ dùng được với danh từ, không dùng được với động từ"], a:0},
+        {q:"「日本へ 行こうと思います。」 và 「日本へ 行こうと思っています。」, điểm khác biệt về sắc thái thời gian giữa 「と思います」 và 「と思っています」 là gì?", c:["「と思います」thường diễn tả một quyết định/ý nghĩ VỪA MỚI nảy ra ngay lúc nói, còn 「と思っています」diễn tả một ý định đã được ấp ủ và DUY TRÌ liên tục trong một khoảng thời gian","Cả hai hoàn toàn giống nhau về sắc thái thời gian","「と思っています」chỉ dùng cho quá khứ đã kết thúc","「と思います」không thể dùng với 意向形"], a:0}]},
+    32:{ title:"普通形＋かもしれません・普通形＋でしょう", normal:[
+        {q:"「明日は 雨が 降るかもしれません。」 mẫu 「普通形＋かもしれません」 diễn tả điều gì?", c:["Một khả năng/dự đoán CHƯA CHẮC CHẮN có thể xảy ra(mức độ tự tin thấp)","Một sự thật chắc chắn 100%","Một kinh nghiệm đã xảy ra trong quá khứ","Một mệnh lệnh"], a:0},
+        {q:"「彼は もう 帰ったでしょう。」 mẫu 「普通形＋でしょう」 diễn tả điều gì?", c:["Một sự phỏng đoán của người nói với mức độ tự tin tương đối cao(có căn cứ, nhưng chưa xác nhận chắc chắn)","Một câu hỏi trực tiếp","Một sự thật hiển nhiên không cần bàn cãi","Một lời mời lịch sự"], a:0},
+        {q:"So sánh mức độ chắc chắn giữa 「雨が 降るかもしれません。」 và 「雨が 降るでしょう。」, câu nào thể hiện mức độ tự tin CAO HƠN của người nói?", c:["「降るでしょう」thể hiện mức độ tự tin cao hơn 「降るかもしれません」(かもしれません mang tính 'có thể, chưa chắc' thấp hơn でしょう)","「降るかもしれません」thể hiện mức độ tự tin cao hơn","Cả hai hoàn toàn giống nhau về mức độ tự tin","Không thể so sánh mức độ tự tin giữa hai mẫu này"], a:0}],
+      hard:[
+        {q:"「あの 店は もう 閉まっているかもしれません。」 danh từ/tính từ trước 「かもしれません」 phải ở dạng nào?", c:["Thể thông thường(普通形)。Riêng danh từ và tính từ đuôi な ở thể khẳng định hiện tại thì bỏ 「だ」(例: 静かかもしれません、学生かもしれません)","Luôn luôn phải chia ở thể ます lịch sự","Luôn luôn phải thêm 「だ」ngay cả với danh từ/な形容詞","Chỉ dùng được với động từ, không dùng được với danh từ/tính từ"], a:0},
+        {q:"「田中さんは 忙しいでしょう。」 khi diễn tả suy đoán về NGƯỜI KHÁC(không phải bản thân người nói), mẫu 「でしょう/だろう」 khác gì so với 「と思います」?", c:["「でしょう」nhấn mạnh tính chất PHỎNG ĐOÁN dựa trên căn cứ khách quan bên ngoài, còn 「と思います」thiên về Ý KIẾN CHỦ QUAN của chính người nói","Cả hai hoàn toàn giống nhau về sắc thái, dùng từ nào cũng được","「でしょう」chỉ dùng được cho bản thân người nói, không dùng cho người khác","「と思います」không thể dùng để suy đoán về người khác"], a:0}]},
+    33:{ title:"命令形・禁止形・～と書いてあります/読みます・～という意味です", normal:[
+        {q:"「止まれ！」 mẫu 「命令形」(thể mệnh lệnh) thường được dùng trong ngữ cảnh nào?", c:["Biển báo, tình huống khẩn cấp, khẩu lệnh thể thao... KHÔNG dùng trong hội thoại lịch sự thông thường","Trong hội thoại lịch sự hàng ngày với người lạ","Chỉ dùng khi nói chuyện với cấp trên","Chỉ dùng trong văn viết trang trọng"], a:0},
+        {q:"看板に 「危険」と 書いてあります。」 mẫu 「～と書いてあります」 dùng để diễn tả điều gì?", c:["Nội dung được VIẾT SẴN trên một vật gì đó(biển báo, giấy tờ...) mà người nói đọc được","Người nói đang tự viết chữ đó ngay lúc nói","Người nói đang đọc to thành tiếng","Một mệnh lệnh phải viết chữ đó"], a:0},
+        {q:"「『猫』は 何と 読みますか。」「『猫』は ねこと 読みます。」 mẫu 「～と読みます」 trong câu hỏi/trả lời này dùng để làm gì?", c:["Hỏi/trả lời về CÁCH ĐỌC của một chữ Hán cụ thể","Hỏi/trả lời về Ý NGHĨA của từ đó","Hỏi/trả lời về cách VIẾT của từ đó","Hỏi về vị trí của con mèo"], a:0}],
+      hard:[
+        {q:"So sánh 「止まれ」(命令形) và 「入るな」(禁止形), điểm khác biệt về sắc thái/ngữ cảnh sử dụng của hai thể này so với 「てください」 thông thường là gì?", c:["命令形/禁止形 là dạng RẤT MẠNH và trực tiếp(dùng cho biển báo, khẩn cấp, mệnh lệnh trong thể thao/quân đội), trong khi 「てください」lịch sự và phù hợp hội thoại hàng ngày hơn nhiều","Cả ba mẫu hoàn toàn giống nhau về mức độ lịch sự","命令形 lịch sự hơn てください","禁止形 chỉ dùng được với danh từ, không dùng được với động từ"], a:0},
+        {q:"「『独身』は どういう意味ですか。」「『独身』は 結婚していないという意味です。」 mẫu 「～は～という意味です」 được dùng để làm gì, và khác gì với 「～と読みます」?", c:["「という意味です」dùng để giải thích/hỏi về Ý NGHĨA của một từ, trong khi 「と読みます」dùng để hỏi về CÁCH ĐỌC(phát âm) của chữ Hán đó — hai mẫu nhắm vào hai khía cạnh khác nhau của từ vựng","Cả hai mẫu hoàn toàn đồng nghĩa và có thể thay thế cho nhau tự do","「という意味です」chỉ dùng được với động từ","「と読みます」dùng để hỏi ý nghĩa, còn「という意味です」dùng để hỏi cách đọc(ngược lại)"], a:0}]},
+    34:{ title:"V-たとおりに・V1ないでV2・Vて/Vないで(方法)", normal:[
+        {q:"「先生が 読んだとおりに、あとについて 読んでください。」 mẫu 「V-たとおりに」 diễn tả điều gì?", c:["Làm ĐÚNG THEO NHƯ những gì đã được chỉ dẫn/làm mẫu trước đó, không thay đổi","Làm ngược lại hoàn toàn với những gì đã được chỉ dẫn","Một khả năng chưa chắc chắn","Một mệnh lệnh mới, không liên quan gì đến trước đó"], a:0},
+        {q:"「砂糖を 入れないで、コーヒーを 飲みます。」 mẫu 「V1ないで、V2」 diễn tả điều gì?", c:["Thực hiện V2(uống cà phê) mà KHÔNG thực hiện V1(cho đường vào) trước đó — thiếu vắng hành động V1 khi làm V2","Thực hiện V1 trước rồi mới thực hiện V2","V1 và V2 xảy ra hoàn toàn độc lập, không liên quan","Cấm không được uống cà phê"], a:0},
+        {q:"So sánh 「歩いて 行きます。」(V-て, phương tiện/cách thức) và 「傘を 差さないで、雨の中を 歩きました。」(V-ないで, thiếu vắng một hành động đi kèm), cả hai mẫu 「て」 và 「ないで」 ở đây đều dùng để diễn tả điều gì chung?", c:["Cách thức/trạng thái đi kèm khi thực hiện hành động chính(có làm gì đó, hoặc không làm gì đó)","Thời gian xảy ra hành động","Địa điểm xảy ra hành động","Lý do của hành động"], a:0}],
+      hard:[
+        {q:"So sánh 「先生が 読んだとおりに、読んでください。」(V-たとおりに) và 「この 地図のとおりに、行ってください。」(Nのとおりに), điểm khác biệt về cách nối của 「とおりに」 với động từ và danh từ là gì?", c:["Sau ĐỘNG TỪ(thể た) dùng trực tiếp 「とおりに」, còn sau DANH TỪ phải thêm trợ từ 「の」trước 「とおりに」(Nのとおりに)","Cả hai trường hợp đều dùng hoàn toàn giống nhau, không có khác biệt gì","「とおりに」chỉ có thể đi sau danh từ, không đi được sau động từ","「とおりに」chỉ dùng được ở thể hiện tại, không dùng được ở thể quá khứ"], a:0},
+        {q:"「傘を 持たないで 出かけました。」 và 「傘を 持って 出かけました。」, điểm khác biệt cốt lõi giữa 「Vないで」 và 「Vて」 khi diễn tả trạng thái đi kèm là gì?", c:["「Vて」diễn tả CÓ làm/CÓ mang theo hành động/vật đó khi thực hiện hành động chính, còn 「Vないで」diễn tả KHÔNG làm/KHÔNG mang theo điều đó","Cả hai hoàn toàn đồng nghĩa, dùng cái nào cũng được","「Vないで」chỉ dùng được ở thì quá khứ","「Vて」là thể phủ định của 「Vないで」"], a:0}]},
+    35:{ title:"Vば/Vなければ・イAければ/ナAなら/Nなら・疑問詞+Vばいいですか・疑問詞+Vても", normal:[
+        {q:"「春に なれば、桜が 咲きます。」 mẫu 「Vば」 diễn tả điều gì?", c:["Một mối quan hệ điều kiện-kết quả mang tính TẤT YẾU/QUY LUẬT chung(hễ điều kiện xảy ra thì kết quả chắc chắn theo sau)","Một mệnh lệnh phải làm mùa xuân đến","Kinh nghiệm đã xảy ra trong quá khứ","Một lời mời lịch sự"], a:0},
+        {q:"「忙しければ、こなくてもいいです。」 mẫu 「イA-ければ」(tính từ đuôi い + ければ) diễn tả điều gì?", c:["Điều kiện với tính từ đuôi い(nếu bận thì không cần đến cũng được)","Một mệnh lệnh phải bận rộn","Một sự thật luôn luôn đúng, không phải điều kiện","Một câu hỏi về mức độ bận rộn"], a:0},
+        {q:"「A: すみません、この漢字が わかりません。 B: どう すれば いいですか。」 mẫu 「疑問詞＋Vばいいですか」 dùng để làm gì?", c:["Hỏi xin lời khuyên/chỉ dẫn về việc nên làm gì trong một tình huống cụ thể","Đưa ra một mệnh lệnh","Diễn tả một điều kiện đơn thuần không liên quan đến câu hỏi","Từ chối lời đề nghị của người khác"], a:0}],
+      hard:[
+        {q:"So sánh 「春に なれば、桜が 咲きます。」(ば, quy luật tự nhiên/tất yếu) và 「春に なったら、花見に 行きましょう。」(たら, một kế hoạch/lời mời cụ thể), điểm khác biệt về sắc thái sử dụng chính giữa 「ば」 và 「たら」 là gì?", c:["「ば」thiên về diễn tả mối quan hệ điều kiện-kết quả mang tính QUY LUẬT/KHÁCH QUAN chung, còn 「たら」linh hoạt hơn, thường dùng cho tình huống/kế hoạch CỤ THỂ và cả trình tự hành động","Cả hai hoàn toàn đồng nghĩa trong mọi ngữ cảnh, không có khác biệt","「ば」chỉ dùng được ở thì quá khứ","「たら」không thể dùng để diễn tả điều kiện, chỉ dùng cho trình tự"], a:0},
+        {q:"So sánh 「何を 食べても、おいしいです。」(疑問詞＋Vても, 'dù ăn gì đi nữa') và 「甘い ものを 食べても、太りません。」(Vても thông thường, 'dù có ăn đi nữa'), sự khác biệt khi có thêm 疑問詞(何/どこ/だれ...) phía trước 「ても」 là gì?", c:["Khi có 疑問詞 phía trước, mẫu 「疑問詞＋Vても」diễn tả Ý NGHĨA BAO QUÁT 'DÙ LÀ GÌ/AI/ĐÂU đi nữa, kết quả vẫn không đổi', khác với 「Vても」thông thường chỉ nói về MỘT trường hợp giả định cụ thể","Cả hai hoàn toàn đồng nghĩa, có 疑問詞 hay không cũng không thay đổi gì","疑問詞＋Vても chỉ dùng được trong câu hỏi, không dùng được trong câu khẳng định","Vても thông thường mới có nghĩa bao quát 'dù là gì đi nữa', còn thêm 疑問詞 thì mất nghĩa đó(ngược lại)"], a:0}]},
   };
 
   function shuffle(arr){
@@ -1102,7 +1270,16 @@
   const lastDrawnQuestion = { normal:null, hard:null };
   // マップごとに出題するLVの範囲を分ける(マップ1=LV0〜3、マップ2=LV4〜9、...)。
   // 前のマップで習った内容が後のマップで蒸し返されたり、逆に後の内容が前のマップに混ざったりしない。
-  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16], 5:[17,18,19,20], 6:[21,22,23,24,25], 7:[26,27,28] };
+  // マップ8・9のLV範囲(29〜31/32〜33)は、当初の構想メモにあった「マップ8=LV29〜31、
+  // マップ9=LV31〜33」という重複(31が両方に含まれる)を解消し、境界を31/32で分けている。
+  // これは幹部(中ボス)の出現課リスト(14,17,18,22,25,27,31,33)ともちょうど整合しており、
+  // LV31の幹部はマップ8に、LV33の幹部はマップ9に、それぞれ過不足なく1体ずつ収まる。
+  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16], 5:[17,18,19,20], 6:[21,22,23,24,25], 7:[26,27,28], 8:[29,30,31], 9:[32,33], 10:[34,35] };
+  // ドラゴン(ラスボス)戦の問題は、マップ10だけの範囲(LV34〜35)に限定せず、当初の構想通り
+  // 「第6〜35課の難問」という広い範囲から出題する(詳細は「ドラゴン(ラスボス)戦の実装」参照)。
+  const DRAGON_QUESTION_MIN_LEVEL = 6;
+  const DRAGON_QUESTION_MAX_LEVEL = 35;
+  const DRAGON_MAX_LIFE = 30;
 
   function buildQuestionBag(pool){
     const range = MAP_LEVEL_RANGES[state.currentMap] || Object.keys(LEVELS).map(Number);
@@ -1165,7 +1342,7 @@
   // 盤面(1〜30マス)の中央寄りの固定マスに配置する(ランダム抽選ではなく意図的な固定配置)。
   // マップごとの幹部の数は、そのマップが担当するLV範囲のうち何課が「幹部の課」に
   // 該当するかで決まる(マップ4=LV14の1体、マップ5=LV17・18の2体、マップ6=LV22・25の2体、マップ7=LV27の1体)。
-  const OFFICER_CELLS = { 4:[15], 5:[14,17], 6:[14,17], 7:[15] };
+  const OFFICER_CELLS = { 4:[15], 5:[14,17], 6:[14,17], 7:[15], 8:[15], 9:[15] };
 
   const SHOP_CATALOG = [
     {key:"herb", nameKey:"itemHerb", price:5},
@@ -1427,7 +1604,118 @@
     return cellMap;
   }
 
+  // マップ8: 樹木(アマゾンの密林のようなイメージ、暗い緑色基調)。ユーザー指定により、
+  // 迷い道(lost)セルを他マップより多め(標準2→5)に、落とし穴(pit)を標準の2倍(2→4)に、
+  // 薬草(herb)は当初案の2倍からさらに増やして3倍(2→6)に配置する。密林の中では見通しが悪く
+  // 近道・追い風・1歩の恩恵を受けにくいという設定で、これらは標準より少なめ(各1)に絞った分、
+  // 敵の遭遇数を確保している(合計27マス、幹部1マスを除く)。幹部はLV31の1体のみ。
+  function buildMap8(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const officerCells = OFFICER_CELLS[8]; // [15] (LV31の幹部)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-1=27マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",7);
+    pushN("pit",4); // 標準(2)の2倍(ユーザー指定)
+    pushN("herb",6); // 当初案(2倍=4)からさらに増やして3倍(ユーザー指定)
+    pushN("shop",2);
+    pushN("shortcut",1); // 密林で見通しが悪く近道を見つけにくいため標準(2)より少なめ
+    pushN("lost",5); // 標準(2)より多め(密林で迷いやすい、仕様通り)
+    pushN("tailwind",1); // 密林の中は風が通りにくいため標準(2)より少なめ
+    pushN("step",1); // 足場が悪く1歩の恩恵を受けにくいため標準(2)より少なめ
+    // 合計 7+4+6+2+1+5+1+1=27
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
+  // マップ9: 砂漠(黄色基調)。マップ4(水のエリア)と同じ「サイコロの目の半分ほどしか
+  // 進めない」特殊ルール(stepsForRoll()側でstate.currentMap===9も判定)を適用し、
+  // 砂に足を取られてなかなか前に進めないことを表現する。「特定セルでライフが1つ減る」
+  // という仕様に対応する新セル種別「cactus」(サボテン)を4マス配置し、近道(shortcut)は
+  // ユーザー指定により一切配置しない。幹部はLV33の1体のみ。
+  function buildMap9(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const officerCells = OFFICER_CELLS[9]; // [15] (LV33の幹部)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-1=27マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",10);
+    pushN("cactus",4); // 「特定セルでライフ-1」の指定通り4マス
+    pushN("herb",2);
+    pushN("shop",2);
+    // shortcut(近道)はユーザー指定により配置しない
+    pushN("lost",2);
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",3);
+    // 合計 10+4+2+2+2+2+2+3=27
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
+  // マップ10: 魔王城(石造りの建物、灰色基調)。ユーザー指定により、ライフ-1の「炎」セルを
+  // 4マス、近道は配置せず迷い道を多めに配置する。現在地から5マス先までしか見えない霧の演出
+  // (FOG_RADIUS参照)もこのマップの特徴。30セル目は通常の番人ではなく、ラスボスの
+  // ドラゴンが固定配置される(type:"dragon"。resolveCell()側で専用の戦闘画面(resolveDragonBattle)
+  // に分岐する。詳細は「ドラゴン(ラスボス)戦の実装」参照)。幹部はこのマップには登場しない
+  // (幹部の出現課は全てマップ4〜9で実装済みのため)。
+  function buildMap10(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"dragon"};
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",9);
+    pushN("fire",4); // 「ライフが減るセルは炎が出ています。それが4つあります」(ユーザー指定)
+    pushN("herb",2);
+    pushN("shop",2);
+    // shortcut(近道)はユーザー指定により配置しない
+    pushN("lost",5); // 「迷い道がおおいです」(ユーザー指定)
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",2);
+    // 合計 9+4+2+2+5+2+2+2=28
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
   function buildMapByNumber(n){
+    if(n===10) return buildMap10();
+    if(n===9) return buildMap9();
+    if(n===8) return buildMap8();
     if(n===7) return buildMap7();
     if(n===6) return buildMap6();
     if(n===5) return buildMap5();
@@ -1447,7 +1735,7 @@
     start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🛡️",
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
-    drown:"🌊", fire:"🔥", officer:"👺",
+    drown:"🌊", fire:"🔥", officer:"👺", cactus:"🌵", dragon:"🐉",
   };
 
   function tileVisual(cellNum){
@@ -1508,12 +1796,15 @@
     scheduleAutoSave();
   }
 
-  // マップ3「洞窟」専用: 現在地から3マス先までしか見えない「霧」の演出。
+  // マップ3「洞窟」・マップ10「魔王城」専用: 現在地から一定マス先までしか見えない「霧」の演出。
+  // マップごとに見える範囲(半径)が異なる(マップ3=3マス、マップ10=5マス、ユーザー指定)。
   // state.cellMapの中身自体は変更せず(ゲームロジックはそのまま参照可能)、
   // DOM上の見た目(アイコン・ラベル・背景色)だけを一時的に隠す。
+  const FOG_RADIUS = { 3:3, 10:5 };
   function applyFogOfWar(curNum){
-    if(state.currentMap!==3){
-      // マップ3以外では霧を一切かけない(念のため既存の霧表示を解除)
+    const radius = FOG_RADIUS[state.currentMap];
+    if(!radius){
+      // 霧のかかるマップ以外では霧を一切かけない(念のため既存の霧表示を解除)
       document.querySelectorAll(".tile.fog").forEach(el=>{
         el.classList.remove("fog");
         const iconSpan = el.querySelector(".icon");
@@ -1523,7 +1814,7 @@
       });
       return;
     }
-    const visibleUpTo = curNum + 3;
+    const visibleUpTo = curNum + radius;
     for(let i=1;i<=TOTAL_CELLS;i++){
       const el = document.getElementById("cell-"+i);
       if(!el) continue;
@@ -1581,11 +1872,11 @@
   function renderStaticText(){
     document.getElementById("titleText").textContent = t("title");
     document.getElementById("subtitleText").textContent =
-      state.currentMap===7 ? t("subtitleMap7") : state.currentMap===6 ? t("subtitleMap6") : state.currentMap===5 ? t("subtitleMap5") : state.currentMap===4 ? t("subtitleMap4") : state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
+      state.currentMap===10 ? t("subtitleMap10") : state.currentMap===9 ? t("subtitleMap9") : state.currentMap===8 ? t("subtitleMap8") : state.currentMap===7 ? t("subtitleMap7") : state.currentMap===6 ? t("subtitleMap6") : state.currentMap===5 ? t("subtitleMap5") : state.currentMap===4 ? t("subtitleMap4") : state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
     document.getElementById("lblLife").textContent = t("life");
     document.getElementById("lblExp").textContent = t("exp");
     document.getElementById("lblGold").textContent = t("gold");
-    document.body.className = "lang-"+state.lang + (state.currentMap>=2 && state.currentMap<=7 ? " map"+state.currentMap : "");
+    document.body.className = "lang-"+state.lang + (state.currentMap>=2 && state.currentMap<=10 ? " map"+state.currentMap : "");
     const openingHintEl = document.getElementById("openingHint");
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
@@ -1675,7 +1966,17 @@
     ["会","あ"],["取","と"],["歩","ある"],["右","みぎ"],["左","ひだり"],["春","はる"],
     ["桜","さくら"],["咲","さ"],["貸","か"],["子","こ"],["帰","かえ"],["悪","わる"],
     ["頭","あたま"],["痛","いた"],["遅","おく"],["買","か"],["忘","わす"],["書","か"],
-    ["音","おと"],["聞","き"],["走","はし"],["広","ひろ"],["多","おお"],["入","はい"]
+    ["音","おと"],["聞","き"],["走","はし"],["広","ひろ"],["多","おお"],["入","はい"],
+    // 2026-08-22(21回目・マップ8/9追加): LV29〜LV33の問題文で新たに使う語彙
+    ["宿題","しゅくだい"],["財布","さいふ"],["飲み物","のみもの"],["出張","しゅっちょう"],
+    ["予定","よてい"],["危険","きけん"],["意味","いみ"],["独身","どくしん"],
+    ["命令","めいれい"],["禁止","きんし"],["意向","いこう"],["自動詞","じどうし"],
+    ["他動詞","たどうし"],["来月","らいげつ"],["明日","あした"],
+    ["開","あ"],["閉","し"],["壁","かべ"],["絵","え"],["掛","か"],["冷","ひ"],["窓","まど"],
+    ["看板","かんばん"],["傘","かさ"],["例","れい"],["彼","かれ"],["店","みせ"],
+    // 2026-08-23(22回目・マップ10追加): LV34〜LV35の問題文で新たに使う語彙
+    ["砂糖","さとう"],["地図","ちず"],["先生","せんせい"],["疑問詞","ぎもんし"],
+    ["差","さ"],["太","ふと"],["甘","あま"],["出","で"]
   ];
   const FURIGANA_MAP = new Map(FURIGANA_WORDS);
   // 長い語(複合語)から先に一致させることで、単漢字の対応表による部分一致の誤変換を防ぐ
@@ -1855,6 +2156,61 @@
     showEvent(()=> showFlavor("☁️", t("map7WelcomeTitle"), t("map7WelcomeText", heroDisplayName()), ()=>{}));
   }
 
+  function goToMap8(){
+    closeModal();
+    state.currentMap = 8;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap8();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(8));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("🌴", t("map8WelcomeTitle"), t("map8WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
+  function goToMap9(){
+    closeModal();
+    state.currentMap = 9;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap9();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(9));
+    scheduleAutoSave();
+    // ユーザー指定: 砂漠に入った最初に「前に進みにくい」ことを伝える演出テキストを表示する
+    showEvent(()=> showFlavor("🏜️", t("map9WelcomeTitle"), t("map9WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
+  function goToMap10(){
+    closeModal();
+    state.currentMap = 10;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap10();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(10));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("🏰", t("map10WelcomeTitle"), t("map10WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
   function showMapClear(){
     if(state.currentMap===1){
       activeModalRenderer = showMapClear;
@@ -1946,16 +2302,48 @@
       document.getElementById("retryBtn").onclick = resetGame;
       return;
     }
-    // マップ7クリア(現時点ではマップ8以降は未実装)
+    if(state.currentMap===7){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map7ClearTitle")}</h2>
+          <p>${t("map7ClearText")}</p>
+          <button class="primary" id="proceedMap8Btn">${t("proceedMap8Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap8Btn").onclick = goToMap8;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    if(state.currentMap===8){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map8ClearTitle")}</h2>
+          <p>${t("map8ClearText")}</p>
+          <button class="primary" id="proceedMap9Btn">${t("proceedMap9Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap9Btn").onclick = goToMap9;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    // マップ9クリア → マップ10(魔王城)へ進む
     activeModalRenderer = showMapClear;
     openModal(`
       <div class="card">
         <div class="final-emoji">🏆</div>
-        <h2>${t("map7ClearTitle")}</h2>
-        <p>${t("map7ClearText")}</p>
-        <button class="primary" id="retryBtn">${t("retryBtn")}</button>
+        <h2>${t("map9ClearTitle")}</h2>
+        <p>${t("map9ClearText")}</p>
+        <button class="primary" id="proceedMap10Btn">${t("proceedMap10Btn")}</button>
+        <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
       </div>
     `);
+    document.getElementById("proceedMap10Btn").onclick = goToMap10;
     document.getElementById("retryBtn").onclick = resetGame;
   }
 
@@ -2005,12 +2393,37 @@
     return roll;
   }
 
-  // マップ4(水のエリア)限定: 水の抵抗でサイコロの目の半分ほどしか進めない。
+  // マップ4(水のエリア)・マップ9(砂漠)限定: 水/砂の抵抗でサイコロの目の半分ほどしか進めない。
   // 出た目そのもの(ダイスの絵)は変えず、実際に進むマス数だけをこの対応表で変換する。
-  const MAP4_DICE_STEPS = { 1:0, 2:1, 3:2, 4:2, 5:2, 6:3 };
+  // マップ9もユーザー指定により同じ換算表を使う(「前に進みにくい」という同じ趣旨のため)。
+  const HALVED_DICE_STEPS = { 1:0, 2:1, 3:2, 4:2, 5:2, 6:3 };
   function stepsForRoll(roll){
-    if(state.currentMap===4) return MAP4_DICE_STEPS[roll];
+    if(state.currentMap===4 || state.currentMap===9) return HALVED_DICE_STEPS[roll];
     return roll;
+  }
+
+  // ユーザー指定(2026-08-23・22回目): 幹部(中ボス)がいるマップでは、サイコロの目が
+  // どんな数であっても、幹部のマスを通り過ぎて先に進むことはできない。サイコロの出目通りに
+  // 進むと幹部のマスを飛び越してしまう場合は、必ず幹部のマスで止まって戦闘になるよう、
+  // 実際に進むマス数をその場で短く切り詰める(出目自体の表示は変えない。マップ4・9の
+  // 「水/砂の抵抗」による短縮と同じ考え方)。マップに幹部が2体いる場合は、現在地から近い方の
+  // 幹部で止める。
+  // ユーザー指定(2026-08-23・23回目): マップ1(王城の城下町)でも同様に、サイコロの目が
+  // どんな数であっても王城(FIXED.king)のマスを通り過ぎることはできない。強制停止するマスの
+  // 一覧を、幹部がいるマップでは幹部のマス、マップ1では王城のマスとして返す。
+  function forcedStopCells(mapNum){
+    if(mapNum===1) return [FIXED.king];
+    return OFFICER_CELLS[mapNum];
+  }
+  function capStepsAtOfficer(steps){
+    if(steps<=0) return steps;
+    const stopCells = forcedStopCells(state.currentMap);
+    if(!stopCells) return steps;
+    const curNum = state.cellIdx+1;
+    const destNum = curNum+steps;
+    const candidates = stopCells.filter(oc=> oc>curNum && oc<=destNum);
+    if(candidates.length===0) return steps;
+    return Math.min(...candidates) - curNum;
   }
 
   function setBusy(b){ state.busy = b; diceEl.classList.toggle("disabled", b); }
@@ -2131,6 +2544,191 @@
       }));
     }
     ask();
+  }
+
+  /* =========================================================
+     ドラゴン(ラスボス)戦・エンディング(2026-08-23・22回目追加)
+     マップ10(魔王城)の30セル目に到達すると、通常の番人ではなくラスボスの
+     ドラゴンとの戦闘になる。ユーザー指定により、この戦闘だけは「ドラゴンクエスト
+     シリーズのような戦闘画面」に画面が切り替わる: 上部にドラゴンの絵(dragon.jpg)を
+     大きく表示し、その下にライフバー・戦闘中の質問/選択肢を配置する(通常の戦闘は
+     画面中央の小さいカードのみで進行するが、ドラゴン戦だけ専用レイアウト
+     (.dragon-battle-card、showDragonQuiz())に切り替わる)。
+     出題プールはマップ10自体のLV範囲(34〜35)には限定せず、当初の構想
+     (「第6〜35課の難問30問」)通りLV6〜35の全hard問題から出題する
+     (DRAGON_QUESTION_MIN_LEVEL〜MAX_LEVEL、DRAGON_MAX_LIFE=30)。他の戦闘と
+     同じく、誤答してもプレイヤーのライフは減らない(正答するとドラゴンの体力が
+     減る)という、このアプリで既に確立された戦闘の仕様を踏襲している。
+  ========================================================= */
+  let dragonQuestionBag = [];
+  function buildDragonQuestionBag(){
+    const all = [];
+    for(let lv=DRAGON_QUESTION_MIN_LEVEL; lv<=DRAGON_QUESTION_MAX_LEVEL; lv++){
+      const bank = LEVELS[lv] && LEVELS[lv].hard;
+      if(bank) all.push(...bank);
+    }
+    return shuffle(all);
+  }
+  function randomDragonQuestion(){
+    if(dragonQuestionBag.length===0){ dragonQuestionBag = buildDragonQuestionBag(); }
+    return dragonQuestionBag.shift();
+  }
+
+  // 通常の戦闘用showQuiz()とは別に、ドラゴン戦専用のドラゴンクエスト風レイアウトで
+  // 質問を表示する。question.c/question.a自体は書き換えず、表示順のみシャッフルする
+  // (showQuiz()と同じランダム化ロジックをそのまま踏襲)。
+  function showDragonQuiz(question, lifeRemaining, onDone){
+    const order = shuffle(question.c.map((_,i)=>i));
+    const displayedChoices = order.map(origIdx=>question.c[origIdx]);
+    const correctDisplayIdx = order.indexOf(question.a);
+    const lifePct = Math.max(0, Math.round((lifeRemaining/DRAGON_MAX_LIFE)*100));
+    openModal(`
+      <div class="card dragon-battle-card">
+        <img class="dragon-img" src="public/images/dragon.jpg" alt="dragon">
+        <div class="dragon-life-wrap">
+          <div class="dragon-life-label">🐉 ${t("dragonLifeLabel")}: ${lifeRemaining}/${DRAGON_MAX_LIFE}</div>
+          <div class="dragon-life-bar"><div class="dragon-life-fill" style="width:${lifePct}%"></div></div>
+        </div>
+        <div class="badge">🐉 ${t("dragonTitle")}</div>
+        <div class="qtext">${addFurigana(question.q)}</div>
+        <div class="choices" id="choicesWrap">
+          ${displayedChoices.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${addFurigana(c)}</span></button>`).join("")}
+        </div>
+        <div class="feedback" id="fb"></div>
+      </div>
+    `);
+    const wrap = document.getElementById("choicesWrap");
+    const fb = document.getElementById("fb");
+    wrap.querySelectorAll(".choice-btn").forEach(btn=>{
+      btn.onclick = ()=>{
+        wrap.querySelectorAll(".choice-btn").forEach(b=>b.disabled=true);
+        const i = Number(btn.dataset.i);
+        const isCorrect = (i===correctDisplayIdx);
+        if(isCorrect){
+          btn.classList.add("correct");
+          fb.textContent = t("correct");
+          fb.className = "feedback ok";
+        } else {
+          btn.classList.add("wrong");
+          wrap.children[correctDisplayIdx].classList.add("correct");
+          fb.textContent = t("wrong");
+          fb.className = "feedback no";
+        }
+        setTimeout(()=>{ closeModal(); onDone(isCorrect); }, 850);
+      };
+    });
+  }
+
+  function resolveDragonBattle(){
+    switchBgmTrack(SPECIAL_BGM.dragonBattle);
+    dragonQuestionBag = buildDragonQuestionBag();
+    let dragonLife = DRAGON_MAX_LIFE;
+    function ask(){
+      const q = randomDragonQuestion();
+      showEvent(()=> showDragonQuiz(q, dragonLife, (correct)=>{
+        if(correct){
+          dragonLife--;
+          gainExp(1);
+          if(dragonLife<=0){
+            onDragonDefeated();
+            return;
+          }
+        }
+        setTimeout(ask, 150);
+      }));
+    }
+    ask();
+  }
+
+  // ドラゴン撃破直後: dragon2.jpg(倒れたドラゴン)を表示する専用の勝利画面。
+  // ユーザー指定: goal_bgm.mp3は16秒間の短いファンファーレ曲で、ループさせず、
+  // 曲が終わったタイミングで自動的にエンディング(姫の救出)画面へ移行し、そこで
+  // BGMをending_bgm.mp3に切り替える。オーディオ要素はBGM全般で常時ループ再生
+  // (<audio id="bgm" loop>)する仕様のため、ここだけ一時的にloopを外し、
+  // 「ended」イベント(曲が実際に終わったタイミング)を主な合図として使う。
+  // ファイル未配置・自動再生ブロック等でendedが発火しないケースに備えて、
+  // ユーザー指定の尺と同じ16秒のフォールバックタイマーも用意し、いずれか早い方で進む。
+  function onDragonDefeated(){
+    bgmEl.loop = false;
+    switchBgmTrack(SPECIAL_BGM.goal);
+    showDragonDefeatedScreen();
+    let advanced = false;
+    const onEnded = ()=> advance();
+    const advance = ()=>{
+      if(advanced) return;
+      advanced = true;
+      bgmEl.removeEventListener("ended", onEnded);
+      bgmEl.loop = true; // 以降のトラック(ending_bgm.mp3等)は通常通りループ再生に戻す
+      showPrincessRescue();
+    };
+    bgmEl.addEventListener("ended", onEnded, {once:true});
+    setTimeout(advance, 16000);
+  }
+  function showDragonDefeatedScreen(){
+    activeModalRenderer = showDragonDefeatedScreen;
+    openModal(`
+      <div class="card dragon-battle-card">
+        <img class="dragon-img" src="public/images/dragon2.jpg" alt="dragon defeated">
+        <h2>${t("dragonDefeatedTitle")}</h2>
+        <p>${t("dragonDefeatedText")}</p>
+      </div>
+    `);
+  }
+
+  // 姫の救出(イベント10)→国王への謁見→結婚/再冒険の選択、というエンディングの流れ。
+  // BGMはこの姫の救出シーンからending_bgm.mp3に切り替える。
+  function showPrincessRescue(){
+    switchBgmTrack(SPECIAL_BGM.ending);
+    showEvent(()=> showFlavor("👸", t("princessRescueTitle"), t("princessRescueText", heroDisplayName()), ()=>{
+      showKingAudience();
+    }));
+  }
+
+  function showKingAudience(){
+    showEvent(()=> showFlavor("👑", t("kingAudienceTitle"), t("kingAudienceText", heroDisplayName()), ()=>{
+      showEndingChoice();
+    }));
+  }
+
+  function showEndingChoice(){
+    activeModalRenderer = showEndingChoice;
+    openModal(`
+      <div class="card">
+        <div class="final-emoji">💍</div>
+        <h2>${t("endingChoiceTitle")}</h2>
+        <p>${t("endingChoiceText")}</p>
+        <button class="primary" id="marryBtn">${t("marryBtn")}</button>
+        <br><button class="secondary" id="adventureBtn" style="margin-top:10px;">${t("adventureBtn")}</button>
+      </div>
+    `);
+    document.getElementById("marryBtn").onclick = ()=>{ closeModal(); showWeddingEnding(); };
+    document.getElementById("adventureBtn").onclick = ()=>{ closeModal(); showAdventureEnding(); };
+  }
+
+  // 結婚エンディング: wedding_bgm.mp3に切り替え、そのままゲーム終了(リトライのみ)。
+  function showWeddingEnding(){
+    switchBgmTrack(SPECIAL_BGM.wedding);
+    activeModalRenderer = showWeddingEnding;
+    openModal(`
+      <div class="card">
+        <div class="final-emoji">💒</div>
+        <h2>${t("weddingEndingTitle")}</h2>
+        <p>${t("weddingEndingText", heroDisplayName())}</p>
+        <button class="primary" id="retryBtn">${t("retryBtn")}</button>
+      </div>
+    `);
+    document.getElementById("retryBtn").onclick = resetGame;
+  }
+
+  // 再冒険エンディング: opening_bgm.mp3に切り替え、「勇者は経験を得て、さらなる冒険へと
+  // 旅立った」の一文を表示したのち、現在のLV/ライフ/経験値/ゴールド/装備/勇者名を
+  // 引き継いだままマップ2から再開する(goToMap2()はマップ固有の状態のみをリセットし、
+  // ステータス自体には一切触れないため、そのまま呼び出すだけで「引き継ぎ再開」になる)。
+  function showAdventureEnding(){
+    switchBgmTrack(SPECIAL_BGM.opening);
+    showEvent(()=> showFlavor("🗺️", t("adventureEndingTitle"), t("adventureEndingText"), ()=>{
+      goToMap2();
+    }));
   }
 
   function openShop(){
@@ -2292,6 +2890,7 @@
     if(ev.type==="enemy"){ resolveEnemyLike("enemy"); return; }
     if(ev.type==="guardian"){ resolveEnemyLike("guardian"); return; }
     if(ev.type==="officer"){ resolveEnemyLike("officer"); return; }
+    if(ev.type==="dragon"){ resolveDragonBattle(); return; }
 
     if(ev.type==="pit"){
       loseLife(1);
@@ -2306,6 +2905,11 @@
     if(ev.type==="fire"){
       loseLife(1);
       showEvent(()=> showFlavor(ICONS.fire, t("fireTitle"), t("fireText"), ()=>{ checkDeath(endTurn); }));
+      return;
+    }
+    if(ev.type==="cactus"){
+      loseLife(1);
+      showEvent(()=> showFlavor(ICONS.cactus, t("cactusTitle"), t("cactusText"), ()=>{ checkDeath(endTurn); }));
       return;
     }
     if(ev.type==="shortcut"){
@@ -2380,17 +2984,23 @@
         diceEl.textContent = DICE_FACES[roll-1];
         diceEl.classList.add("settle");
         setTimeout(()=>diceEl.classList.remove("settle"), 420);
-        const steps = stepsForRoll(roll);
-        if(state.currentMap===4 && steps<=0){
-          // 水の抵抗が強すぎて1マスも進めない(出目が1の場合)。
+        const steps = capStepsAtOfficer(stepsForRoll(roll));
+        if((state.currentMap===4 || state.currentMap===9) && steps<=0){
+          // 水/砂の抵抗が強すぎて1マスも進めない(出目が1の場合)。
           // 盤面上は移動が発生しない(現在のマスを再度resolveCell()しない)ため、
           // ここでは移動イベントを起こさず、専用のモーダルで「進めなかった」ことを伝えてターンを終える。
           hintEl.textContent = "";
-          showEvent(()=> showFlavor("🌊", t("waterStuckTitle"), t("waterStuckText", roll), endTurn));
+          if(state.currentMap===4){
+            showEvent(()=> showFlavor("🌊", t("waterStuckTitle"), t("waterStuckText", roll), endTurn));
+          } else {
+            showEvent(()=> showFlavor("🏜️", t("sandStuckTitle"), t("sandStuckText", roll), endTurn));
+          }
           return;
         }
         if(state.currentMap===4){
           hintEl.textContent = t("rolledWaterMove", roll, steps);
+        } else if(state.currentMap===9){
+          hintEl.textContent = t("rolledSandMove", roll, steps);
         } else {
           hintEl.textContent = t("rolled", roll);
         }
@@ -2715,14 +3325,15 @@
   }
 
   // 特殊イベント用BGMのパス。幹部(中ボス)戦・ドラゴン(最終ボス)戦・ゴール後・エンディング用。
-  // dragonBattle/goal/endingは、ドラゴンとの戦闘自体がまだ実装されていない(将来のマップで
-  // 実装予定)ため、現時点では「切り替える仕組み」だけ用意しておく段階。実際にドラゴン戦の
-  // マップ/イベントを作る際に、この定数とswitchBgmTrack()を使って呼び出す想定。
+  // 2026-08-23(22回目): マップ10(魔王城)・ドラゴン戦・エンディング本体の実装に伴い、
+  // wedding(結婚エンディング)・opening(再び冒険に出る選択時、オープニング曲に戻す)を追加。
   const SPECIAL_BGM = {
     officerBattle: "public/audio/enemy_bgm.mp3",
     dragonBattle: "public/audio/dragon_bgm.mp3",
     goal: "public/audio/goal_bgm.mp3",
     ending: "public/audio/ending_bgm.mp3",
+    wedding: "public/audio/wedding_bgm.mp3",
+    opening: "public/audio/opening_bgm.mp3",
   };
 
   function switchBgmTrack(path){
