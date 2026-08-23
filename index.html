@@ -41,6 +41,18 @@
     --accent:#8c1f1f; --accent-light:#c94f3a;
     --bg1:#5c1010; --bg2:#300808; --bg3:#120202;
   }
+  /* マップ6「高山(雪山)」のテーマカラー(白〜青白い雪のグラデーション基調)。 */
+  body.map6{
+    --gold:#dff4fb; --gold-light:#ffffff;
+    --accent:#7fb8d4; --accent-light:#bfe3f0;
+    --bg1:#2c4a5c; --bg2:#16303d; --bg3:#050f14;
+  }
+  /* マップ7「天上界」のテーマカラー(白に黄色/金色が混じる雲のイメージ)。 */
+  body.map7{
+    --gold:#f5cf6b; --gold-light:#ffe9a8;
+    --accent:#c9a227; --accent-light:#e8c869;
+    --bg1:#6b5220; --bg2:#3a2c10; --bg3:#140f04;
+  }
   /* マップ3限定: 現在地から3マス先までしか見えない「霧」の演出。
      元のタイル種別のクラス(enemy/pit/guardian等)は残したまま、背景色だけを
      一律の暗色で上書きして種別が見た目からわからないようにする。 */
@@ -87,7 +99,7 @@
     color:var(--gold-light); font-size:1.1rem; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
   }
-  .devbtn.logged-in{ border-color:#3f9142; color:#8be29a; }
+  .devbtn.logged-in{ border-color:#e08a2e; color:#ff9d33; background:rgba(224,138,46,.18); box-shadow:0 0 8px rgba(255,157,51,.5); }
   .devbtn.muted{ opacity:.55; }
 
   header.top{ text-align:center; padding:10px 0 6px; }
@@ -201,6 +213,7 @@
   .tile.dojo{ background:#4a4470; color:#ece8fb; }
   .tile.enemy{ background:#7a2a2a; color:#ffe6e6; }
   .tile.guardian{ background:linear-gradient(160deg,#3a2a1e,#1b1210); color:var(--gold-light); font-weight:700; border:2px solid var(--gold); }
+  .tile.officer{ background:linear-gradient(160deg,#5a1e3a,#2a0f1e); color:#ffd6e6; font-weight:700; border:2px solid #c9407a; }
   .tile.pit{ background:#3a2a2a; color:#e6c9c9; }
   .tile.shortcut{ background:var(--gold); color:#3a2a1e; }
   .tile.lost{ background:#8b2635; color:#fbe6e6; }
@@ -279,6 +292,12 @@
   body.map5 button.primary{ box-shadow:0 4px 0 #5c1010, 0 8px 18px rgba(0,0,0,.5); }
   body.map5 button.primary:active{ box-shadow:0 1px 0 #5c1010; }
   body.map5 .controls{ border-color:rgba(212,58,47,.4); }
+  body.map6 button.primary{ box-shadow:0 4px 0 #2c4a5c, 0 8px 18px rgba(0,0,0,.35); }
+  body.map6 button.primary:active{ box-shadow:0 1px 0 #2c4a5c; }
+  body.map6 .controls{ border-color:rgba(127,184,212,.4); }
+  body.map7 button.primary{ box-shadow:0 4px 0 #6b5220, 0 8px 18px rgba(0,0,0,.35); }
+  body.map7 button.primary:active{ box-shadow:0 1px 0 #6b5220; }
+  body.map7 .controls{ border-color:rgba(201,162,39,.4); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
     font-weight:500;
@@ -340,8 +359,8 @@
   .feedback.ok{ color:#3f6644; }
   .feedback.no{ color:#8b2635; }
   .final-emoji{ font-size:2.6rem; margin-bottom:8px; }
-  .shop-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 4px; border-bottom:1px solid var(--parchment-dark); text-align:left; }
-  .shop-row:last-child{ border-bottom:none; }
+  .shop-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; margin-bottom:8px; border:2px solid #4a2f18; border-radius:8px; text-align:left; }
+  .shop-row:last-child{ margin-bottom:0; }
   .shop-row .name{ font-size:.9rem; font-weight:700; }
   .shop-row .price{ font-size:.8rem; color:#6a5a4a; }
   .name-input{
@@ -476,6 +495,7 @@
       introTitle:"Mở đầu câu chuyện",
       introText:"Công chúa đã bị Ma Vương Rồng bắt cóc! Quốc vương đang tìm kiếm một dũng sĩ can đảm để giải cứu công chúa. Bạn quyết định lên đường trở thành dũng sĩ ấy.<br><br>Trước tiên, hãy đi qua Thị Trấn Hoàng Gia: gặp Quốc Vương, luyện tập tại 3 võ đường, rồi thử sức với quái vật luyện tập trước khi thực sự lên đường phiêu lưu.",
       startBtn:"⚔️ Bắt đầu phiêu lưu",
+      introHelpBtn:"？ Xem hướng dẫn chơi trước",
       openingHint:"👆 Chạm vào màn hình để bắt đầu",
       openingLoadingText:"Đang tải...",
       kingTitle:"Yết kiến Quốc Vương",
@@ -500,6 +520,7 @@
       enemyTitle:"Quái vật luyện tập xuất hiện!",
       enemyTitleReal:"Quái vật xuất hiện!",
       guardianTitle:"Người Gác Cổng xuất hiện!",
+      officerTitle:"Sĩ Quan Chỉ Huy (Kanbu) xuất hiện!",
       untrainedHurt:"Bạn chưa học phòng thủ nên bị thương ngay lập tức! Sinh lực -1.",
       sentBack:"Bạn chưa luyện tập đầy đủ nên bị đưa trở lại ô số 8 để luyện tập thêm!",
       sentBackCastle:"Bạn chưa học cả cách tấn công lẫn cách phòng thủ nên bị đưa thẳng về đầu Thị Trấn Hoàng Gia để chuẩn bị lại từ đầu!",
@@ -514,6 +535,7 @@
       enemyDefeatedReal:"Bạn đã đánh bại quái vật!",
       guardianDefeated:"Bạn đã đánh bại Người Gác Cổng luyện tập! Bản đồ 1 hoàn thành!",
       guardianDefeatedReal:"Bạn đã đánh bại Người Gác Cổng!",
+      officerDefeated:"Bạn đã đánh bại Sĩ Quan Chỉ Huy (Kanbu)!",
       pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
       shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
       lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
@@ -570,8 +592,20 @@
       map5WelcomeTitle:"Chào mừng đến Vùng Lửa!",
       map5WelcomeText:(name)=>`${name} bước vào một vùng đất bao phủ bởi lửa đỏ rực. Hơi nóng táp vào mặt từng cơn...`,
       map5ClearTitle:"Bản đồ 5 hoàn thành!",
-      map5ClearText:"Bạn đã vượt qua vùng lửa một cách an toàn. (Bản đồ 6 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      map5ClearText:"Bạn đã vượt qua vùng lửa một cách an toàn. Phía trước là một ngọn núi cao phủ đầy tuyết trắng...",
       subtitleMap5:"Bản đồ 5: Vùng Lửa (LV17〜LV20)",
+      proceedMap6Btn:"➡️ Đến Bản đồ 6: Núi Tuyết",
+      map6WelcomeTitle:"Chào mừng đến Núi Tuyết!",
+      map6WelcomeText:(name)=>`${name} bước lên một ngọn núi cao phủ đầy tuyết trắng. Gió lạnh thổi mạnh và mặt đất trơn trượt khiến từng bước chân đều khó khăn...`,
+      map6ClearTitle:"Bản đồ 6 hoàn thành!",
+      map6ClearText:"Bạn đã vượt qua ngọn núi tuyết một cách an toàn. Phía trên những đám mây, một vùng ánh sáng huyền ảo đang chờ đón...",
+      subtitleMap6:"Bản đồ 6: Núi Tuyết (LV21〜LV25)",
+      proceedMap7Btn:"➡️ Đến Bản đồ 7: Thiên Giới",
+      map7WelcomeTitle:"Chào mừng đến Thiên Giới!",
+      map7WelcomeText:(name)=>`${name} bước lên những đám mây bồng bềnh ánh vàng. Một làn gió nhẹ nhàng nâng bước, đưa ${name} tiến về phía trước...`,
+      map7ClearTitle:"Bản đồ 7 hoàn thành!",
+      map7ClearText:"Bạn đã vượt qua Thiên Giới một cách an toàn! (Bản đồ 8 sẽ được bổ sung ở phiên bản tiếp theo.)",
+      subtitleMap7:"Bản đồ 7: Thiên Giới (LV26〜LV28)",
       drownTitle:"Suýt chết đuối!",
       drownText:"Dòng nước bất ngờ cuốn bạn xuống sâu. Bạn mất 1 Sinh lực.",
       fireTitle:"Bị lửa thiêu!",
@@ -585,6 +619,18 @@
       devToJa:"Chuyển sang Tiếng Nhật",
       devToVi:"Chuyển sang Tiếng Việt",
       devClose:"Đóng",
+      devLoadDataBtn:"💾 Tải lại dữ liệu đã lưu",
+      devLoadDataNoAuth:"Cần đăng nhập bằng email trước khi tải dữ liệu.",
+      devLoadDataNoSave:"Không tìm thấy dữ liệu đã lưu trên máy chủ.",
+      devLoadDataSuccess:"Đã tải dữ liệu đã lưu!",
+      devAdminBtn:"🔑 Quản trị viên",
+      adminPasswordTitle:"Xác thực quản trị viên",
+      adminPasswordText:"Nhập mật khẩu quản trị viên để tiếp tục.",
+      adminPasswordWrong:"Mật khẩu không đúng.",
+      adminPanelTitle:"Chế độ quản trị viên",
+      adminMapJumpLabel:"Nhập số bản đồ (1〜7) để di chuyển đến đó ngay:",
+      adminMapJumpBtn:"🚀 Di chuyển đến bản đồ",
+      adminMapJumpInvalid:"Số bản đồ không hợp lệ.",
       accountTitle:"Tài khoản",
       accountGuestNote:"Bạn có thể chơi mà không cần đăng nhập. Đăng nhập bằng email để lưu và tiếp tục tiến trình chơi ở lần sau.",
       accountEmailPlaceholder:"Nhập địa chỉ email...",
@@ -619,6 +665,7 @@
       introTitle:"物語のはじまり",
       introText:"姫が魔王ドラゴンにさらわれてしまった！国王は勇気ある冒険者を探している。あなたはその勇者になることを決意した。<br><br>まずは城下町へ。国王に謁見し、3つの道場で修行を積み、練習用のモンスターと戦ってから本当の冒険に旅立とう。",
       startBtn:"⚔️ 冒険をはじめる",
+      introHelpBtn:"？ 先に遊び方を見る",
       openingHint:"👆 画面をタップしてはじめる",
       openingLoadingText:"読み込み中...",
       kingTitle:"国王への謁見",
@@ -643,6 +690,7 @@
       enemyTitle:"練習用モンスターが現れた！",
       enemyTitleReal:"モンスターが現れた！",
       guardianTitle:"番人が現れた！",
+      officerTitle:"幹部が現れた！",
       untrainedHurt:"守り方を学んでいないので、即座に傷を負ってしまった！ライフ-1。",
       sentBack:"修行が足りないため、8マス目まで連れ戻されてしまった！",
       sentBackCastle:"戦い方も守り方もまだ学んでいないため、城下町の入り口まで送り返されてしまった！最初から準備をやり直そう。",
@@ -657,6 +705,7 @@
       enemyDefeatedReal:"モンスターを倒した！",
       guardianDefeated:"練習用の番人を倒した！マップ1クリア！",
       guardianDefeatedReal:"番人を倒した！",
+      officerDefeated:"幹部を倒した！",
       pitTitle:"落とし穴！", pitText:"落とし穴に落ちてしまった！ライフ-1。",
       shortcutTitle:"近道！", shortcutText:"近道を見つけた！3マス進む。",
       lostTitle:"迷い道！", lostText:"道に迷ってしまった！3マス戻る。",
@@ -713,8 +762,20 @@
       map5WelcomeTitle:"炎のエリアへようこそ！",
       map5WelcomeText:(name)=>`${name}は真紅の炎に包まれたエリアへ足を踏み入れた。熱風が肌を刺すように吹きつける……`,
       map5ClearTitle:"マップ5クリア！",
-      map5ClearText:"炎のエリアを無事に抜けた。（マップ6は次のバージョンで追加予定です。）",
+      map5ClearText:"炎のエリアを無事に抜けた。この先には雪に覆われた高山がそびえている……",
       subtitleMap5:"マップ5：炎のエリア (LV17〜LV20)",
+      proceedMap6Btn:"➡️ マップ6:雪山へ進む",
+      map6WelcomeTitle:"雪山へようこそ！",
+      map6WelcomeText:(name)=>`${name}は雪に覆われた高山へ足を踏み入れた。冷たい風が吹きすさび、足元も滑りやすい……`,
+      map6ClearTitle:"マップ6クリア！",
+      map6ClearText:"雪山を無事に抜けた。雲の上には、金色に輝く不思議な光が広がっている……",
+      subtitleMap6:"マップ6：雪山 (LV21〜LV25)",
+      proceedMap7Btn:"➡️ マップ7:天上界へ進む",
+      map7WelcomeTitle:"天上界へようこそ！",
+      map7WelcomeText:(name)=>`${name}は金色に輝く雲の上へ足を踏み入れた。やわらかな追い風が背中を押し、${name}を前へと運んでいく……`,
+      map7ClearTitle:"マップ7クリア！",
+      map7ClearText:"天上界を無事に抜けた！（マップ8は次のバージョンで追加予定です。）",
+      subtitleMap7:"マップ7：天上界 (LV26〜LV28)",
       drownTitle:"溺れかけた！",
       drownText:"急な水の流れに引き込まれた。ライフを1失った。",
       fireTitle:"炎に焼かれた！",
@@ -728,6 +789,18 @@
       devToJa:"日本語に切り替える",
       devToVi:"ベトナム語に切り替える",
       devClose:"閉じる",
+      devLoadDataBtn:"💾 保存データを読み込み直す",
+      devLoadDataNoAuth:"データを読み込むには先にメールでログインしてください。",
+      devLoadDataNoSave:"サーバー上に保存データが見つかりませんでした。",
+      devLoadDataSuccess:"保存データを読み込みました！",
+      devAdminBtn:"🔑 管理者",
+      adminPasswordTitle:"管理者認証",
+      adminPasswordText:"管理者パスワードを入力してください。",
+      adminPasswordWrong:"パスワードが違います。",
+      adminPanelTitle:"管理者モード",
+      adminMapJumpLabel:"移動したいマップ番号(1〜7)を入力:",
+      adminMapJumpBtn:"🚀 このマップへ移動",
+      adminMapJumpInvalid:"無効なマップ番号です。",
       accountTitle:"アカウント",
       accountGuestNote:"ログインしなくても遊べます。メールでログインすると、進行状況を保存して次回続きから再開できます。",
       accountEmailPlaceholder:"メールアドレスを入力...",
@@ -912,6 +985,62 @@
       hard:[
         {q:"「この 部屋は 静かだし、駅にも 近いし、いい部屋だと 思います。」 Trợ từ 「し」 trong câu này có vai trò gì?", c:["Liệt kê nhiều lý do/đặc điểm cùng lúc để dẫn đến một kết luận","Chỉ đưa ra đúng một lý do duy nhất","Phủ định các lý do đã nêu trước đó","Dùng để đặt câu hỏi về lý do"], a:0},
         {q:"So sánh 「行きます」→「行く」、「行きません」→「行かない」、「行きました」→「行った」、「行きませんでした」→「行かなかった」, quy luật chung khi chuyển từ 敬体 sang 普通形 của động từ là gì?", c:["Mỗi thì (hiện tại/quá khứ, khẳng định/phủ định) của 敬体 đều có một dạng 普通形 tương ứng riêng, không đơn giản chỉ là bỏ 「ます」","Chỉ cần bỏ 「ます」 là xong trong mọi trường hợp","Không có sự tương ứng nào giữa hai thể","普通形 chỉ tồn tại ở thì hiện tại"], a:0}]},
+    21:{ title:"普通形＋でしょう？・そう思います", normal:[
+        {q:"「あしたも 雨でしょう？」 Mẫu 「普通形＋でしょう？」(giọng lên cuối câu) dùng để làm gì?", c:["Xác nhận lại một điều người nói đã đoán, mong người nghe đồng tình","Ra lệnh cho người nghe","Phủ định hoàn toàn ý kiến của người nghe","Mời người nghe làm gì đó"], a:0},
+        {q:"「A: 田中さんは 忙しいでしょう？ B: ええ、そうですね。」 Trong câu trả lời, 「そうですね」 thể hiện điều gì?", c:["Sự đồng tình với điều mà A vừa nói","Sự phủ định hoàn toàn","Một câu hỏi ngược lại","Sự ngạc nhiên"], a:0},
+        {q:"Muốn nói \"Ngày mai chắc là nghỉ, đúng không?\" (xác nhận lại với người nghe), câu nào đúng theo mẫu đã học?", c:["あしたは 休みでしょう？","あしたは 休みです。","あしたは 休みでした。","あしたは 休みでしょうか。"], a:0}],
+      hard:[
+        {q:"So sánh 「あした 雨でしょう。」(giọng xuống) và 「あした 雨でしょう？」(giọng lên), điểm khác nhau chính là gì?", c:["Ngữ điệu: giọng xuống là lời dự đoán của người nói, giọng lên là xác nhận lại với người nghe","Không có khác biệt gì","Câu đầu là quá khứ, câu sau là hiện tại","Câu đầu lịch sự hơn câu sau"], a:0},
+        {q:"「A: すずしいですね。 B: ええ、わたしも そう思います。」 「そう思います」 khác với 「そうです」 ở điểm nào?", c:["「そう思います」thể hiện đó là ý kiến/suy nghĩ cá nhân của người nói, còn 「そうです」chỉ đơn thuần xác nhận sự việc","Không có khác biệt gì","「そう思います」chỉ dùng cho quá khứ","「そうです」chỉ dùng khi phủ định"], a:0}]},
+    22:{ title:"名詞修飾(N[人・物・場所]は/を/が～)・用事/約束があります", normal:[
+        {q:"「きのう 会った 人は 山田さんです。」 Cụm 「きのう 会った」 đứng trước danh từ 「人」 để làm gì?", c:["Bổ nghĩa/mô tả rõ hơn cho danh từ đứng sau (danh từ đó là ai/cái gì)","Là một câu hoàn chỉnh độc lập","Phủ định danh từ đứng sau","Đặt câu hỏi về danh từ đó"], a:0},
+        {q:"「これは わたしが 撮った 写真です。」 Trong mệnh đề bổ nghĩa 「わたしが 撮った」, chủ ngữ 「わたし」 dùng trợ từ nào?", c:["が","は","を","に"], a:0},
+        {q:"「あした 大事な 約束が あります。」 câu này diễn tả điều gì?", c:["Có một cuộc hẹn/lịch trình quan trọng vào ngày mai","Không có việc gì phải làm","Một lời mời","Một câu hỏi về thời gian"], a:0}],
+      hard:[
+        {q:"So sánh 「わたしは 写真を 撮りました。」 và 「これは わたしが 撮った 写真です。」, vì sao mệnh đề bổ nghĩa danh từ lại dùng 「が」 thay vì 「は」 cho chủ ngữ 「わたし」?", c:["Trong mệnh đề bổ nghĩa danh từ(修飾節), chủ ngữ luôn dùng 「が」, không dùng 「は」","Cả hai đều dùng như nhau, không có quy tắc","「は」chỉ dùng cho câu hỏi","「が」chỉ dùng khi phủ định"], a:0},
+        {q:"「昼ごはんを 食べる 時間が ありません。」 Cấu trúc 「V-る＋N(時間・約束・用事)＋があります/ありません」 diễn tả điều gì?", c:["Có/không có đủ thời gian(hoặc việc cần làm/lịch hẹn) để thực hiện hành động đó","Khả năng làm được việc đó","Kinh nghiệm đã từng làm việc đó","Mệnh lệnh phải làm việc đó ngay"], a:0}]},
+    23:{ title:"V-る/V-たとき・イAい/ナAな/Nのとき・Vると", normal:[
+        {q:"「日本へ 行く とき、パスポートを 取ります。」 動詞「行く」 ở thể nào và vì sao?", c:["Thể từ điển(る), vì hành động 'lấy hộ chiếu' xảy ra TRƯỚC KHI đi Nhật","Thể た, vì đã đi Nhật rồi","Thể ている, vì đang đi Nhật","Thể ない, vì phủ định việc đi Nhật"], a:0},
+        {q:"「日本へ 行った とき、写真を 撮りました。」 So với câu trên, động từ 「行った」(thể た) cho biết điều gì?", c:["Hành động 'chụp ảnh' xảy ra SAU KHI(hoặc trong lúc) đã đến Nhật","Hành động xảy ra trước khi đến Nhật","Chưa từng đi Nhật","Sẽ đi Nhật trong tương lai"], a:0},
+        {q:"「暇な とき、テレビを 見ます。」 vì sao 「暇」(ナ形容詞) lại thêm 「な」 trước danh từ 「とき」?", c:["Vì 「暇」là ナ形容詞, khi đứng trước danh từ phải chia thành 「暇な」","Vì đó là quy tắc bắt buộc với mọi từ loại","Vì 「暇」là danh từ chỉ thời gian","Vì đang ở thì quá khứ"], a:0}],
+      hard:[
+        {q:"So sánh 「歩いて わたる とき、右と左を 見ます。」(thể る) và 「わたった とき、車が 来ました。」(thể た), điều gì quyết định dùng thể る hay thể た trước 「とき」?", c:["Hành động của mệnh đề とき đã hoàn thành hay chưa so với hành động ở mệnh đề chính(chưa xong→る、đã xong→た)","Chỉ phụ thuộc vào thì của toàn câu","Không có quy tắc, dùng thể nào cũng được","Phụ thuộc vào câu là khẳng định hay phủ định"], a:0},
+        {q:"「春に なると、桜が 咲きます。」 mẫu 「Vると、～」 trong câu này diễn tả điều gì?", c:["Kết quả tự nhiên/tất yếu xảy ra sau đó, không mang tính chủ ý(khác với たら mang tính giả định cá nhân)","Một mệnh lệnh","Kinh nghiệm trong quá khứ","Lời mời lịch sự"], a:0}]},
+    24:{ title:"V-てあげます／V-てもらいます／V-てくれます", normal:[
+        {q:"「わたしは 田中さんに 本を 貸してあげました。」 mẫu 「Vてあげます」 diễn tả ai làm gì cho ai?", c:["Người nói(hoặc phía người nói) làm một việc tốt cho người khác","Người khác làm một việc cho người nói","Người nói tự làm cho chính mình","Một mệnh lệnh"], a:0},
+        {q:"「わたしは 田中さんに 本を 貸してもらいました。」 hành động 「貸す」(cho mượn) ở đây do ai thực hiện?", c:["Do 田中さん thực hiện, người nói là người nhận được lợi ích/sự giúp đỡ","Do người nói thực hiện","Không ai thực hiện","Do một người thứ ba khác"], a:0},
+        {q:"「田中さんは わたしに 本を 貸してくれました。」 so với 「もらいました」ở câu trên, câu này khác biệt chủ yếu ở đâu?", c:["Cùng một sự việc nhưng đổi chủ ngữ câu sang người CHO(田中さん), nhấn mạnh lòng biết ơn với hành động đó","Nghĩa hoàn toàn khác nhau","Câu này là câu phủ định","Câu này ở thì quá khứ, câu kia ở thì hiện tại"], a:0}],
+      hard:[
+        {q:"「（わたしは）子どもに 本を 読んで あげました。」 và 「田中さんが 子どもに 本を 読んで くれました。」, vì sao câu thứ 2 dùng 「くれました」 mà không phải 「あげました」?", c:["Vì hành động đó hướng về phía người nói(hoặc con của người nói), nên phải dùng くれる chứ không dùng あげる","Vì あげる chỉ dùng cho thì quá khứ","Vì 2 câu nghĩa giống hệt nhau, dùng từ nào cũng được","Vì くれる chỉ dùng với đồ vật, không dùng với hành động"], a:0},
+        {q:"「誕生日に、友達が わたしに かわいい 花を くれました。」 Vì sao câu này dùng 「くれました」 chứ không phải 「あげました」?", c:["Vì người nhận(わたし)chính là người nói, hành động 'cho' hướng về phía người nói nên phải dùng くれる","Vì hoa là vật vô tri, chỉ có thể dùng くれる","Vì đây là câu hỏi","Vì あげる chỉ dùng với động từ, không dùng với danh từ trực tiếp"], a:0}]},
+    25:{ title:"普通形過去＋ら(たら)・V/イA/ナA/Nても", normal:[
+        {q:"「うちへ 帰ったら、すぐ 電話します。」 mẫu 「Vたら、～」 ở đây diễn tả điều gì?", c:["Sau khi hoàn thành việc 'về nhà', sẽ làm việc tiếp theo(trình tự việc sẽ làm)","Nếu không về nhà thì sẽ không gọi điện","Kinh nghiệm trong quá khứ","Mệnh lệnh phải về nhà ngay"], a:0},
+        {q:"「雨が 降ったら、行きません。」 mẫu 「たら」 trong câu này mang tính chất gì?", c:["Giả định(nếu điều kiện đó xảy ra thì...), điều kiện chưa chắc chắn xảy ra","Chắc chắn sẽ xảy ra","Đã xảy ra trong quá khứ","Một lời mời lịch sự"], a:0},
+        {q:"「難しくても、頑張ります。」 mẫu 「イAくても」 diễn tả sắc thái gì?", c:["Dù cho điều kiện đó(khó) có xảy ra, kết quả/quyết tâm phía sau vẫn không thay đổi","Nếu khó thì sẽ không làm","Chỉ làm khi nào dễ","Câu hỏi về độ khó"], a:0}],
+      hard:[
+        {q:"So sánh 「うちへ 帰ったら、すぐ 電話します。」 và 「うちへ 帰ります。それから、電話します。」, điểm đặc trưng của 「たら」 là gì?", c:["「たら」vừa dùng cho điều kiện giả định('nếu'), vừa dùng để nối 2 hành động theo trình tự('sau khi'), tùy ngữ cảnh","「たら」chỉ dùng được cho điều kiện giả định, không dùng để nối trình tự","「たら」chỉ dùng cho quá khứ","Không có gì khác biệt so với から"], a:0},
+        {q:"「A: あした 天気が 悪くても、行きますか。 B: ええ、行きます。」 mẫu 「悪くても」 trong câu hỏi của A có ý nghĩa gì?", c:["Ngay cả khi điều kiện bất lợi(thời tiết xấu) xảy ra, kết quả vẫn không đổi(khác với もし～ら chỉ nêu điều kiện đơn thuần)","Vì trời xấu nên chắc chắn không đi","Là câu khẳng định về thời tiết","Là câu mời"], a:0}]},
+    26:{ title:"～んですか・どうして～んですか…～んです", normal:[
+        {q:"「A: 顔色が 悪いですね。 どうしたんですか。 B: ちょっと 頭が 痛いんです。」 mẫu 「んですか／んです」 ở đây dùng để làm gì?", c:["Hỏi và giải thích lý do/hoàn cảnh đằng sau một sự việc đã quan sát được","Đưa ra mệnh lệnh","Mời người nghe làm gì đó","Chỉ đơn thuần hỏi giờ giấc"], a:0},
+        {q:"「どうして 遅れたんですか。」「電車が 止まったんです。」 câu trả lời sử dụng 「んです」 vì lý do gì?", c:["Để giải thích rõ nguyên nhân đứng sau sự việc(tàu bị dừng) mà người kia đang thắc mắc","Vì đó là câu hỏi","Vì đang phủ định","Vì là mệnh lệnh"], a:0},
+        {q:"So với 「何を 買いますか。」, câu 「何を 買うんですか。」 mang sắc thái gì khác?", c:["Thể hiện sự quan tâm/tò mò của người hỏi về một tình huống đã nhận thấy, thân mật hơn","Hoàn toàn giống nhau về sắc thái","Là câu phủ định","Là câu mệnh lệnh"], a:0}],
+      hard:[
+        {q:"「A: すみません、あした 行けないんです。 B: そうですか。」 vì sao A lại dùng 「んです」 thay vì chỉ nói 「行けません」?", c:["Để đưa ra lời giải thích/biện minh cho việc từ chối một cách nhẹ nhàng, lịch sự hơn","Vì んです chỉ dùng cho câu khẳng định","Vì んです là thể lịch sự hơn です của danh từ","Không có khác biệt nào"], a:0},
+        {q:"「レポートを 忘れたんですか。」 So với 「レポートを 忘れましたか。」, câu dùng 「んですか」 thể hiện thái độ gì của người hỏi?", c:["Ngạc nhiên hoặc muốn xác nhận thêm về một tình huống bất ngờ nhận thấy được","Thái độ trung lập, khách quan hoàn toàn giống câu kia","Là câu mệnh lệnh","Là lời mời"], a:0}]},
+    27:{ title:"可能動詞・見えます/聞こえます・Nができます", normal:[
+        {q:"「わたしは 漢字が 書けます。」 động từ 「書けます」(可能動詞・thể khả năng) được biến đổi từ động từ nào?", c:["書きます(書く)","書きました","書いています","書かせます"], a:0},
+        {q:"「ここから 富士山が 見えます。」 mẫu 「Nが見えます」 diễn tả điều gì?", c:["Vật đó tự nhiên lọt vào tầm mắt, không cần cố ý nhìn(khả năng nhìn thấy tự nhiên)","Người nói đang cố tình nhìn chăm chú vào vật đó","Vật đó đã biến mất","Một mệnh lệnh phải nhìn"], a:0},
+        {q:"「山田さんは ピアノが できます。」 mẫu 「Nができます」 ở đây dùng để diễn tả điều gì?", c:["Khả năng/sở trường làm được một việc gì đó(ở đây là biết chơi piano)","Sở thích cá nhân, không liên quan khả năng","Kế hoạch trong tương lai","Kinh nghiệm trong quá khứ"], a:0}],
+      hard:[
+        {q:"So sánh 「電車の 音が 聞こえます。」(tự nhiên nghe thấy) và 「わたしは 音楽を 聞きます。」(chủ động nghe), điểm khác biệt chính giữa 「聞こえます」 và 「聞きます」 là gì?", c:["「聞こえます」diễn tả âm thanh tự nhiên lọt vào tai mà không cần cố ý, còn 「聞きます」là hành động chủ động lắng nghe","Cả hai hoàn toàn giống nhau về nghĩa","「聞こえます」chỉ dùng ở thì quá khứ","「聞きます」là thể khả năng của 「聞こえます」"], a:0},
+        {q:"「わたしは 漢字は 読めますが、書けません。」 mẫu 「N1はVますが、N2はVません」 trong câu này dùng để làm gì?", c:["Đối chiếu/so sánh 2 khả năng trái ngược nhau của cùng một người(đọc được nhưng không viết được)","Liệt kê nhiều lý do cùng lúc","Diễn tả 2 hành động xảy ra đồng thời","Phủ định hoàn toàn cả 2 khả năng"], a:0}]},
+    28:{ title:"V1ながらV2・Vています(習慣)・～し、～し", normal:[
+        {q:"「音楽を 聞きながら、勉強します。」 mẫu 「V1ながらV2」 cho biết hành động nào là hành động chính?", c:["V2(勉強します) là hành động chính, V1(聞きながら) là hành động phụ diễn ra đồng thời","V1 là hành động chính","Cả 2 hành động xảy ra tuần tự, không đồng thời","V2 xảy ra trước V1"], a:0},
+        {q:"「わたしは 毎朝 走っています。」 mẫu 「Vています」 trong câu này diễn tả điều gì?", c:["Một thói quen/hành động lặp đi lặp lại đều đặn(khác với đang xảy ra ngay lúc nói)","Hành động đang xảy ra ngay tại thời điểm nói","Kinh nghiệm trong quá khứ","Kế hoạch trong tương lai"], a:0},
+        {q:"「この 部屋は 広いし、明るいし、気に入りました。」 trợ từ 「し」 được lặp lại 2 lần trong câu này để làm gì?", c:["Liệt kê thêm nhiều đặc điểm/lý do cùng lúc để dẫn đến một kết luận chung","Chỉ nêu đúng một lý do duy nhất","Phủ định các đặc điểm đã nêu","Đặt câu hỏi về đặc điểm của căn phòng"], a:0}],
+      hard:[
+        {q:"So sánh 「音楽を 聞きながら、勉強します。」(ながら, đồng thời) và 「音楽を 聞いたり、勉強したり します。」(たり, liệt kê một vài việc), điểm khác biệt chính là gì?", c:["「ながら」diễn tả 2 hành động xảy ra ĐỒNG THỜI bởi cùng một người, còn 「たり」chỉ liệt kê một vài hành động tiêu biểu(có thể không đồng thời)","Cả hai hoàn toàn giống nhau","「ながら」chỉ dùng cho quá khứ","「たり」chỉ dùng được với đúng 2 hành động"], a:0},
+        {q:"「どうして この 会社に 入りたいんですか。」「給料も いいし、仕事も 面白いし、休みも 多いですから。」 vì sao câu trả lời liệt kê liên tiếp nhiều 「し」 thay vì chỉ dùng 「から」 một lần?", c:["Để nhấn mạnh có NHIỀU lý do cùng đóng góp vào quyết định, chứ không chỉ một lý do duy nhất(như から thường ngụ ý)","Vì し bắt buộc phải dùng ít nhất 2 lần trong mọi câu","Vì から không thể dùng để trả lời câu hỏi どうして","Không có sự khác biệt nào so với から"], a:0}]},
   };
 
   function shuffle(arr){
@@ -973,7 +1102,7 @@
   const lastDrawnQuestion = { normal:null, hard:null };
   // マップごとに出題するLVの範囲を分ける(マップ1=LV0〜3、マップ2=LV4〜9、...)。
   // 前のマップで習った内容が後のマップで蒸し返されたり、逆に後の内容が前のマップに混ざったりしない。
-  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16], 5:[17,18,19,20] };
+  const MAP_LEVEL_RANGES = { 1:[0,1,2,3], 2:[4,5,6,7,8,9], 3:[10,11,12,13], 4:[14,15,16], 5:[17,18,19,20], 6:[21,22,23,24,25], 7:[26,27,28] };
 
   function buildQuestionBag(pool){
     const range = MAP_LEVEL_RANGES[state.currentMap] || Object.keys(LEVELS).map(Number);
@@ -1032,6 +1161,11 @@
 
   const TOTAL_CELLS = 30;
   const FIXED = { king:6, dojoCombat:8, dojoDefense:12, dojoItem:16, guardian:30 };
+  // 幹部(中ボス)の配置マス。「マップ中央付近に配置」という仕様に沿って、
+  // 盤面(1〜30マス)の中央寄りの固定マスに配置する(ランダム抽選ではなく意図的な固定配置)。
+  // マップごとの幹部の数は、そのマップが担当するLV範囲のうち何課が「幹部の課」に
+  // 該当するかで決まる(マップ4=LV14の1体、マップ5=LV17・18の2体、マップ6=LV22・25の2体、マップ7=LV27の1体)。
+  const OFFICER_CELLS = { 4:[15], 5:[14,17], 6:[14,17], 7:[15] };
 
   const SHOP_CATALOG = [
     {key:"herb", nameKey:"itemHerb", price:5},
@@ -1165,7 +1299,10 @@
     cellMap[1] = {type:"start"};
     cellMap[FIXED.guardian] = {type:"guardian"};
 
-    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+    const officerCells = OFFICER_CELLS[4]; // [15] (LV14の幹部)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-1=27マス
 
     const events = [];
     const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
@@ -1177,7 +1314,7 @@
     pushN("lost",2);
     pushN("tailwind",2);
     pushN("step",2);
-    pushN("blank",4); // 合計28
+    pushN("blank",3); // 合計27(幹部1マス分を差し引いてblankを4→3に調整)
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -1196,7 +1333,10 @@
     cellMap[1] = {type:"start"};
     cellMap[FIXED.guardian] = {type:"guardian"};
 
-    const cellsAsc = []; for(let i=2;i<=29;i++) cellsAsc.push(i); // 28マス
+    const officerCells = OFFICER_CELLS[5]; // [14,17] (LV17・LV18の幹部2体)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-2=26マス
 
     const events = [];
     const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
@@ -1207,8 +1347,7 @@
     pushN("shortcut",2);
     pushN("lost",2);
     pushN("tailwind",2);
-    pushN("step",2);
-    pushN("blank",2); // 合計28
+    pushN("step",2); // 合計26(幹部2マス分を差し引いてblank2→0に調整)
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -1219,7 +1358,78 @@
     return cellMap;
   }
 
+  // マップ6: 高山エリア。雪山らしく足元が悪く、「1つ戻る(lost)」セルを他マップより
+  // 多めに配置する(仕様メモ「『1つ戻る』セルが多い」に対応)。幹部はLV22・LV25の2体。
+  function buildMap6(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const officerCells = OFFICER_CELLS[6]; // [14,17] (LV22・LV25の幹部2体)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-2=26マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",8);
+    pushN("pit",2);
+    pushN("herb",2);
+    pushN("shop",2);
+    pushN("shortcut",2);
+    pushN("lost",5); // 他マップの標準(2)より多め = 雪山の足場の悪さを表現
+    pushN("tailwind",2);
+    pushN("step",2);
+    pushN("blank",1); // 合計26
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){ cellMap[c] = {type:"step", dir: Math.random()<0.5?1:-1}; }
+      else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
+  // マップ7: 天上界。雲に乗って軽やかに進めるイメージで、「1つ進む(step forward)」と
+  // 「追い風(tailwind)」セルを他マップより多めに配置する(仕様メモ「『1つ進む』『追い風』セルが多い」に対応)。
+  // 幹部はLV27の1体のみ。
+  function buildMap7(){
+    const cellMap = {};
+    cellMap[1] = {type:"start"};
+    cellMap[FIXED.guardian] = {type:"guardian"};
+
+    const officerCells = OFFICER_CELLS[7]; // [15] (LV27の幹部)
+    officerCells.forEach(c=>{ cellMap[c] = {type:"officer"}; });
+
+    const cellsAsc = []; for(let i=2;i<=29;i++) if(!officerCells.includes(i)) cellsAsc.push(i); // 28-1=27マス
+
+    const events = [];
+    const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
+    pushN("enemy",8);
+    pushN("pit",2);
+    pushN("herb",2);
+    pushN("shop",2);
+    pushN("shortcut",2);
+    pushN("lost",1); // 天上界らしく「戻る」系は最小限
+    pushN("tailwind",5); // 他マップの標準(2)より多め
+    pushN("step",5); // 他マップの標準(2)より多め。方向は下の割り当てで前向きに偏らせる
+    // 合計 8+2+2+2+2+1+5+5=27
+
+    const assignment = assignNoAdjacentDup(cellsAsc, events);
+    cellsAsc.forEach(c=>{
+      const ev = assignment[c];
+      if(ev==="step"){
+        // 「1つ進む」セルが多い、という仕様メモに沿って前進方向に大きく偏らせる(約80%が前進)
+        cellMap[c] = {type:"step", dir: Math.random()<0.8?1:-1};
+      } else { cellMap[c] = {type:ev}; }
+    });
+    return cellMap;
+  }
+
   function buildMapByNumber(n){
+    if(n===7) return buildMap7();
+    if(n===6) return buildMap6();
     if(n===5) return buildMap5();
     if(n===4) return buildMap4();
     if(n===3) return buildMap3();
@@ -1237,7 +1447,7 @@
     start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🛡️",
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
-    drown:"🌊", fire:"🔥",
+    drown:"🌊", fire:"🔥", officer:"👺",
   };
 
   function tileVisual(cellNum){
@@ -1371,11 +1581,11 @@
   function renderStaticText(){
     document.getElementById("titleText").textContent = t("title");
     document.getElementById("subtitleText").textContent =
-      state.currentMap===5 ? t("subtitleMap5") : state.currentMap===4 ? t("subtitleMap4") : state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
+      state.currentMap===7 ? t("subtitleMap7") : state.currentMap===6 ? t("subtitleMap6") : state.currentMap===5 ? t("subtitleMap5") : state.currentMap===4 ? t("subtitleMap4") : state.currentMap===3 ? t("subtitleMap3") : state.currentMap===2 ? t("subtitleMap2") : t("subtitle");
     document.getElementById("lblLife").textContent = t("life");
     document.getElementById("lblExp").textContent = t("exp");
     document.getElementById("lblGold").textContent = t("gold");
-    document.body.className = "lang-"+state.lang + (state.currentMap>=2 && state.currentMap<=5 ? " map"+state.currentMap : "");
+    document.body.className = "lang-"+state.lang + (state.currentMap>=2 && state.currentMap<=7 ? " map"+state.currentMap : "");
     const openingHintEl = document.getElementById("openingHint");
     if(openingHintEl){ openingHintEl.textContent = t("openingHint"); }
     const openingLoadingTextEl = document.getElementById("openingLoadingText");
@@ -1411,6 +1621,13 @@
     state.exp += n;
     while(state.exp >= 100){
       state.exp -= 100;
+      // ヘルプ文言(「経験値が100たまるとライフの上限が1増える」)通りに、
+      // ライフの上限(maxLife)自体を1増やす。以前はここでmaxLifeを変えずに
+      // 現在ライフをMath.min(maxLife, life+1)で回復するだけだったため、
+      // ライフが満タンの時にExpが100たまっても何も起きない(回復もしない)という
+      // 不具合になっていた。上限を先に増やしてから現在ライフも1回復させることで、
+      // 満タン時でも必ず効果が反映されるようにする。
+      state.maxLife += 1;
       state.life = Math.min(state.maxLife, state.life+1);
     }
     renderHUD();
@@ -1448,7 +1665,17 @@
     ["暇","ひま"],["撮","と"],
     ["今日","きょう"],["木村","きむら"],["普通形","ふつうけい"],["普通体","ふつうたい"],
     ["敬体","けいたい"],["待","ま"],["持","も"],["今","いま"],["吸","す"],["忙","いそが"],
-    ["日本","にほん"]
+    ["日本","にほん"],
+    // 2026-08-22(20回目・マップ6/7追加): LV21〜LV28の問題文で新たに使う語彙
+    ["田中","たなか"],["山田","やまだ"],["会社","かいしゃ"],["用事","ようじ"],
+    ["約束","やくそく"],["修飾節","しゅうしょくせつ"],["誕生日","たんじょうび"],
+    ["顔色","かおいろ"],["電車","でんしゃ"],["可能","かのう"],["音楽","おんがく"],
+    ["勉強","べんきょう"],["毎朝","まいあさ"],["仕事","しごと"],["給料","きゅうりょう"],
+    ["気に入り","きにいり"],["頑張","がんば"],["面白","おもしろ"],["大事","だいじ"],
+    ["会","あ"],["取","と"],["歩","ある"],["右","みぎ"],["左","ひだり"],["春","はる"],
+    ["桜","さくら"],["咲","さ"],["貸","か"],["子","こ"],["帰","かえ"],["悪","わる"],
+    ["頭","あたま"],["痛","いた"],["遅","おく"],["買","か"],["忘","わす"],["書","か"],
+    ["音","おと"],["聞","き"],["走","はし"],["広","ひろ"],["多","おお"],["入","はい"]
   ];
   const FURIGANA_MAP = new Map(FURIGANA_WORDS);
   // 長い語(複合語)から先に一致させることで、単漢字の対応表による部分一致の誤変換を防ぐ
@@ -1469,12 +1696,18 @@
   }
 
   function showQuiz(question, badgeText, onDone){
+    // 選択肢の表示順を毎回シャッフルする(正解が毎回同じ位置(1番目)に固定されてしまう問題への対応)。
+    // question.c/question.a 自体は書き換えず、表示用の並び替え配列(order)だけをこの描画で使う。
+    // order[表示位置] = 元の配列(question.c)でのインデックス、という対応表。
+    const order = shuffle(question.c.map((_,i)=>i));
+    const displayedChoices = order.map(origIdx=>question.c[origIdx]);
+    const correctDisplayIdx = order.indexOf(question.a);
     openModal(`
       <div class="card">
         <div class="badge">${badgeText}</div>
         <div class="qtext">${addFurigana(question.q)}</div>
         <div class="choices" id="choicesWrap">
-          ${question.c.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${addFurigana(c)}</span></button>`).join("")}
+          ${displayedChoices.map((c,i)=>`<button class="choice-btn" data-i="${i}"><span>${addFurigana(c)}</span></button>`).join("")}
         </div>
         <div class="feedback" id="fb"></div>
       </div>
@@ -1485,14 +1718,14 @@
       btn.onclick = ()=>{
         wrap.querySelectorAll(".choice-btn").forEach(b=>b.disabled=true);
         const i = Number(btn.dataset.i);
-        const isCorrect = (i===question.a);
+        const isCorrect = (i===correctDisplayIdx);
         if(isCorrect){
           btn.classList.add("correct");
           fb.textContent = t("correct");
           fb.className = "feedback ok";
         } else {
           btn.classList.add("wrong");
-          wrap.children[question.a].classList.add("correct");
+          wrap.children[correctDisplayIdx].classList.add("correct");
           fb.textContent = t("wrong");
           fb.className = "feedback no";
         }
@@ -1586,6 +1819,42 @@
     showEvent(()=> showFlavor("🔥", t("map5WelcomeTitle"), t("map5WelcomeText", heroDisplayName()), ()=>{}));
   }
 
+  function goToMap6(){
+    closeModal();
+    state.currentMap = 6;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap6();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(6));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("❄️", t("map6WelcomeTitle"), t("map6WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
+  function goToMap7(){
+    closeModal();
+    state.currentMap = 7;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMap7();
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(7));
+    scheduleAutoSave();
+    showEvent(()=> showFlavor("☁️", t("map7WelcomeTitle"), t("map7WelcomeText", heroDisplayName()), ()=>{}));
+  }
+
   function showMapClear(){
     if(state.currentMap===1){
       activeModalRenderer = showMapClear;
@@ -1647,13 +1916,43 @@
       document.getElementById("retryBtn").onclick = resetGame;
       return;
     }
-    // マップ5クリア(現時点ではマップ6以降は未実装)
+    if(state.currentMap===5){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map5ClearTitle")}</h2>
+          <p>${t("map5ClearText")}</p>
+          <button class="primary" id="proceedMap6Btn">${t("proceedMap6Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap6Btn").onclick = goToMap6;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    if(state.currentMap===6){
+      activeModalRenderer = showMapClear;
+      openModal(`
+        <div class="card">
+          <div class="final-emoji">🏆</div>
+          <h2>${t("map6ClearTitle")}</h2>
+          <p>${t("map6ClearText")}</p>
+          <button class="primary" id="proceedMap7Btn">${t("proceedMap7Btn")}</button>
+          <br><button class="secondary" id="retryBtn" style="margin-top:10px;">${t("retryBtn")}</button>
+        </div>
+      `);
+      document.getElementById("proceedMap7Btn").onclick = goToMap7;
+      document.getElementById("retryBtn").onclick = resetGame;
+      return;
+    }
+    // マップ7クリア(現時点ではマップ8以降は未実装)
     activeModalRenderer = showMapClear;
     openModal(`
       <div class="card">
         <div class="final-emoji">🏆</div>
-        <h2>${t("map5ClearTitle")}</h2>
-        <p>${t("map5ClearText")}</p>
+        <h2>${t("map7ClearTitle")}</h2>
+        <p>${t("map7ClearText")}</p>
         <button class="primary" id="retryBtn">${t("retryBtn")}</button>
       </div>
     `);
@@ -1756,13 +2055,19 @@
 
   function trainedForPractice(){ return state.dojoCombatDone && state.dojoDefenseDone; }
 
-  function resolveEnemyLike(isGuardian){
-    const life = isGuardian ? 3 : 1;
+  // kind: "enemy"(通常の敵) / "guardian"(マップ最後尾の番人) / "officer"(幹部・中ボス)。
+  // 幹部はマップ中央付近に配置される中ボスで、番人より手強い(ライフ5・難問のみ)が、
+  // 倒してもマップクリアにはならず(showMapClearを呼ばない)、通常の敵と同様にターンが続く。
+  function resolveEnemyLike(kind){
+    const isGuardian = kind==="guardian";
+    const isOfficer = kind==="officer";
+    const life = isGuardian ? 3 : isOfficer ? 5 : 1;
     // 「練習用」という表現は、城下町(マップ1)の8〜16セルより後にある練習ステージ限定の設定。
     // マップ2以降は本当の冒険の一部として敵と戦う場面なので「練習用」を付けない表記にする。
+    // (幹部はマップ1には登場しないため、isPracticeFramingが真になることはない)
     const isPracticeFraming = state.currentMap===1;
-    const getTitle = ()=> isGuardian ? t("guardianTitle") : t(isPracticeFraming ? "enemyTitle" : "enemyTitleReal");
-    const icon = isGuardian ? "🛡️" : "👹";
+    const getTitle = ()=> isGuardian ? t("guardianTitle") : isOfficer ? t("officerTitle") : t(isPracticeFraming ? "enemyTitle" : "enemyTitleReal");
+    const icon = isGuardian ? "🛡️" : isOfficer ? "👺" : "👹";
 
     // 戦い方も守り方も未修行 → 即ダメージ + 城(1マス目)まで送還。戻ったマスのイベントも再生する。
     if(!state.dojoDefenseDone && !state.dojoCombatDone){
@@ -1793,21 +2098,28 @@
     }
 
     // 両方修行済み → 通常の練習戦闘(ライフは減らない、正解で敵ライフ減少)
+    // 幹部戦だけは専用のBGM(enemy_bgm.mp3)に切り替える。倒した後、下のdefeatedTitle表示直後に
+    // 元のマップのテーマBGMへ戻す(番人戦はshowMapClear()→次マップへの遷移で自動的にBGMが変わるため、
+    // ここで個別に戻す必要はない)。
+    if(isOfficer){ switchBgmTrack(SPECIAL_BGM.officerBattle); }
     let remainingLife = life;
     function ask(){
-      const q = isGuardian ? randomHardQuestion() : randomQuestion("normal");
-      showEvent(()=> showQuiz(q, isGuardian ? "🛡️ "+t("guardianTitle") : "👹 "+getTitle(), (correct)=>{
+      const q = (isGuardian || isOfficer) ? randomHardQuestion() : randomQuestion("normal");
+      showEvent(()=> showQuiz(q, icon+" "+getTitle(), (correct)=>{
         if(correct){
           remainingLife--;
           gainExp(1);
           if(remainingLife<=0){
-            const goldGain = isGuardian ? 5 : 1;
+            const goldGain = isOfficer ? 8 : isGuardian ? 5 : 1;
             state.gold += goldGain;
             renderHUD();
             const defeatedTitle = isGuardian
               ? t(isPracticeFraming ? "guardianDefeated" : "guardianDefeatedReal")
+              : isOfficer
+              ? t("officerDefeated")
               : t(isPracticeFraming ? "enemyDefeated" : "enemyDefeatedReal");
             const defeatedNote = isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain);
+            if(isOfficer){ switchBgmTrack(bgmPathForMap(state.currentMap)); }
             showEvent(()=> showFlavor("🏆", defeatedTitle, defeatedNote, ()=>{
               if(isGuardian){ showMapClear(); }
               else { endTurn(); }
@@ -1977,8 +2289,9 @@
       return;
     }
 
-    if(ev.type==="enemy"){ resolveEnemyLike(false); return; }
-    if(ev.type==="guardian"){ resolveEnemyLike(true); return; }
+    if(ev.type==="enemy"){ resolveEnemyLike("enemy"); return; }
+    if(ev.type==="guardian"){ resolveEnemyLike("guardian"); return; }
+    if(ev.type==="officer"){ resolveEnemyLike("officer"); return; }
 
     if(ev.type==="pit"){
       loseLife(1);
@@ -2401,6 +2714,17 @@
     return "public/audio/map"+mapNum+"_bgm.mp3";
   }
 
+  // 特殊イベント用BGMのパス。幹部(中ボス)戦・ドラゴン(最終ボス)戦・ゴール後・エンディング用。
+  // dragonBattle/goal/endingは、ドラゴンとの戦闘自体がまだ実装されていない(将来のマップで
+  // 実装予定)ため、現時点では「切り替える仕組み」だけ用意しておく段階。実際にドラゴン戦の
+  // マップ/イベントを作る際に、この定数とswitchBgmTrack()を使って呼び出す想定。
+  const SPECIAL_BGM = {
+    officerBattle: "public/audio/enemy_bgm.mp3",
+    dragonBattle: "public/audio/dragon_bgm.mp3",
+    goal: "public/audio/goal_bgm.mp3",
+    ending: "public/audio/ending_bgm.mp3",
+  };
+
   function switchBgmTrack(path){
     if(bgmSourceEl.getAttribute("src") === path) return;
     // 「切り替え直前に本当に再生中だったか」だけで判定すると、load()直後の一瞬paused状態に
@@ -2449,7 +2773,7 @@
   /* =========================================================
      Dev設定パネル
   ========================================================= */
-  function openDevPanel(){
+  function openDevPanel(msg){
     // 開発者パネルを開く前に表示されていたイベント/画面を覚えておき、
     // 言語切替後やパネルを閉じた後にそこへ戻れるようにする(そうしないと
     // ショップ等のイベント中に操作不能になってしまう)。
@@ -2459,7 +2783,10 @@
         <div class="badge">⚙ ${t("devTitle")}</div>
         <p>${t("devLangLabel")}: <b>${state.lang.toUpperCase()}</b></p>
         <button class="primary" id="langToggleBtn">${state.lang==="vi" ? t("devToJa") : t("devToVi")}</button>
-        <br><button class="secondary" id="devCloseBtn" style="margin-top:14px;">${t("devClose")}</button>
+        <br><button class="secondary" id="devLoadDataBtn" style="margin-top:14px;">${t("devLoadDataBtn")}</button>
+        <br><button class="secondary" id="devAdminBtn" style="margin-top:10px;">${t("devAdminBtn")}</button>
+        <div class="feedback ok" id="devMsg">${msg||""}</div>
+        <br><button class="secondary" id="devCloseBtn" style="margin-top:4px;">${t("devClose")}</button>
       </div>
     `);
     document.getElementById("langToggleBtn").onclick = ()=>{
@@ -2467,11 +2794,99 @@
       renderStaticText();
       if(returnTo){ returnTo(); } else { closeModal(); }
     };
+    document.getElementById("devLoadDataBtn").onclick = async ()=>{
+      if(!auth.user){ openDevPanel(t("devLoadDataNoAuth")); return; }
+      const saved = await loadProgress();
+      if(!saved || !saved.state){ openDevPanel(t("devLoadDataNoSave")); return; }
+      applyStateSnapshot(saved.state);
+      switchBgmTrack(bgmPathForMap(state.currentMap));
+      closeModal();
+      showEvent(()=> showFlavor("💾", t("devLoadDataSuccess"), t("welcomeBackText", heroDisplayName()||"..."), ()=>{}));
+    };
+    document.getElementById("devAdminBtn").onclick = ()=>{ openAdminPasswordPrompt(returnTo); };
     document.getElementById("devCloseBtn").onclick = ()=>{
       if(returnTo){ returnTo(); } else { closeModal(); }
     };
   }
-  document.getElementById("devBtn").addEventListener("click", openDevPanel);
+  document.getElementById("devBtn").addEventListener("click", ()=>openDevPanel());
+
+  // 管理者モード: 開発者パネルの中の「🔑 管理者」ボタンから入る。パスワードは
+  // クライアント側JSにベタ書きなので、ソースを見れば誰でも分かる「軽い間仕切り」でしかない
+  // (本当の認証ではない)。マップ番号を直接指定して自由に移動できる、動作確認用のツール。
+  const ADMIN_PASSWORD = "kaiwa2026";
+  function openAdminPasswordPrompt(returnTo){
+    function render(msg){
+      activeModalRenderer = ()=>render();
+      openModal(`
+        <div class="card">
+          <div class="badge">🔑 ${t("adminPasswordTitle")}</div>
+          <p>${t("adminPasswordText")}</p>
+          <input type="password" id="adminPasswordInput" class="name-input" placeholder="Password">
+          <div class="feedback no" id="adminPwMsg">${msg||""}</div>
+          <br><button class="primary" id="adminPwSubmitBtn" style="margin-top:12px;">OK</button>
+          <br><button class="secondary" id="adminPwCancelBtn" style="margin-top:10px;">${t("devClose")}</button>
+        </div>
+      `);
+      const input = document.getElementById("adminPasswordInput");
+      input.focus();
+      function submit(){
+        if(input.value === ADMIN_PASSWORD){
+          openAdminPanel(returnTo);
+        } else {
+          render(t("adminPasswordWrong"));
+        }
+      }
+      document.getElementById("adminPwSubmitBtn").onclick = submit;
+      input.addEventListener("keydown", (e)=>{ if(e.key==="Enter"){ e.preventDefault(); submit(); } });
+      document.getElementById("adminPwCancelBtn").onclick = ()=>{ openDevPanel(); };
+    }
+    render();
+  }
+
+  function openAdminPanel(returnTo){
+    const maxMap = Math.max(...Object.keys(MAP_LEVEL_RANGES).map(Number));
+    function render(msg){
+      activeModalRenderer = ()=>render();
+      openModal(`
+        <div class="card">
+          <div class="badge">🔑 ${t("adminPanelTitle")}</div>
+          <p>${t("adminMapJumpLabel")}</p>
+          <input type="number" id="adminMapInput" class="name-input" min="1" max="${maxMap}" value="${state.currentMap}">
+          <div class="feedback no" id="adminMsg">${msg||""}</div>
+          <br><button class="primary" id="adminJumpBtn" style="margin-top:12px;">${t("adminMapJumpBtn")}</button>
+          <br><button class="secondary" id="adminCloseBtn" style="margin-top:10px;">${t("devClose")}</button>
+        </div>
+      `);
+      document.getElementById("adminJumpBtn").onclick = ()=>{
+        const n = Number(document.getElementById("adminMapInput").value);
+        if(!Number.isInteger(n) || n<1 || n>maxMap){ render(t("adminMapJumpInvalid")); return; }
+        adminJumpToMap(n);
+      };
+      document.getElementById("adminCloseBtn").onclick = ()=>{
+        if(returnTo){ returnTo(); } else { closeModal(); }
+      };
+    }
+    render();
+  }
+
+  // 管理者パネルからの直接マップ移動。goToMap2〜7と同じ処理を汎用化したもの
+  // (ストーリーの導入フラバーテキストは表示しない、動作確認用の即時移動)。
+  function adminJumpToMap(n){
+    closeModal();
+    state.currentMap = n;
+    state.cellIdx = 0;
+    state.busy = false;
+    state.lastDiceRoll = null;
+    resetQuestionBags();
+    state.cellMap = buildMapByNumber(n);
+    renderStaticText();
+    buildBoard();
+    renderHUD();
+    diceEl.classList.remove("disabled");
+    hintEl.textContent = t("hintRoll");
+    switchBgmTrack(bgmPathForMap(n));
+    scheduleAutoSave();
+  }
 
   /* =========================================================
      遊び方(ヘルプ)パネル
@@ -2531,12 +2946,14 @@
         <h2>${t("introTitle")}</h2>
         <p>${t("introText")}</p>
         <button class="primary" id="startBtn">${t("startBtn")}</button>
+        <br><button class="secondary" id="introHelpBtn" style="margin-top:10px;">${t("introHelpBtn")}</button>
       </div>
     `);
     document.getElementById("startBtn").onclick = ()=>{
       switchBgmTrack(bgmPathForMap(1));
       closeModal();
     };
+    document.getElementById("introHelpBtn").onclick = ()=>{ openHelpPanel(); };
   }
 
   function resetGame(){
