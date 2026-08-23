@@ -327,15 +327,16 @@
   body.map10 .controls{ border-color:rgba(154,161,171,.4); }
   button.primary:disabled{ opacity:.5; cursor:not-allowed; filter:grayscale(.3); }
   button.secondary{
-    font-weight:500;
+    font-weight:700;
     padding:9px 18px;
     border-radius:999px;
-    border:1.5px solid var(--gold);
+    border:2.5px solid var(--ink);
     background:transparent;
-    color:var(--gold-light);
+    color:var(--ink);
     cursor:pointer;
-    margin:4px;
+    margin:10px 4px 4px;
   }
+  button.secondary:hover{ background:rgba(58,42,30,.08); }
   button.secondary:disabled{ opacity:.4; cursor:not-allowed; }
   .hint{ font-size:.78rem; color:#e6d9c2; text-align:center; min-height:1.2em; }
 
@@ -569,6 +570,10 @@
       untrainedHurt:"Bạn chưa học phòng thủ nên bị thương ngay lập tức! Sinh lực -1.",
       sentBack:"Bạn chưa luyện tập đầy đủ nên bị đưa trở lại ô số 8 để luyện tập thêm!",
       sentBackCastle:"Bạn chưa học cả cách tấn công lẫn cách phòng thủ nên bị đưa thẳng về đầu Thị Trấn Hoàng Gia để chuẩn bị lại từ đầu!",
+      guardianAllTrainingNeeded:"Người Gác Cổng vẫn còn quá mạnh đối với bạn.",
+      guardianSentBackCastle:"Bạn chưa hoàn thành luyện tập ở cả 3 võ đường (Chiến Đấu, Phòng Thủ, Sử Dụng Vật Phẩm) nên bị đưa trở lại đầu Thị Trấn Hoàng Gia! Hãy luyện tập đầy đủ rồi quay lại thử thách.",
+      attackBlocked:"🛡️ Bạn đã đỡ được đòn tấn công! Sinh lực không bị giảm.",
+      criticalHit:"💥 Đòn chí mạng! Gây 2 điểm sát thương cho đối thủ!",
       correct:"✅ Chính xác!",
       wrong:"❌ Sai rồi…",
       noDamagePractice:"(Đây là khu vực luyện tập nên sinh lực không bị giảm)",
@@ -776,6 +781,10 @@
       untrainedHurt:"守り方を学んでいないので、即座に傷を負ってしまった！ライフ-1。",
       sentBack:"修行が足りないため、8マス目まで連れ戻されてしまった！",
       sentBackCastle:"戦い方も守り方もまだ学んでいないため、城下町の入り口まで送り返されてしまった！最初から準備をやり直そう。",
+      guardianAllTrainingNeeded:"番人はまだお前には強すぎるようだ。",
+      guardianSentBackCastle:"3つの道場(戦い方・守り方・道具の使い方)をすべて修行し終えていないため、城下町の入り口まで送り返されてしまった！しっかり修行してから出直そう。",
+      attackBlocked:"🛡️ 攻撃を防いだ！ライフは減らなかった。",
+      criticalHit:"💥 クリティカルヒット！相手に2ダメージを与えた！",
       correct:"✅ 正解！",
       wrong:"❌ 残念…",
       noDamagePractice:"（練習エリアのためライフは減らない）",
@@ -2468,6 +2477,14 @@
 
   function trainedForPractice(){ return state.dojoCombatDone && state.dojoDefenseDone; }
 
+  // ユーザー指定(2026-08-23・26回目): 通常戦闘(敵/幹部/番人)で誤答した場合、この確率で
+  // 「攻撃を防いだ」判定になりライフが減らない(それ以外の誤答は通常通りライフ-1)。
+  const WRONG_ANSWER_DEFENSE_CHANCE = 0.05;
+
+  // ユーザー指定(2026-08-23・26回目): 通常戦闘で正答した場合、この確率で「クリティカル
+  // ヒット」判定になり、相手のライフが通常の1ではなく2減る。
+  const CRITICAL_HIT_CHANCE = 0.05;
+
   // kind: "enemy"(通常の敵) / "guardian"(マップ最後尾の番人) / "officer"(幹部・中ボス)。
   // 幹部はマップ中央付近に配置される中ボスで、番人より手強い(ライフ5・難問のみ)が、
   // 倒してもマップクリアにはならず(showMapClearを呼ばない)、通常の敵と同様にターンが続く。
@@ -2481,6 +2498,17 @@
     const isPracticeFraming = state.currentMap===1;
     const getTitle = ()=> isGuardian ? t("guardianTitle") : isOfficer ? t("officerTitle") : t(isPracticeFraming ? "enemyTitle" : "enemyTitleReal");
     const icon = isGuardian ? "🛡️" : isOfficer ? "👺" : "👹";
+
+    // ユーザー指定(2026-08-23・25回目): 城下町(マップ1)で番人と出会った時は、3つの道場
+    // (戦い方・守り方・道具の使い方)のうち1つでも未修行なら、ダメージなしでスタート(1マス目)
+    // まで強制送還する。以下の「戦い方/守り方」のみをチェックする一般の敵向けの分岐とは別に、
+    // 番人限定でより厳しく(道具の道場も含めた全3道場を)チェックする。
+    if(isGuardian && state.currentMap===1 && !(state.dojoCombatDone && state.dojoDefenseDone && state.dojoItemDone)){
+      showEvent(()=> showFlavor(icon, getTitle(), t("guardianAllTrainingNeeded")+"<br>"+t("guardianSentBackCastle"), ()=>{
+        warpTo(1, ()=>{ resolveCell(); });
+      }));
+      return;
+    }
 
     // 戦い方も守り方も未修行 → 即ダメージ + 城(1マス目)まで送還。戻ったマスのイベントも再生する。
     if(!state.dojoDefenseDone && !state.dojoCombatDone){
@@ -2510,7 +2538,12 @@
       return;
     }
 
-    // 両方修行済み → 通常の練習戦闘(ライフは減らない、正解で敵ライフ減少)
+    // 両方修行済み → 通常の練習戦闘(正解で敵ライフ減少)。
+    // ユーザー報告(2026-08-23・26回目)により、誤答時は原則ライフ-1に変更した
+    // (それまでは誤答してもライフが減らない仕様だったが、これは意図しない不具合という
+    // 扱いで修正した)。ただしユーザー追加指定により、誤答時も5%の確率(WRONG_ANSWER_DEFENSE_CHANCE)
+    // で「攻撃を防いだ」として防御に成功しライフは減らない特殊演出を挟む。また正答時も5%の確率
+    // (CRITICAL_HIT_CHANCE)で「クリティカルヒット」となり、相手のライフを通常の1ではなく2減らす。
     // 幹部戦だけは専用のBGM(enemy_bgm.mp3)に切り替える。倒した後、下のdefeatedTitle表示直後に
     // 元のマップのテーマBGMへ戻す(番人戦はshowMapClear()→次マップへの遷移で自動的にBGMが変わるため、
     // ここで個別に戻す必要はない)。
@@ -2520,27 +2553,45 @@
       const q = (isGuardian || isOfficer) ? randomHardQuestion() : randomQuestion("normal");
       showEvent(()=> showQuiz(q, icon+" "+getTitle(), (correct)=>{
         if(correct){
-          remainingLife--;
           gainExp(1);
-          if(remainingLife<=0){
-            const goldGain = isOfficer ? 8 : isGuardian ? 5 : 1;
-            state.gold += goldGain;
-            renderHUD();
-            const defeatedTitle = isGuardian
-              ? t(isPracticeFraming ? "guardianDefeated" : "guardianDefeatedReal")
-              : isOfficer
-              ? t("officerDefeated")
-              : t(isPracticeFraming ? "enemyDefeated" : "enemyDefeatedReal");
-            const defeatedNote = isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain);
-            if(isOfficer){ switchBgmTrack(bgmPathForMap(state.currentMap)); }
-            showEvent(()=> showFlavor("🏆", defeatedTitle, defeatedNote, ()=>{
-              if(isGuardian){ showMapClear(); }
-              else { endTurn(); }
-            }));
-            return;
+          const isCritical = Math.random() < CRITICAL_HIT_CHANCE;
+          remainingLife -= isCritical ? 2 : 1;
+          const afterHit = ()=>{
+            if(remainingLife<=0){
+              const goldGain = isOfficer ? 8 : isGuardian ? 5 : 1;
+              state.gold += goldGain;
+              renderHUD();
+              const defeatedTitle = isGuardian
+                ? t(isPracticeFraming ? "guardianDefeated" : "guardianDefeatedReal")
+                : isOfficer
+                ? t("officerDefeated")
+                : t(isPracticeFraming ? "enemyDefeated" : "enemyDefeatedReal");
+              const defeatedNote = isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain);
+              if(isOfficer){ switchBgmTrack(bgmPathForMap(state.currentMap)); }
+              showEvent(()=> showFlavor("🏆", defeatedTitle, defeatedNote, ()=>{
+                if(isGuardian){ showMapClear(); }
+                else { endTurn(); }
+              }));
+              return;
+            }
+            setTimeout(ask, 150);
+          };
+          if(isCritical){
+            showEvent(()=> showFlavor("💥", getTitle(), t("criticalHit"), afterHit));
+          } else {
+            afterHit();
           }
+          return;
         }
-        setTimeout(ask, 150);
+        // 誤答: 5%の確率で防御に成功しライフは減らない。それ以外は通常通りライフ-1。
+        if(Math.random() < WRONG_ANSWER_DEFENSE_CHANCE){
+          showEvent(()=> showFlavor("🛡️", getTitle(), t("attackBlocked"), ()=>{
+            setTimeout(ask, 150);
+          }));
+          return;
+        }
+        loseLife(1);
+        checkDeath(()=>{ setTimeout(ask, 150); });
       }));
     }
     ask();
@@ -2556,9 +2607,14 @@
      (.dragon-battle-card、showDragonQuiz())に切り替わる)。
      出題プールはマップ10自体のLV範囲(34〜35)には限定せず、当初の構想
      (「第6〜35課の難問30問」)通りLV6〜35の全hard問題から出題する
-     (DRAGON_QUESTION_MIN_LEVEL〜MAX_LEVEL、DRAGON_MAX_LIFE=30)。他の戦闘と
-     同じく、誤答してもプレイヤーのライフは減らない(正答するとドラゴンの体力が
-     減る)という、このアプリで既に確立された戦闘の仕様を踏襲している。
+     (DRAGON_QUESTION_MIN_LEVEL〜MAX_LEVEL、DRAGON_MAX_LIFE=30)。
+     (注: 2026-08-23・26回目で通常の敵/幹部/番人戦(resolveEnemyLike())に「誤答時は
+     ライフ-1、5%の確率で防御成功しライフ維持、正答時も5%の確率でクリティカルヒット」
+     という仕様を追加した際は、30問連続で正答する必要がある特に長丁場の最終決戦という
+     理由でドラゴン戦をあえて対象外にしていたが、28回目にユーザーから「ラスボス戦でも
+     誤答するとライフが減り、正答するとドラゴンのライフが減る」という明示的な指定を
+     受けたため、以下resolveDragonBattle()も通常戦闘と全く同じ仕様(誤答時ライフ-1・
+     5%防御成功・正答時5%クリティカルヒット)で統一した)
   ========================================================= */
   let dragonQuestionBag = [];
   function buildDragonQuestionBag(){
@@ -2627,14 +2683,33 @@
       const q = randomDragonQuestion();
       showEvent(()=> showDragonQuiz(q, dragonLife, (correct)=>{
         if(correct){
-          dragonLife--;
           gainExp(1);
-          if(dragonLife<=0){
-            onDragonDefeated();
-            return;
+          const isCritical = Math.random() < CRITICAL_HIT_CHANCE;
+          dragonLife -= isCritical ? 2 : 1;
+          const afterHit = ()=>{
+            if(dragonLife<=0){
+              onDragonDefeated();
+              return;
+            }
+            setTimeout(ask, 150);
+          };
+          if(isCritical){
+            showEvent(()=> showFlavor("💥", t("dragonTitle"), t("criticalHit"), afterHit));
+          } else {
+            afterHit();
           }
+          return;
         }
-        setTimeout(ask, 150);
+        // 誤答: 通常戦闘(resolveEnemyLike())と同じく、5%の確率で防御成功しライフは減らない。
+        // それ以外は勇者のライフが1減る(2026-08-23・28回目、ユーザー指定によりドラゴン戦にも適用)。
+        if(Math.random() < WRONG_ANSWER_DEFENSE_CHANCE){
+          showEvent(()=> showFlavor("🛡️", t("dragonTitle"), t("attackBlocked"), ()=>{
+            setTimeout(ask, 150);
+          }));
+          return;
+        }
+        loseLife(1);
+        checkDeath(()=>{ setTimeout(ask, 150); });
       }));
     }
     ask();
@@ -3394,8 +3469,8 @@
         <div class="badge">⚙ ${t("devTitle")}</div>
         <p>${t("devLangLabel")}: <b>${state.lang.toUpperCase()}</b></p>
         <button class="primary" id="langToggleBtn">${state.lang==="vi" ? t("devToJa") : t("devToVi")}</button>
-        <br><button class="secondary" id="devLoadDataBtn" style="margin-top:14px;">${t("devLoadDataBtn")}</button>
-        <br><button class="secondary" id="devAdminBtn" style="margin-top:10px;">${t("devAdminBtn")}</button>
+        <br><button class="primary" id="devLoadDataBtn" style="margin-top:14px;">${t("devLoadDataBtn")}</button>
+        <br><button class="primary" id="devAdminBtn" style="margin-top:10px;">${t("devAdminBtn")}</button>
         <div class="feedback ok" id="devMsg">${msg||""}</div>
         <br><button class="secondary" id="devCloseBtn" style="margin-top:4px;">${t("devClose")}</button>
       </div>
