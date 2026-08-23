@@ -387,6 +387,25 @@
   .feedback.ok{ color:#3f6644; }
   .feedback.no{ color:#8b2635; }
   .final-emoji{ font-size:2.6rem; margin-bottom:8px; }
+  /* 単語/文字バブル並べ替え問題(2026-08-24・29回目追加。LV22の並べ替え問題、
+     番人の単語並べ替え問題で共通使用)。上段(bubble-answer)は解答欄、下段(bubble-pool)は
+     まだ使っていないバブルの置き場で、タップで両者を行き来する。 */
+  .scramble-hint{ font-size:.8rem; color:#6a5a4a; margin:0 0 10px; }
+  .bubble-answer{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    min-height:46px; padding:8px; margin-bottom:10px;
+    border:2px dashed var(--gold); border-radius:10px; background:rgba(212,160,23,.08);
+  }
+  .bubble-pool{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:6px; }
+  .bubble-btn{
+    font-size:.95rem; font-weight:700; padding:9px 14px;
+    border-radius:10px; border:2px solid var(--accent);
+    background:#fff; cursor:pointer;
+  }
+  .bubble-btn:disabled{ cursor:default; opacity:.6; }
+  .bubble-answer .bubble-btn{ background:var(--parchment-dark,#e3d5b8); }
+  .bubble-answer.bubble-correct .bubble-btn{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .bubble-answer.bubble-wrong .bubble-btn{ background:#8b2635; color:#fff; border-color:#8b2635; }
   /* ドラゴン(ラスボス)戦専用の戦闘画面(2026-08-22・22回目追加)。
      ドラゴンクエストシリーズのような構図: 上部にドラゴンの絵を大きく表示し、
      その下にライフバー・戦闘中の質問/選択肢を配置する(通常の戦闘は画面中央の
@@ -421,6 +440,22 @@
     margin-top:4px;
   }
   .name-input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+
+  /* 管理者ユーティリティ画面(2026-08-24・29回目追加): ユーザーDB閲覧・全問題閲覧編集の
+     2画面は表示項目が多いため、通常の.cardより幅広の専用レイアウトにする。 */
+  .admin-wide-card{ max-width:720px; text-align:left; }
+  .admin-wide-card .badge{ display:block; text-align:center; margin-bottom:10px; }
+  .admin-table-wrap{ overflow-x:auto; max-height:55vh; border:1px solid rgba(150,110,40,.3); border-radius:8px; }
+  .admin-table{ width:100%; border-collapse:collapse; font-size:.82rem; white-space:nowrap; }
+  .admin-table th, .admin-table td{ padding:6px 10px; border-bottom:1px solid rgba(150,110,40,.2); text-align:left; }
+  .admin-table th{ background:rgba(212,160,23,.15); position:sticky; top:0; }
+  .admin-lv-list{ max-height:55vh; overflow-y:auto; margin-top:8px; }
+  .admin-lv-row{ margin-bottom:6px; }
+  .admin-lv-toggle{ width:100%; text-align:left; font-size:.85rem; }
+  .admin-q-card{ border:1px solid rgba(150,110,40,.3); border-radius:8px; padding:10px; margin:8px 0; }
+  .admin-q-textarea{ min-height:52px; resize:vertical; font-family:inherit; }
+  .admin-choice-row{ display:flex; align-items:center; gap:6px; margin-top:6px; }
+  .admin-choice-row input[type="text"]{ margin-top:0; flex:1; }
 
   /* =========================================================
      オープニング画面
@@ -574,6 +609,14 @@
       guardianSentBackCastle:"Bạn chưa hoàn thành luyện tập ở cả 3 võ đường (Chiến Đấu, Phòng Thủ, Sử Dụng Vật Phẩm) nên bị đưa trở lại đầu Thị Trấn Hoàng Gia! Hãy luyện tập đầy đủ rồi quay lại thử thách.",
       attackBlocked:"🛡️ Bạn đã đỡ được đòn tấn công! Sinh lực không bị giảm.",
       criticalHit:"💥 Đòn chí mạng! Gây 2 điểm sát thương cho đối thủ!",
+      conjugateTeFormPrompt:(masu)=>`Hãy viết thể て (te-form) của 「${masu}」.`,
+      conjugateDictFormPrompt:(masu)=>`Hãy viết thể từ điển (thể thường) của 「${masu}」.`,
+      conjugateInputPlaceholder:"Nhập bằng hiragana",
+      conjugateSubmitBtn:"Trả lời",
+      conjugateAnswerRevealLabel:"Đáp án: ",
+      scrambleSentenceHint:"Chạm vào từng từ để sắp xếp thành câu đúng.",
+      scrambleWordHint:"Chạm vào từng chữ để sắp xếp thành từ đúng.",
+      scrambleAnswerRevealLabel:"Đáp án: ",
       correct:"✅ Chính xác!",
       wrong:"❌ Sai rồi…",
       noDamagePractice:"(Đây là khu vực luyện tập nên sinh lực không bị giảm)",
@@ -785,6 +828,14 @@
       guardianSentBackCastle:"3つの道場(戦い方・守り方・道具の使い方)をすべて修行し終えていないため、城下町の入り口まで送り返されてしまった！しっかり修行してから出直そう。",
       attackBlocked:"🛡️ 攻撃を防いだ！ライフは減らなかった。",
       criticalHit:"💥 クリティカルヒット！相手に2ダメージを与えた！",
+      conjugateTeFormPrompt:(masu)=>`「${masu}」のて形を書いてください。`,
+      conjugateDictFormPrompt:(masu)=>`「${masu}」の辞書形(普通形)を書いてください。`,
+      conjugateInputPlaceholder:"ひらがなで入力",
+      conjugateSubmitBtn:"こたえる",
+      conjugateAnswerRevealLabel:"正解: ",
+      scrambleSentenceHint:"単語をタップして、正しい文になるように並べてください。",
+      scrambleWordHint:"文字をタップして、正しい単語になるように並べてください。",
+      scrambleAnswerRevealLabel:"正解: ",
       correct:"✅ 正解！",
       wrong:"❌ 残念…",
       noDamagePractice:"（練習エリアのためライフは減らない）",
@@ -958,6 +1009,44 @@
     const v = dict[key];
     if(typeof v === "function") return v(...args);
     return v;
+  }
+
+  // ユーザー指定(2026-08-24・29回目): 管理者ユーティリティ画面(A/B)は「日本語表示でいい」との
+  // ことなので、他のUI文言のようにvi/ja両方をI18Nに用意するのではなく、常に日本語固定のテキストを
+  // ここにまとめておく(state.langの言語切替の影響を受けない)。呼び出し方はt()と同じat(key, ...args)。
+  const ADMIN_UTIL_TEXT = {
+    adminUtilityBtn: "🛠️ ユーティリティ",
+    adminUtilityTitle: "管理者ユーティリティ",
+    adminUtilityUserDbBtn: "👥 (A) ユーザー情報データベース",
+    adminUtilityQuestionBtn: "📝 (B) 全問題閲覧・編集",
+    adminUserDbTitle: "ユーザー情報データベース",
+    adminUserDbLoading: "読み込み中…",
+    adminUserDbNeedLogin: "この機能を使うには、管理者アカウントでログインしてください(⚙設定 → 👤アカウント からログイン)。",
+    adminUserDbFetchError: "データの取得に失敗しました。SupabaseのSQL Editorで game_saves テーブルに、このアカウントによる全ユーザー分のSELECTを許可するRLS(行レベルセキュリティ)ポリシーを追加する必要があります。",
+    adminUserDbEmpty: "保存データがまだありません。",
+    adminUserDbColName: "名前",
+    adminUserDbColUserId: "ユーザーID",
+    adminUserDbColLife: "ライフ",
+    adminUserDbColExp: "経験値",
+    adminUserDbColGold: "ゴールド",
+    adminUserDbColMap: "マップ",
+    adminUserDbColItems: "アイテム",
+    adminUserDbNoName: "(名前未設定)",
+    adminUserDbNoItems: "なし",
+    adminUserDbCount: (n)=> `合計 ${n} 件`,
+    adminQuestionTitle: "全問題閲覧・編集",
+    adminQuestionHint: "レベルをタップすると問題一覧が開きます。編集して「保存」を押すと、この端末のブラウザにのみ変更が反映されます(ゲーム本体のファイル自体は書き換わりません)。",
+    adminQuestionPoolNormal: "標準",
+    adminQuestionPoolHard: "難問",
+    adminQuestionEditedTag: "✏️編集済み",
+    adminQuestionSaveBtn: "保存",
+    adminQuestionResetBtn: "編集を元に戻す",
+    adminQuestionSaved: "保存しました。",
+    adminQuestionReset: "元に戻しました。",
+  };
+  function at(key, ...args){
+    const v = ADMIN_UTIL_TEXT[key];
+    return typeof v === "function" ? v(...args) : v;
   }
 
   /* =========================================================
@@ -1290,11 +1379,38 @@
   const DRAGON_QUESTION_MAX_LEVEL = 35;
   const DRAGON_MAX_LIFE = 30;
 
+  // ユーザー指定(2026-08-24・29回目): 管理画面のユーティリティ「(B)全問題閲覧・編集」画面で
+  // 問題を編集できるようにする。ゲーム自体はビルド済みの静的HTML1ファイルのため、編集内容を
+  // ソースコードへ直接書き戻すことはできない。そのため、編集内容をこのブラウザのlocalStorageに
+  // 「上書きレイヤー」として保存し、出題時にLEVELSの元データの上にこの上書きを重ねて使う設計に
+  // した(元のLEVELSデータ自体は書き換えない)。管理者がこの画面で保存した端末でのみ有効。
+  const QUESTION_OVERRIDE_KEY = "adv_question_overrides";
+  function loadQuestionOverrides(){
+    try{
+      const raw = localStorage.getItem(QUESTION_OVERRIDE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){ return {}; }
+  }
+  function saveQuestionOverrides(overrides){
+    try{ localStorage.setItem(QUESTION_OVERRIDE_KEY, JSON.stringify(overrides)); }catch(e){}
+  }
+  let questionOverrides = loadQuestionOverrides();
+  // LEVELS[lv][pool]をそのまま返す代わりに、上書きレイヤーを重ねた配列を返す。
+  // 出題ロジック(buildQuestionBag/buildDragonQuestionBag)は必ずこの関数経由でLEVELSを読む。
+  function getQuestionBank(lv, pool){
+    const base = LEVELS[lv] && LEVELS[lv][pool];
+    if(!base) return base;
+    return base.map((q,idx)=>{
+      const ov = questionOverrides[lv+":"+pool+":"+idx];
+      return ov ? { q:ov.q, c:ov.c.slice(), a:ov.a } : q;
+    });
+  }
+
   function buildQuestionBag(pool){
     const range = MAP_LEVEL_RANGES[state.currentMap] || Object.keys(LEVELS).map(Number);
     const all = [];
     for(const lv of range){
-      const bank = LEVELS[lv] && LEVELS[lv][pool];
+      const bank = getQuestionBank(lv, pool);
       if(bank) all.push(...bank);
     }
     const bag = shuffle(all);
@@ -1352,6 +1468,90 @@
   // マップごとの幹部の数は、そのマップが担当するLV範囲のうち何課が「幹部の課」に
   // 該当するかで決まる(マップ4=LV14の1体、マップ5=LV17・18の2体、マップ6=LV22・25の2体、マップ7=LV27の1体)。
   const OFFICER_CELLS = { 4:[15], 5:[14,17], 6:[14,17], 7:[15], 8:[15], 9:[15] };
+
+  /* =========================================================
+     幹部(中ボス)の特殊問題・番人の単語並べ替え問題(2026-08-24・29回目追加)
+     ユーザー指定: 「中ボスは、特別な問題を出す事にしたい。特に第１４課のボスは動詞の
+     「て形」、第１８課は動詞の「辞書形」の活用形の問題で…自分で手入力して答えるもの。
+     第１グループ動詞を中心に出題する。第２２課では並べ替え問題で…単語バブル…」
+     「門番の中には…バブルを並びかえて１つの単語を作る問題を出すものもいて、１０％の
+     確率で出題してほしい」
+     OFFICER_CELLSの各セルには「(map,cell)→この幹部が象徴するLV」という対応が
+     既にコメントで示されている(マップ4のcell15=LV14、マップ5のcell14=LV17・cell17=LV18、
+     マップ6のcell14=LV22・cell17=LV25、マップ7のcell15=LV27、マップ8のcell15=LV31、
+     マップ9のcell15=LV33)。以下はそれをコードから引けるようにした対応表。
+  ========================================================= */
+  const OFFICER_NOMINAL_LEVEL = {
+    4: { 15:14 },
+    5: { 14:17, 17:18 },
+    6: { 14:22, 17:25 },
+    7: { 15:27 },
+    8: { 15:31 },
+    9: { 15:33 },
+  };
+  // 上記の「象徴するLV」のうち、特殊な問題タイプが指定されているもの。
+  // それ以外のLV(17・25・27・31・33)の幹部は、従来通り通常の4択(hard)問題を出題する。
+  const SPECIAL_OFFICER_QUESTION_TYPE = { 14:"teForm", 18:"dictForm", 22:"scramble" };
+
+  // LV14「て形」・LV18「辞書形」問題用の動詞データ。第1グループ(五段)動詞を中心に、
+  // ジェイエヌワンイーティー等の教案サイトで第14課の例として挙げられている動詞
+  // (働く・休む・飲む・吸う・聞く・読む・書く・撮る・切る・遊ぶ・泳ぐ・急ぐ・待つ・
+  // 手伝う・話す)から、て形の5パターン(く→いて/ぐ→いで/む・ぶ→んで/う・つ・る→って/
+  // す→して)を一通りカバーする10語+不規則活用の「行く」を選定。いずれもLV14より前
+  // (自己紹介・時間・曜日等)で既出の基礎語彙で、辞書形はLV14より後のLV18で扱うため、
+  // て形・辞書形のどちらの練習にも安全に使い回せる。
+  const CONJUGATE_VERBS = [
+    { masu:"書きます", te:"書いて", dict:"書く", teKana:"かいて", dictKana:"かく" },
+    { masu:"聞きます", te:"聞いて", dict:"聞く", teKana:"きいて", dictKana:"きく" },
+    { masu:"読みます", te:"読んで", dict:"読む", teKana:"よんで", dictKana:"よむ" },
+    { masu:"飲みます", te:"飲んで", dict:"飲む", teKana:"のんで", dictKana:"のむ" },
+    { masu:"休みます", te:"休んで", dict:"休む", teKana:"やすんで", dictKana:"やすむ" },
+    { masu:"遊びます", te:"遊んで", dict:"遊ぶ", teKana:"あそんで", dictKana:"あそぶ" },
+    { masu:"待ちます", te:"待って", dict:"待つ", teKana:"まって", dictKana:"まつ" },
+    { masu:"撮ります", te:"撮って", dict:"撮る", teKana:"とって", dictKana:"とる" },
+    { masu:"話します", te:"話して", dict:"話す", teKana:"はなして", dictKana:"はなす" },
+    { masu:"行きます", te:"行って", dict:"行く", teKana:"いって", dictKana:"いく" }, // て形だけ例外活用
+  ];
+  let conjugateBag = { teForm:[], dictForm:[] };
+  function buildConjugateBag(kind){ return shuffle(CONJUGATE_VERBS.slice()); }
+  function randomConjugateVerb(kind){
+    if(conjugateBag[kind].length===0){ conjugateBag[kind] = buildConjugateBag(kind); }
+    return conjugateBag[kind].shift();
+  }
+
+  // LV22「並べ替え(文)」問題用のデータ。LV22の文法項目である名詞修飾節
+  // (「わたしが 撮った 写真です」のような「動詞の普通形+名詞」)を使った例文を、
+  // 単語(文節)単位でバブルに分割してシャッフル出題する。既存のふりがな辞書で
+  // 対応済みの語彙(写真・映画・本・友達・田中・木村・見・読・撮)のみで構成しており、
+  // 新規のふりがな追加は不要。
+  const SCRAMBLE_SENTENCES = [
+    { words:["これは","わたしが","撮った","写真です。"] },
+    { words:["それは","友達が","撮った","写真です。"] },
+    { words:["あれは","きのう","見た","映画です。"] },
+    { words:["これは","せんしゅう","読んだ","本です。"] },
+    { words:["それは","田中さんが","撮った","写真です。"] },
+    { words:["あれは","木村さんが","見た","映画です。"] },
+  ];
+  let scrambleSentenceBag = [];
+  function randomScrambleSentence(){
+    if(scrambleSentenceBag.length===0){ scrambleSentenceBag = shuffle(SCRAMBLE_SENTENCES.slice()); }
+    return scrambleSentenceBag.shift();
+  }
+
+  // 番人(guardian)専用: 10%の確率で出題する「単語並べ替え(1文字ずつのバブル)」問題。
+  // 番人は全マップ(マップ1〜10)に登場するため、最も早い番人(マップ1、LV0〜3の範囲)
+  // でも既習語である必要がある。そのため、自己紹介・持ち物等、LV0〜3で共通して
+  // 学ぶ最も基礎的なひらがな語彙のみをプールにしている(漢字表記は使わずひらがなのみ)。
+  const WORD_SCRAMBLE_POOL = [
+    "わたし","せんせい","がくせい","かいしゃ","くに",
+    "かさ","ほん","くるま","とけい","かぎ","でんわ","つくえ",
+  ];
+  const WORD_SCRAMBLE_CHANCE = 0.10;
+  let wordScrambleBag = [];
+  function randomScrambleWord(){
+    if(wordScrambleBag.length===0){ wordScrambleBag = shuffle(WORD_SCRAMBLE_POOL.slice()); }
+    return wordScrambleBag.shift();
+  }
 
   const SHOP_CATALOG = [
     {key:"herb", nameKey:"itemHerb", price:5},
@@ -1985,7 +2185,9 @@
     ["看板","かんばん"],["傘","かさ"],["例","れい"],["彼","かれ"],["店","みせ"],
     // 2026-08-23(22回目・マップ10追加): LV34〜LV35の問題文で新たに使う語彙
     ["砂糖","さとう"],["地図","ちず"],["先生","せんせい"],["疑問詞","ぎもんし"],
-    ["差","さ"],["太","ふと"],["甘","あま"],["出","で"]
+    ["差","さ"],["太","ふと"],["甘","あま"],["出","で"],
+    // 2026-08-24(29回目・幹部の特殊問題追加): LV14(て形)問題文で新たに使う語彙
+    ["遊","あそ"]
   ];
   const FURIGANA_MAP = new Map(FURIGANA_WORDS);
   // 長い語(複合語)から先に一致させることで、単漢字の対応表による部分一致の誤変換を防ぐ
@@ -2042,6 +2244,113 @@
         setTimeout(()=>{ closeModal(); onDone(isCorrect); }, 850);
       };
     });
+  }
+
+  /* =========================================================
+     幹部(中ボス)の特殊問題タイプ用UI(2026-08-24・29回目追加)
+     showConjugateQuiz(): LV14(て形)・LV18(辞書形)。4択ではなく、動詞の活用形を
+     自分で手入力して答える。ひらがな表記(kana)・漢字表記(kanji)のどちらで
+     答えても正解として扱う(スペース類は無視)。
+     showBubbleQuiz(): LV22の文並べ替え、および番人の単語並べ替え(10%)の両方で
+     共通使用する汎用バブル並べ替えUI。units配列の「並び順」を当てる問題で、
+     文並べ替えなら単語単位、単語並べ替えなら1文字単位の配列を渡せば良い
+     (見た目・操作方法は完全に共通)。
+  ========================================================= */
+  function normalizeConjAnswer(s){
+    return (s||"").replace(/[\s　]+/g, "").trim();
+  }
+  function showConjugateQuiz(item, formType, badgeText, onDone){
+    const promptKey = formType==="teForm" ? "conjugateTeFormPrompt" : "conjugateDictFormPrompt";
+    const correctKana = formType==="teForm" ? item.teKana : item.dictKana;
+    const correctKanji = formType==="teForm" ? item.te : item.dict;
+    openModal(`
+      <div class="card">
+        <div class="badge">${badgeText}</div>
+        <div class="qtext">${t(promptKey, addFurigana(item.masu))}</div>
+        <input type="text" id="conjInput" class="name-input" placeholder="${t("conjugateInputPlaceholder")}" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <br><button class="primary" id="conjSubmitBtn" style="margin-top:12px;">${t("conjugateSubmitBtn")}</button>
+        <div class="feedback" id="fb"></div>
+      </div>
+    `);
+    const input = document.getElementById("conjInput");
+    const btn = document.getElementById("conjSubmitBtn");
+    const fb = document.getElementById("fb");
+    input.focus();
+    const submit = ()=>{
+      if(input.disabled) return;
+      const given = normalizeConjAnswer(input.value);
+      const isCorrect = given.length>0 && (given===correctKana || given===correctKanji);
+      input.disabled = true;
+      btn.disabled = true;
+      if(isCorrect){
+        fb.textContent = t("correct");
+        fb.className = "feedback ok";
+      } else {
+        fb.textContent = t("wrong")+" "+t("conjugateAnswerRevealLabel")+correctKanji+"（"+correctKana+"）";
+        fb.className = "feedback no";
+      }
+      setTimeout(()=>{ closeModal(); onDone(isCorrect); }, 1200);
+    };
+    btn.onclick = submit;
+    input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") submit(); });
+  }
+
+  function showBubbleQuiz(units, badgeText, hintText, revealSep, onDone){
+    const ids = units.map((_,i)=>i);
+    let poolIds = shuffle(ids.slice());
+    let answerIds = [];
+    let locked = false;
+    openModal(`
+      <div class="card">
+        <div class="badge">${badgeText}</div>
+        <p class="scramble-hint">${hintText}</p>
+        <div class="bubble-answer" id="bubbleAnswer"></div>
+        <div class="bubble-pool" id="bubblePool"></div>
+        <div class="feedback" id="fb"></div>
+      </div>
+    `);
+    const answerEl = document.getElementById("bubbleAnswer");
+    const poolEl = document.getElementById("bubblePool");
+    const fb = document.getElementById("fb");
+    function render(){
+      answerEl.innerHTML = answerIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${units[id]}</button>`).join("");
+      poolEl.innerHTML = poolIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${units[id]}</button>`).join("");
+      answerEl.querySelectorAll(".bubble-btn").forEach(b=>{
+        b.onclick = ()=>{
+          if(locked) return;
+          const id = Number(b.dataset.id);
+          answerIds = answerIds.filter(x=>x!==id);
+          poolIds.push(id);
+          render();
+        };
+      });
+      poolEl.querySelectorAll(".bubble-btn").forEach(b=>{
+        b.onclick = ()=>{
+          if(locked) return;
+          const id = Number(b.dataset.id);
+          poolIds = poolIds.filter(x=>x!==id);
+          answerIds.push(id);
+          render();
+          if(answerIds.length===units.length){ check(); }
+        };
+      });
+    }
+    function check(){
+      locked = true;
+      const arranged = answerIds.map(id=>units[id]);
+      const isCorrect = arranged.every((w,i)=>w===units[i]);
+      answerEl.className = "bubble-answer " + (isCorrect ? "bubble-correct" : "bubble-wrong");
+      if(isCorrect){
+        fb.textContent = t("correct");
+        fb.className = "feedback ok";
+      } else {
+        fb.textContent = t("wrong")+" "+t("scrambleAnswerRevealLabel")+units.join(revealSep);
+        fb.className = "feedback no";
+      }
+      render();
+      setTimeout(()=>{ closeModal(); onDone(isCorrect); }, 1200);
+    }
+    render();
   }
 
   function showGameOver(){
@@ -2549,9 +2858,16 @@
     // ここで個別に戻す必要はない)。
     if(isOfficer){ switchBgmTrack(SPECIAL_BGM.officerBattle); }
     let remainingLife = life;
+    // ユーザー指定(2026-08-24・29回目): 幹部(中ボス)のうち、LV14=て形・LV18=辞書形・
+    // LV22=並べ替えを象徴する幹部だけは、通常の4択(hard)問題ではなく専用の特殊問題
+    // タイプを出題する。どの幹部がどのLVを象徴するかはOFFICER_NOMINAL_LEVELで判定する
+    // (それ以外のLVの幹部・通常の敵・番人の基本問題は従来通り4択のまま)。
+    const officerNominalLv = isOfficer ? (OFFICER_NOMINAL_LEVEL[state.currentMap]||{})[state.cellIdx+1] : null;
+    const specialType = officerNominalLv ? SPECIAL_OFFICER_QUESTION_TYPE[officerNominalLv] : null;
     function ask(){
-      const q = (isGuardian || isOfficer) ? randomHardQuestion() : randomQuestion("normal");
-      showEvent(()=> showQuiz(q, icon+" "+getTitle(), (correct)=>{
+      // 正答/誤答の判定後の共通処理(クリティカルヒット・防御成功・撃破判定等)。
+      // 出題UIが4択/手入力/バブル並べ替えのどれであっても、onDone(isCorrect)経由でここに合流する。
+      function handleAnswer(correct){
         if(correct){
           gainExp(1);
           const isCritical = Math.random() < CRITICAL_HIT_CHANCE;
@@ -2592,7 +2908,26 @@
         }
         loseLife(1);
         checkDeath(()=>{ setTimeout(ask, 150); });
-      }));
+      }
+
+      if(specialType==="teForm" || specialType==="dictForm"){
+        const item = randomConjugateVerb(specialType);
+        showEvent(()=> showConjugateQuiz(item, specialType, icon+" "+getTitle(), handleAnswer));
+        return;
+      }
+      if(specialType==="scramble"){
+        const item = randomScrambleSentence();
+        showEvent(()=> showBubbleQuiz(item.words, icon+" "+getTitle(), t("scrambleSentenceHint"), "", handleAnswer));
+        return;
+      }
+      // 番人限定: 10%の確率で通常の4択の代わりに単語(1文字ずつ)並べ替え問題を出題する。
+      if(isGuardian && Math.random() < WORD_SCRAMBLE_CHANCE){
+        const word = randomScrambleWord();
+        showEvent(()=> showBubbleQuiz(word.split(""), icon+" "+getTitle(), t("scrambleWordHint"), "", handleAnswer));
+        return;
+      }
+      const q = (isGuardian || isOfficer) ? randomHardQuestion() : randomQuestion("normal");
+      showEvent(()=> showQuiz(q, icon+" "+getTitle(), handleAnswer));
     }
     ask();
   }
@@ -2620,7 +2955,7 @@
   function buildDragonQuestionBag(){
     const all = [];
     for(let lv=DRAGON_QUESTION_MIN_LEVEL; lv<=DRAGON_QUESTION_MAX_LEVEL; lv++){
-      const bank = LEVELS[lv] && LEVELS[lv].hard;
+      const bank = getQuestionBank(lv, "hard");
       if(bank) all.push(...bank);
     }
     return shuffle(all);
@@ -3540,6 +3875,7 @@
           <input type="number" id="adminMapInput" class="name-input" min="1" max="${maxMap}" value="${state.currentMap}">
           <div class="feedback no" id="adminMsg">${msg||""}</div>
           <br><button class="primary" id="adminJumpBtn" style="margin-top:12px;">${t("adminMapJumpBtn")}</button>
+          <br><button class="primary" id="adminUtilityBtn" style="margin-top:10px;">${at("adminUtilityBtn")}</button>
           <br><button class="secondary" id="adminCloseBtn" style="margin-top:10px;">${t("devClose")}</button>
         </div>
       `);
@@ -3548,11 +3884,205 @@
         if(!Number.isInteger(n) || n<1 || n>maxMap){ render(t("adminMapJumpInvalid")); return; }
         adminJumpToMap(n);
       };
+      document.getElementById("adminUtilityBtn").onclick = ()=>{
+        openAdminUtilityMenu(()=>render());
+      };
       document.getElementById("adminCloseBtn").onclick = ()=>{
         if(returnTo){ returnTo(); } else { closeModal(); }
       };
     }
     render();
+  }
+
+  /* =========================================================
+     管理者ユーティリティ画面(2026-08-24・29回目新規実装)
+     ユーザー指定: 「管理画面にユーティリティボタンを作る。そのボタンを押すと(A)ユーザー情報の
+     データベースを閲覧できる機能…と(B)すべての問題を閲覧し、内容を修正できる画面の２つに
+     飛ぶことができる。仕様はいったん任せます」
+     入口はopenAdminPanel()内の「🛠️ ユーティリティ」ボタン。A/Bとも日本語表示固定
+     (ユーザー指定通り)。
+  ========================================================= */
+  function openAdminUtilityMenu(returnTo){
+    activeModalRenderer = ()=> openAdminUtilityMenu(returnTo);
+    openModal(`
+      <div class="card">
+        <div class="badge">🛠️ ${at("adminUtilityTitle")}</div>
+        <button class="primary" id="utilUserDbBtn">${at("adminUtilityUserDbBtn")}</button>
+        <br><button class="primary" id="utilQuestionBtn" style="margin-top:10px;">${at("adminUtilityQuestionBtn")}</button>
+        <br><button class="secondary" id="utilBackBtn" style="margin-top:10px;">${t("devClose")}</button>
+      </div>
+    `);
+    document.getElementById("utilUserDbBtn").onclick = ()=>{ openAdminUserDatabase(returnTo); };
+    document.getElementById("utilQuestionBtn").onclick = ()=>{ openAdminQuestionBrowser(returnTo); };
+    document.getElementById("utilBackBtn").onclick = ()=>{ if(returnTo){ returnTo(); } else { closeModal(); } };
+  }
+
+  /* ---- (A) ユーザー情報データベース閲覧 ----
+     ユーザー名(ヒーロー名)・ライフ・経験値・ゴールド・マップ番号・持っているアイテムの種類と
+     数を一覧表示する。表示項目からメールアドレスは除外している(ユーザー確認済み: 2026-08-24・
+     29回目「メールアドレスは項目に含めなくてよい」)。データはSupabaseのgame_savesテーブルを
+     全件取得(user_idで絞り込まない)して取得するため、Supabase側のRLS(行レベルセキュリティ)
+     ポリシーがこの管理者アカウントに対して全行のSELECTを許可している必要がある(通常のプレイ中の
+     保存/読み込みは自分の行のみに絞り込んでいるため、これは管理者専用の追加設定が必要)。
+     また、この画面はログイン済み(auth.user有り)であることが前提。 */
+  function openAdminUserDatabase(returnTo){
+    activeModalRenderer = ()=> openAdminUserDatabase(returnTo);
+    async function render(){
+      openModal(`
+        <div class="card admin-wide-card">
+          <div class="badge">👥 ${at("adminUserDbTitle")}</div>
+          <p class="scramble-hint">${at("adminUserDbLoading")}</p>
+          <br><button class="secondary" id="utilDbBackBtn">${t("devClose")}</button>
+        </div>
+      `);
+      document.getElementById("utilDbBackBtn").onclick = ()=>{ openAdminUtilityMenu(returnTo); };
+      if(!auth.user){
+        renderResult(`<p class="feedback no">${at("adminUserDbNeedLogin")}</p>`);
+        return;
+      }
+      try{
+        const res = await fetch(REST_URL + "/game_saves?select=user_id,state,updated_at&order=updated_at.desc", {
+          headers:{ "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+auth.accessToken }
+        });
+        if(!res.ok){
+          renderResult(`<p class="feedback no">${at("adminUserDbFetchError")}</p>`);
+          return;
+        }
+        const rows = await res.json();
+        renderResult(buildTable(rows));
+      }catch(e){
+        renderResult(`<p class="feedback no">${at("adminUserDbFetchError")}</p>`);
+      }
+    }
+    function itemsSummary(s){
+      const items = [];
+      if(s.hasOrderScroll) items.push(t("itemOrderScroll"));
+      if(s.hasElixir) items.push(t("itemElixir"));
+      return items.length ? items.join("、")+`（${items.length}）` : at("adminUserDbNoItems");
+    }
+    function buildTable(rows){
+      if(!rows || rows.length===0){ return `<p class="scramble-hint">${at("adminUserDbEmpty")}</p>`; }
+      const head = `<tr>
+        <th>${at("adminUserDbColName")}</th><th>${at("adminUserDbColUserId")}</th>
+        <th>${at("adminUserDbColLife")}</th><th>${at("adminUserDbColExp")}</th>
+        <th>${at("adminUserDbColGold")}</th><th>${at("adminUserDbColMap")}</th>
+        <th>${at("adminUserDbColItems")}</th></tr>`;
+      const body = rows.map(row=>{
+        const s = row.state || {};
+        const name = s.heroName && s.heroName.trim() ? s.heroName : at("adminUserDbNoName");
+        const shortId = (row.user_id||"").slice(0,8);
+        return `<tr>
+          <td>${name}</td><td>${shortId}</td>
+          <td>${s.life!=null?s.life:"-"}/${s.maxLife!=null?s.maxLife:"-"}</td>
+          <td>${s.exp!=null?s.exp:"-"}</td><td>${s.gold!=null?s.gold:"-"}</td>
+          <td>${s.currentMap!=null?s.currentMap:"-"}</td>
+          <td>${itemsSummary(s)}</td>
+        </tr>`;
+      }).join("");
+      return `<div class="admin-table-wrap"><table class="admin-table">${head}${body}</table></div>
+        <p class="scramble-hint">${at("adminUserDbCount", rows.length)}</p>`;
+    }
+    function renderResult(html){
+      openModal(`
+        <div class="card admin-wide-card">
+          <div class="badge">👥 ${at("adminUserDbTitle")}</div>
+          ${html}
+          <br><button class="secondary" id="utilDbBackBtn2" style="margin-top:10px;">${t("devClose")}</button>
+        </div>
+      `);
+      document.getElementById("utilDbBackBtn2").onclick = ()=>{ openAdminUtilityMenu(returnTo); };
+    }
+    render();
+  }
+
+  /* ---- (B) 全問題閲覧・編集 ----
+     LEVELS(全36レベル×normal/hard)の問題を、レベルごとに折りたたみ表示し、各問題文・
+     選択肢4つ・正解番号をその場で編集できる。保存は上記のquestionOverrides(localStorage)
+     に書き込むのみで、ゲーム本体のソースコード(LEVELS)自体は書き換えない(この管理者端末の
+     ブラウザにのみ反映される。全プレイヤーへ配信するには、この編集内容を元にソースコードの
+     LEVELSを直接書き換えて再デプロイする必要がある)。 */
+  function openAdminQuestionBrowser(returnTo){
+    let expandedLv = null;
+    activeModalRenderer = ()=> openAdminQuestionBrowser(returnTo);
+    function render(msg){
+      const levelKeys = Object.keys(LEVELS).map(Number).sort((a,b)=>a-b);
+      const listHtml = levelKeys.map(lv=>{
+        const title = LEVELS[lv].title;
+        const isOpen = expandedLv===lv;
+        return `<div class="admin-lv-row">
+          <button class="secondary admin-lv-toggle" data-lv="${lv}">${isOpen?"▼":"▶"} LV${lv}: ${title}</button>
+          ${isOpen ? buildLevelEditor(lv) : ""}
+        </div>`;
+      }).join("");
+      openModal(`
+        <div class="card admin-wide-card">
+          <div class="badge">📝 ${at("adminQuestionTitle")}</div>
+          <p class="scramble-hint">${at("adminQuestionHint")}</p>
+          <div class="feedback ok" id="utilQMsg">${msg||""}</div>
+          <div class="admin-lv-list">${listHtml}</div>
+          <br><button class="secondary" id="utilQBackBtn" style="margin-top:10px;">${t("devClose")}</button>
+        </div>
+      `);
+      document.querySelectorAll(".admin-lv-toggle").forEach(btn=>{
+        btn.onclick = ()=>{
+          const lv = Number(btn.dataset.lv);
+          expandedLv = (expandedLv===lv) ? null : lv;
+          render();
+        };
+      });
+      document.getElementById("utilQBackBtn").onclick = ()=>{ openAdminUtilityMenu(returnTo); };
+      if(expandedLv!=null){ wireLevelEditor(expandedLv); }
+    }
+    function buildLevelEditor(lv){
+      const pools = ["normal","hard"];
+      return pools.map(pool=>{
+        const bank = LEVELS[lv][pool] || [];
+        return bank.map((baseQ,idx)=>{
+          const ov = questionOverrides[lv+":"+pool+":"+idx];
+          const cur = ov || baseQ;
+          const choicesHtml = cur.c.map((c,ci)=>`
+            <div class="admin-choice-row">
+              <input type="radio" name="ans-${lv}-${pool}-${idx}" value="${ci}" ${cur.a===ci?"checked":""}>
+              <input type="text" class="name-input admin-choice-input" data-lv="${lv}" data-pool="${pool}" data-idx="${idx}" data-ci="${ci}" value="${escapeAttr(c)}">
+            </div>`).join("");
+          return `<div class="admin-q-card">
+            <div class="scramble-hint">${pool==="normal"?at("adminQuestionPoolNormal"):at("adminQuestionPoolHard")} #${idx+1}${ov?" "+at("adminQuestionEditedTag"):""}</div>
+            <textarea class="name-input admin-q-textarea" data-lv="${lv}" data-pool="${pool}" data-idx="${idx}" data-field="q">${escapeAttr(cur.q)}</textarea>
+            ${choicesHtml}
+            <button class="primary admin-q-save" data-lv="${lv}" data-pool="${pool}" data-idx="${idx}" style="margin-top:8px;">${at("adminQuestionSaveBtn")}</button>
+            ${ov ? `<button class="secondary admin-q-reset" data-lv="${lv}" data-pool="${pool}" data-idx="${idx}" style="margin-top:8px;">${at("adminQuestionResetBtn")}</button>` : ""}
+          </div>`;
+        }).join("");
+      }).join("");
+    }
+    function wireLevelEditor(lv){
+      document.querySelectorAll(".admin-q-save").forEach(btn=>{
+        btn.onclick = ()=>{
+          const lv2 = Number(btn.dataset.lv), pool = btn.dataset.pool, idx = Number(btn.dataset.idx);
+          const key = lv2+":"+pool+":"+idx;
+          const qEl = document.querySelector(`textarea[data-lv="${lv2}"][data-pool="${pool}"][data-idx="${idx}"]`);
+          const choiceEls = document.querySelectorAll(`input.admin-choice-input[data-lv="${lv2}"][data-pool="${pool}"][data-idx="${idx}"]`);
+          const ansEl = document.querySelector(`input[name="ans-${lv2}-${pool}-${idx}"]:checked`);
+          const c = Array.from(choiceEls).map(el=>el.value);
+          const a = ansEl ? Number(ansEl.value) : 0;
+          questionOverrides[key] = { q: qEl.value, c, a };
+          saveQuestionOverrides(questionOverrides);
+          render(at("adminQuestionSaved"));
+        };
+      });
+      document.querySelectorAll(".admin-q-reset").forEach(btn=>{
+        btn.onclick = ()=>{
+          const lv2 = Number(btn.dataset.lv), pool = btn.dataset.pool, idx = Number(btn.dataset.idx);
+          delete questionOverrides[lv2+":"+pool+":"+idx];
+          saveQuestionOverrides(questionOverrides);
+          render(at("adminQuestionReset"));
+        };
+      });
+    }
+    render();
+  }
+  function escapeAttr(s){
+    return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   }
 
   // 管理者パネルからの直接マップ移動。goToMap2〜7と同じ処理を汎用化したもの
