@@ -441,6 +441,17 @@
   }
   .name-input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
 
+  /* 管理者パネルのマップ番号入力(2026-08-24追記): 数値入力欄とボタンの間隔を詰め、
+     +/-ボタン(トグル操作)でも数値を増減できるようにする。 */
+  .admin-num-row{ display:flex; align-items:center; gap:8px; margin-top:4px; }
+  .admin-num-row .name-input{ margin-top:0; text-align:center; }
+  .stepper-btn{ flex:0 0 42px; width:42px; height:42px; font-size:1.3rem; font-weight:700; line-height:1; border-radius:10px; border:2.5px solid var(--ink); background:transparent; color:var(--ink); cursor:pointer; }
+  .stepper-btn:hover{ background:rgba(58,42,30,.08); }
+  .stepper-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .admin-msg-tight{ margin-top:4px; min-height:0; }
+  .admin-btn-col{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .admin-btn-col button{ margin:0; }
+
   /* 管理者ユーティリティ画面(2026-08-24・29回目追加): ユーザーDB閲覧・全問題閲覧編集の
      2画面は表示項目が多いため、通常の.cardより幅広の専用レイアウトにする。 */
   .admin-wide-card{ max-width:720px; text-align:left; }
@@ -1021,8 +1032,8 @@
     adminUtilityQuestionBtn: "📝 (B) 全問題閲覧・編集",
     adminUserDbTitle: "ユーザー情報データベース",
     adminUserDbLoading: "読み込み中…",
-    adminUserDbNeedLogin: "この機能を使うには、管理者アカウントでログインしてください(⚙設定 → 👤アカウント からログイン)。",
-    adminUserDbFetchError: "データの取得に失敗しました。SupabaseのSQL Editorで game_saves テーブルに、このアカウントによる全ユーザー分のSELECTを許可するRLS(行レベルセキュリティ)ポリシーを追加する必要があります。",
+    adminUserDbNeedLogin: "この機能を使うには、まずあなた自身のアカウントでログインしてください(⚙設定 → 👤アカウント。管理者専用の別アカウントはありません、普段のログインでOKです)。ログイン後も、他ユーザーのデータを見るにはSupabase側の追加設定が必要です(下のエラー文を参照)。",
+    adminUserDbFetchError: "データの取得に失敗しました。ログイン中のアカウントに、他ユーザー分もSELECTする権限がまだありません。SupabaseのSQL Editorで game_saves テーブルに、あなたのuser_id(またはemail)による全ユーザー分のSELECTを許可するRLS(行レベルセキュリティ)ポリシーを追加してください。",
     adminUserDbEmpty: "保存データがまだありません。",
     adminUserDbColName: "名前",
     adminUserDbColUserId: "ユーザーID",
@@ -3872,15 +3883,29 @@
         <div class="card">
           <div class="badge">🔑 ${t("adminPanelTitle")}</div>
           <p>${t("adminMapJumpLabel")}</p>
-          <input type="number" id="adminMapInput" class="name-input" min="1" max="${maxMap}" value="${state.currentMap}">
-          <div class="feedback no" id="adminMsg">${msg||""}</div>
-          <br><button class="primary" id="adminJumpBtn" style="margin-top:12px;">${t("adminMapJumpBtn")}</button>
-          <br><button class="primary" id="adminUtilityBtn" style="margin-top:10px;">${at("adminUtilityBtn")}</button>
-          <br><button class="secondary" id="adminCloseBtn" style="margin-top:10px;">${t("devClose")}</button>
+          <div class="admin-num-row">
+            <button type="button" class="stepper-btn" id="adminMapDecBtn" aria-label="-1">−</button>
+            <input type="number" id="adminMapInput" class="name-input" min="1" max="${maxMap}" value="${state.currentMap}">
+            <button type="button" class="stepper-btn" id="adminMapIncBtn" aria-label="+1">＋</button>
+          </div>
+          <div class="feedback no admin-msg-tight" id="adminMsg">${msg||""}</div>
+          <div class="admin-btn-col">
+            <button class="primary" id="adminJumpBtn">${t("adminMapJumpBtn")}</button>
+            <button class="primary" id="adminUtilityBtn">${at("adminUtilityBtn")}</button>
+            <button class="secondary" id="adminCloseBtn">${t("devClose")}</button>
+          </div>
         </div>
       `);
+      const mapInput = document.getElementById("adminMapInput");
+      function stepMap(delta){
+        const cur = Number(mapInput.value) || 1;
+        const next = Math.min(maxMap, Math.max(1, cur + delta));
+        mapInput.value = next;
+      }
+      document.getElementById("adminMapDecBtn").onclick = ()=> stepMap(-1);
+      document.getElementById("adminMapIncBtn").onclick = ()=> stepMap(1);
       document.getElementById("adminJumpBtn").onclick = ()=>{
-        const n = Number(document.getElementById("adminMapInput").value);
+        const n = Number(mapInput.value);
         if(!Number.isInteger(n) || n<1 || n>maxMap){ render(t("adminMapJumpInvalid")); return; }
         adminJumpToMap(n);
       };
