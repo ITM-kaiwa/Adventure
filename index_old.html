@@ -453,33 +453,20 @@
   .admin-btn-col button{ margin:0; }
 
   /* 管理者ユーティリティ画面(2026-08-24・29回目追加): ユーザーDB閲覧・全問題閲覧編集の
-     2画面は表示項目が多いため、通常の.cardより幅広の専用レイアウトにする。
-     2026-08-24追記: 閉じるボタンが画面下に見切れる報告を受け、.card自体を縦方向flexにし、
-     一覧/テーブル部分だけがflex-shrinkで縮む(=残りは常に閉じるボタン等のために確保される)
-     構成に変更した。max-height:55vhは「広い画面で伸びすぎない上限」として維持しつつ、
-     画面が低い場合はそれより縮んでボタンが必ず見える。 */
-  .admin-wide-card{ max-width:720px; text-align:left; display:flex; flex-direction:column; gap:8px; }
-  .admin-wide-card > *{ flex:0 0 auto; margin:0; }
-  .admin-wide-card .badge{ display:block; text-align:center; }
-  .admin-table-wrap{ overflow-x:auto; overflow-y:auto; flex:1 1 auto; min-height:100px; max-height:55vh; border:1px solid rgba(150,110,40,.3); border-radius:8px; }
+     2画面は表示項目が多いため、通常の.cardより幅広の専用レイアウトにする。 */
+  .admin-wide-card{ max-width:720px; text-align:left; }
+  .admin-wide-card .badge{ display:block; text-align:center; margin-bottom:10px; }
+  .admin-table-wrap{ overflow-x:auto; max-height:55vh; border:1px solid rgba(150,110,40,.3); border-radius:8px; }
   .admin-table{ width:100%; border-collapse:collapse; font-size:.82rem; white-space:nowrap; }
   .admin-table th, .admin-table td{ padding:6px 10px; border-bottom:1px solid rgba(150,110,40,.2); text-align:left; }
   .admin-table th{ background:rgba(212,160,23,.15); position:sticky; top:0; }
-  .admin-lv-list{ flex:1 1 auto; min-height:100px; max-height:55vh; overflow-y:auto; }
+  .admin-lv-list{ max-height:55vh; overflow-y:auto; margin-top:8px; }
   .admin-lv-row{ margin-bottom:6px; }
   .admin-lv-toggle{ width:100%; text-align:left; font-size:.85rem; }
   .admin-q-card{ border:1px solid rgba(150,110,40,.3); border-radius:8px; padding:10px; margin:8px 0; }
   .admin-q-textarea{ min-height:52px; resize:vertical; font-family:inherit; }
   .admin-choice-row{ display:flex; align-items:center; gap:6px; margin-top:6px; }
   .admin-choice-row input[type="text"]{ margin-top:0; flex:1; }
-
-  /* 管理者ユーティリティ「🎵 BGMを楽しむ」(2026-08-24追加) */
-  .admin-bgm-list{ flex:1 1 auto; min-height:100px; max-height:55vh; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
-  .admin-bgm-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 10px; border:1px solid rgba(150,110,40,.3); border-radius:8px; }
-  .admin-bgm-name{ font-size:.85rem; font-weight:700; line-height:1.5; }
-  .admin-bgm-file{ font-size:.72rem; font-weight:400; color:#6a5a4a; }
-  .admin-bgm-play{ flex:0 0 auto; width:40px; height:40px; border-radius:50%; border:2.5px solid var(--ink); background:transparent; color:var(--ink); font-size:1.05rem; cursor:pointer; }
-  .admin-bgm-play:hover{ background:rgba(58,42,30,.08); }
 
   /* =========================================================
      オープニング画面
@@ -548,7 +535,7 @@
 <button class="devbtn" id="helpBtn" style="right:186px;" title="Help">？</button>
 <button class="devbtn" id="saveBtn" style="right:142px;" title="Save">💾</button>
 <button class="devbtn" id="bgmBtn" style="right:98px;" title="BGM">🔊</button>
-<button class="devbtn" id="accountBtn" style="right:54px;" title="Account"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 20.5c0-4.4 3.6-8 8-8s8 3.6 8 8v.5H4v-.5z"></path></svg></button>
+<button class="devbtn" id="accountBtn" style="right:54px;" title="Account">👤</button>
 <button class="devbtn" id="devBtn" title="Dev settings">⚙</button>
 <div class="save-toast" id="saveToast"></div>
 <audio id="bgm" loop preload="auto"><source id="bgmSource" src="public/audio/opening_bgm.mp3" type="audio/mpeg"></audio>
@@ -1067,9 +1054,6 @@
     adminQuestionResetBtn: "編集を元に戻す",
     adminQuestionSaved: "保存しました。",
     adminQuestionReset: "元に戻しました。",
-    adminBgmBtn: "🎵 BGMを楽しむ",
-    adminBgmTitle: "BGMを楽しむ",
-    adminBgmHint: "ファイル名の隣の再生ボタンを押すと、それぞれのBGMを試聴できます。同時に再生できるのは1曲だけです(別の曲を再生すると、それまでの曲は自動的に止まります)。",
   };
   function at(key, ...args){
     const v = ADMIN_UTIL_TEXT[key];
@@ -3773,29 +3757,6 @@
     opening: "public/audio/opening_bgm.mp3",
   };
 
-  // 管理者ユーティリティ「🎵 BGMを楽しむ」用(2026-08-24追加): ゲーム中で使われている
-  // 全BGMファイルの一覧。上のbgmPathForMap()/SPECIAL_BGMと同じファイルパスを、
-  // 管理者向けの分かりやすいラベル付きでまとめたもの(マップ名は各言語のsubtitleMapNキーと
-  // 対応する日本語名)。
-  const BGM_LIBRARY = [
-    { label:"オープニング", file: SPECIAL_BGM.opening },
-    { label:"マップ1：王城の城下町", file: bgmPathForMap(1) },
-    { label:"マップ2：草原", file: bgmPathForMap(2) },
-    { label:"マップ3：洞窟", file: bgmPathForMap(3) },
-    { label:"マップ4：水のエリア", file: bgmPathForMap(4) },
-    { label:"マップ5：炎のエリア", file: bgmPathForMap(5) },
-    { label:"マップ6：雪山", file: bgmPathForMap(6) },
-    { label:"マップ7：天上界", file: bgmPathForMap(7) },
-    { label:"マップ8：密林", file: bgmPathForMap(8) },
-    { label:"マップ9：砂漠", file: bgmPathForMap(9) },
-    { label:"マップ10：魔王城", file: bgmPathForMap(10) },
-    { label:"幹部(中ボス)戦", file: SPECIAL_BGM.officerBattle },
-    { label:"ドラゴン(ラスボス)戦", file: SPECIAL_BGM.dragonBattle },
-    { label:"ゴールファンファーレ", file: SPECIAL_BGM.goal },
-    { label:"エンディング(姫の救出)", file: SPECIAL_BGM.ending },
-    { label:"結婚エンディング", file: SPECIAL_BGM.wedding },
-  ];
-
   function switchBgmTrack(path){
     if(bgmSourceEl.getAttribute("src") === path) return;
     // 「切り替え直前に本当に再生中だったか」だけで判定すると、load()直後の一瞬paused状態に
@@ -3973,13 +3934,11 @@
         <div class="badge">🛠️ ${at("adminUtilityTitle")}</div>
         <button class="primary" id="utilUserDbBtn">${at("adminUtilityUserDbBtn")}</button>
         <br><button class="primary" id="utilQuestionBtn" style="margin-top:10px;">${at("adminUtilityQuestionBtn")}</button>
-        <br><button class="primary" id="utilBgmBtn" style="margin-top:10px;">${at("adminBgmBtn")}</button>
         <br><button class="secondary" id="utilBackBtn" style="margin-top:10px;">${t("devClose")}</button>
       </div>
     `);
     document.getElementById("utilUserDbBtn").onclick = ()=>{ openAdminUserDatabase(returnTo); };
     document.getElementById("utilQuestionBtn").onclick = ()=>{ openAdminQuestionBrowser(returnTo); };
-    document.getElementById("utilBgmBtn").onclick = ()=>{ openAdminBgmPlayer(returnTo); };
     document.getElementById("utilBackBtn").onclick = ()=>{ if(returnTo){ returnTo(); } else { closeModal(); } };
   }
 
@@ -3998,7 +3957,7 @@
         <div class="card admin-wide-card">
           <div class="badge">👥 ${at("adminUserDbTitle")}</div>
           <p class="scramble-hint">${at("adminUserDbLoading")}</p>
-          <button class="secondary" id="utilDbBackBtn">${t("devClose")}</button>
+          <br><button class="secondary" id="utilDbBackBtn">${t("devClose")}</button>
         </div>
       `);
       document.getElementById("utilDbBackBtn").onclick = ()=>{ openAdminUtilityMenu(returnTo); };
@@ -4053,7 +4012,7 @@
         <div class="card admin-wide-card">
           <div class="badge">👥 ${at("adminUserDbTitle")}</div>
           ${html}
-          <button class="secondary" id="utilDbBackBtn2">${t("devClose")}</button>
+          <br><button class="secondary" id="utilDbBackBtn2" style="margin-top:10px;">${t("devClose")}</button>
         </div>
       `);
       document.getElementById("utilDbBackBtn2").onclick = ()=>{ openAdminUtilityMenu(returnTo); };
@@ -4086,7 +4045,7 @@
           <p class="scramble-hint">${at("adminQuestionHint")}</p>
           <div class="feedback ok" id="utilQMsg">${msg||""}</div>
           <div class="admin-lv-list">${listHtml}</div>
-          <button class="secondary" id="utilQBackBtn">${t("devClose")}</button>
+          <br><button class="secondary" id="utilQBackBtn" style="margin-top:10px;">${t("devClose")}</button>
         </div>
       `);
       document.querySelectorAll(".admin-lv-toggle").forEach(btn=>{
@@ -4144,61 +4103,6 @@
           render(at("adminQuestionReset"));
         };
       });
-    }
-    render();
-  }
-
-  /* ---- 管理者ユーティリティ「🎵 BGMを楽しむ」(2026-08-24新規実装) ----
-     ユーザー指定: 「管理画面にボタンを１つ追加して、「BGMを楽しむ」というボタンを作り、それを
-     押すと、BGMのファイルの一覧が表示されファイル名の隣の再生ボタンを押すとそれぞれのBGMが
-     再生される仕様にしてください」
-     実際のゲーム進行中に使う<audio id="bgm">要素とは別に、試聴専用のnew Audio()を都度生成する。
-     こうすることで、試聴中でも裏で進んでいるゲーム本体のBGM状態(現在のマップ・ループ設定等)を
-     一切壊さずに済む。同時に鳴らせるのは1曲のみとし、別の曲の再生ボタンを押すか、この画面を
-     閉じると、それまでの試聴は自動的に停止する。 */
-  function openAdminBgmPlayer(returnTo){
-    let previewAudio = null;
-    let previewFile = null;
-    activeModalRenderer = ()=> openAdminBgmPlayer(returnTo);
-    function stopPreview(){
-      if(previewAudio){ previewAudio.pause(); previewAudio.currentTime = 0; }
-      previewAudio = null; previewFile = null;
-    }
-    function render(){
-      const rows = BGM_LIBRARY.map(item=>{
-        const playing = previewFile===item.file;
-        const fileName = item.file.replace("public/audio/","");
-        return `<div class="admin-bgm-row">
-          <span class="admin-bgm-name">${item.label}<br><span class="admin-bgm-file">${fileName}</span></span>
-          <button type="button" class="admin-bgm-play" data-file="${escapeAttr(item.file)}" aria-label="${playing?"pause":"play"}">${playing?"⏸️":"▶️"}</button>
-        </div>`;
-      }).join("");
-      openModal(`
-        <div class="card admin-wide-card">
-          <div class="badge">🎵 ${at("adminBgmTitle")}</div>
-          <p class="scramble-hint">${at("adminBgmHint")}</p>
-          <div class="admin-bgm-list">${rows}</div>
-          <button class="secondary" id="adminBgmBackBtn">${t("devClose")}</button>
-        </div>
-      `);
-      document.querySelectorAll(".admin-bgm-play").forEach(btn=>{
-        btn.onclick = ()=>{
-          const file = btn.dataset.file;
-          if(previewFile===file){ stopPreview(); render(); return; }
-          stopPreview();
-          previewAudio = new Audio(file);
-          previewFile = file;
-          previewAudio.play().catch(()=>{});
-          previewAudio.addEventListener("ended", ()=>{
-            if(previewFile===file){ stopPreview(); render(); }
-          });
-          render();
-        };
-      });
-      document.getElementById("adminBgmBackBtn").onclick = ()=>{
-        stopPreview();
-        openAdminUtilityMenu(returnTo);
-      };
     }
     render();
   }
@@ -4321,11 +4225,6 @@
   diceEl.addEventListener("keydown", (e)=>{
     if(e.key==="Enter" || e.key===" "){ e.preventDefault(); rollDice(); }
   });
-  // ユーザー指定(2026-08-24): サイコロの絵だけでなく、マップ(盤面)のどこをクリックしても
-  // サイコロを振れるようにする。盤面のマスには元々クリックハンドラが付いていないため、
-  // 単純にboard要素全体にクリックリスナーを追加するだけで安全に実現できる(rollDice()自体が
-  // state.busy中は何もしないガードを持っているため、演出中の連打・誤操作でも問題ない)。
-  boardEl.addEventListener("click", rollDice);
 
   function showContinuePrompt(savedState){
     function render(){
