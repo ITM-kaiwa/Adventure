@@ -3752,6 +3752,10 @@
   const bgmSourceEl = document.getElementById("bgmSource");
   const bgmBtn = document.getElementById("bgmBtn");
   let bgmStarted = false;
+  // 管理者ユーティリティ「🎵 BGMを楽しむ」画面を開いている間だけtrueにするフラグ(2026-08-24追加)。
+  // このフラグが立っている間は、ページ上の任意のクリック等で発火するstartBgmOnce()による
+  // ゲーム本編BGMの再開を止める(試聴中に不意にゲーム本編のBGMが鳴りだしてしまうのを防ぐ)。
+  let suppressGameBgmForPreview = false;
   bgmEl.volume = 0.35;
 
   // 画面(オープニング/マップ)に応じてBGMの曲を切り替える。
@@ -3812,7 +3816,7 @@
   function startBgmOnce(){
     if(bgmStarted) return;
     bgmStarted = true;
-    if(!bgmEl.muted){
+    if(!bgmEl.muted && !suppressGameBgmForPreview){
       bgmEl.play().catch(()=>{ /* 自動再生がブロックされた場合は次の操作まで待つ */ bgmStarted = false; });
     }
   }
@@ -4156,9 +4160,26 @@
      こうすることで、試聴中でも裏で進んでいるゲーム本体のBGM状態(現在のマップ・ループ設定等)を
      一切壊さずに済む。同時に鳴らせるのは1曲のみとし、別の曲の再生ボタンを押すか、この画面を
      閉じると、それまでの試聴は自動的に停止する。 */
+  // ゲーム本編のBGM(<audio id="bgm">)を、現在のマップの曲で再度鳴らす。
+  // switchBgmTrack()はsrcが変化しない場合は何もしない(=一時停止したままになる)ため、
+  // 「試聴のために一時停止しただけでsrc自体は変わっていない」ケースも正しく再開できるよう、
+  // src据え置きの場合は明示的にbgmEl.play()を呼ぶ。
+  function resumeGameBgmForCurrentMap(){
+    const path = bgmPathForMap(state.currentMap);
+    if(bgmSourceEl.getAttribute("src") !== path){
+      switchBgmTrack(path);
+    } else if(bgmStarted && !bgmEl.muted && bgmEl.paused){
+      bgmEl.play().catch(()=>{});
+    }
+  }
   function openAdminBgmPlayer(returnTo){
     let previewAudio = null;
     let previewFile = null;
+    // この画面を開いている間は、ページ上の何気ないクリックでゲーム本編のBGMが
+    // 不意に再開しないようにする(詳しくはsuppressGameBgmForPreviewの定義コメント参照)。
+    // ゲーム本編のBGM自体はすでに一時停止済み、または後続のbgmEl.pause()で止める。
+    suppressGameBgmForPreview = true;
+    bgmEl.pause();
     activeModalRenderer = ()=> openAdminBgmPlayer(returnTo);
     function stopPreview(){
       if(previewAudio){ previewAudio.pause(); previewAudio.currentTime = 0; }
@@ -4186,6 +4207,11 @@
           const file = btn.dataset.file;
           if(previewFile===file){ stopPreview(); render(); return; }
           stopPreview();
+          // ユーザー指定(2026-08-24): 試聴を始めるときは、既に流れているゲーム本編のBGMを止めてから
+          // 指定の曲を鳴らす(二重に音が重ならないようにする)。試聴が最後まで再生し終わっても
+          // ループはせず、そのまま無音のままでよい(new Audio()はデフォルトでループしないため
+          // 追加の対応は不要)。ゲーム本編のBGMの再開は、この画面を抜けるときにのみ行う。
+          bgmEl.pause();
           previewAudio = new Audio(file);
           previewFile = file;
           previewAudio.play().catch(()=>{});
@@ -4197,6 +4223,8 @@
       });
       document.getElementById("adminBgmBackBtn").onclick = ()=>{
         stopPreview();
+        suppressGameBgmForPreview = false;
+        resumeGameBgmForCurrentMap();
         openAdminUtilityMenu(returnTo);
       };
     }
