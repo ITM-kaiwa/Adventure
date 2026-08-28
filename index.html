@@ -253,6 +253,8 @@
   .tile.blank{ background:#33405c; color:#c9d3ea; }
   .tile.amulet{ background:#2a5a7a; color:#eaf6ff; }
   .tile.climbBoots{ background:#5a4530; color:#fff0d9; }
+  .tile.lamp{ background:#8a5a1e; color:#fff3d6; }
+  .tile.swimRing{ background:#1e6a8a; color:#eaf9ff; }
 
   .token{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -358,6 +360,7 @@
     display:flex; align-items:center; justify-content:center;
     padding:18px; z-index:50;
   }
+  @keyframes popIn{ from{ opacity:0; transform:scale(.96); } to{ opacity:1; transform:scale(1); } }
   .card{
     background:var(--parchment);
     color:var(--ink);
@@ -368,6 +371,7 @@
     border:3px solid var(--gold);
     text-align:center;
     max-height:88vh; overflow-y:auto;
+    animation:popIn .15s ease-out;
   }
   .card h2{ font-size:1.2rem; margin:0 0 10px; }
   .card p{ font-size:.92rem; line-height:1.7; margin:0 0 12px; }
@@ -428,6 +432,7 @@
     width:100%; max-height:34vh; object-fit:contain;
     border-radius:12px; margin-bottom:12px;
     background:#000; box-shadow:0 10px 28px rgba(0,0,0,.6);
+    transition:transform .2s ease, filter .2s ease;
   }
   .dragon-life-wrap{ margin-bottom:12px; }
   .dragon-life-label{ font-size:.78rem; font-weight:700; margin-bottom:4px; opacity:.85; }
@@ -437,6 +442,19 @@
   .dragon-battle-card .choice-btn{ background:#22262c; color:#f0eee8; border-color:#5a616b; }
   .dragon-battle-card .choice-btn.correct{ background:#3f6644; border-color:#3f6644; }
   .dragon-battle-card .choice-btn.wrong{ background:#8b2635; border-color:#8b2635; }
+
+  /* 番人・幹部戦のドラクエ風バトル画面(2026-08-28追加)。
+     ドラゴン戦(.dragon-battle-card)と同じ暗い戦闘ステージ・体力バーを流用し、
+     絵がない敵は代わりに絵文字を大きく表示する(.battle-sprite)。
+     正解した瞬間に敵の絵がひるむ演出として.hitクラスを一時的に付与する。 */
+  .battle-sprite{
+    width:100%; height:34vh; max-height:200px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:5rem; line-height:1; border-radius:12px; margin-bottom:12px;
+    background:#000; box-shadow:0 10px 28px rgba(0,0,0,.6);
+    transition:transform .2s ease, filter .2s ease;
+  }
+  #battleSprite.hit{ transform:scale(1.15); filter:drop-shadow(0 0 18px rgba(255,80,80,.85)); }
   .shop-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:8px 10px; margin-bottom:8px; border:2px solid #4a2f18; border-radius:8px; text-align:left; }
   .shop-row:last-child{ margin-bottom:0; }
   .shop-row .name{ font-size:.9rem; font-weight:700; }
@@ -686,6 +704,15 @@
       climbBootsText:"Bạn nhận được Ủng Leo Núi. Với đôi ủng này, bạn sẽ không còn trượt chân trên núi tuyết nữa!",
       climbBootsTextLocked:"Bạn nhặt được Ủng Leo Núi, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
       itemClimbBoots:"🥾 Ủng Leo Núi",
+      lampTitle:"Nhặt được Đèn Lồng!",
+      lampText:"Bạn nhận được Đèn Lồng. Từ giờ, trong những nơi tối tăm bạn sẽ nhìn xa hơn bình thường!",
+      lampTextLocked:"Bạn nhặt được Đèn Lồng, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      itemLamp:"🪔 Đèn Lồng",
+      swimRingTitle:"Nhặt được Phao Bơi!",
+      swimRingText:"Bạn nhận được Phao Bơi. Từ giờ, bạn sẽ không bị đuối nước ở Vùng Nước nữa!",
+      swimRingTextLocked:"Bạn nhặt được Phao Bơi, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      itemSwimRing:"🛟 Phao Bơi",
+      drownTextBlocked:"Dòng nước bất ngờ cuốn bạn xuống, nhưng nhờ có Phao Bơi nên bạn không hề hấn gì!",
       shopTitle:"Cửa hàng lưu động",
       shopIntro:"Một thương nhân đang bán các vật phẩm quý hiếm:",
       shopBuy:"Mua",
@@ -699,6 +726,8 @@
       itemHerbDesc:"Nhấn vào đây để dùng 1 thảo dược, hồi phục 1 sinh lực.",
       itemAmuletDesc:"Khi mang theo, các ô lửa ở Vùng Lửa sẽ không làm bạn mất sinh lực nữa.",
       itemClimbBootsDesc:"Khi mang theo, các ô lạc đường ở vùng núi tuyết sẽ không đẩy bạn lùi lại nữa.",
+      itemLampDesc:"Khi mang theo, tầm nhìn ở những khu vực tối tăm sẽ mở rộng hơn bình thường.",
+      itemSwimRingDesc:"Khi mang theo, bạn sẽ không bị mất sinh lực khi đuối nước ở Vùng Nước nữa.",
       inventoryLabel:"🎒 Vật phẩm:",
       saveToastSuccess:"💾 Đã lưu!",
       saveToastError:"⚠️ Lưu thất bại, vui lòng thử lại.",
@@ -769,6 +798,7 @@
       subtitleMap10:"Bản đồ 10: Lâu đài Ma Vương (LV34〜LV35)",
       dragonTitle:"Rồng - Trùm cuối cùng",
       dragonLifeLabel:"Sinh lực của Rồng",
+      battleHpLabel:"Sinh lực",
       dragonDefeatedTitle:"Đã đánh bại Rồng!",
       dragonDefeatedText:"Con rồng gầm lên đau đớn rồi gục ngã bất động. Trận chiến cuối cùng đã kết thúc!",
       princessRescueTitle:"Giải cứu công chúa!",
@@ -919,6 +949,15 @@
       climbBootsText:"登山靴を手に入れた。これを履いていれば、雪山で足を滑らせなくなる！",
       climbBootsTextLocked:"登山靴を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
       itemClimbBoots:"🥾 登山靴",
+      lampTitle:"ランプを見つけた！",
+      lampText:"ランプを手に入れた。これがあれば、暗い場所でもいつもより遠くまで見えるようになる！",
+      lampTextLocked:"ランプを手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      itemLamp:"🪔 ランプ",
+      swimRingTitle:"浮き輪を見つけた！",
+      swimRingText:"浮き輪を手に入れた。これがあれば、水のエリアで溺れなくなる！",
+      swimRingTextLocked:"浮き輪を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      itemSwimRing:"🛟 浮き輪",
+      drownTextBlocked:"急な水の流れに引き込まれそうになったが、浮き輪のおかげで無事だった！",
       shopTitle:"移動商人のお店",
       shopIntro:"商人が珍しいアイテムを売っている:",
       shopBuy:"購入",
@@ -932,6 +971,8 @@
       itemHerbDesc:"クリックすると薬草を1個使い、ライフが1回復する。",
       itemAmuletDesc:"持っていると、炎のエリアの炎マスに触れてもライフが減らなくなる。",
       itemClimbBootsDesc:"持っていると、高山エリアの迷い道マスを踏んでも戻されなくなる。",
+      itemLampDesc:"持っていると、暗いエリアでの視界がいつもより広がる。",
+      itemSwimRingDesc:"持っていると、水のエリアで溺れてもライフが減らなくなる。",
       inventoryLabel:"🎒 持ち物:",
       saveToastSuccess:"💾 保存しました！",
       saveToastError:"⚠️ 保存に失敗しました。もう一度お試しください。",
@@ -1002,6 +1043,7 @@
       subtitleMap10:"マップ10：魔王城 (LV34〜LV35)",
       dragonTitle:"ドラゴン(ラスボス)",
       dragonLifeLabel:"ドラゴンの体力",
+      battleHpLabel:"体力",
       dragonDefeatedTitle:"ドラゴンを倒した！",
       dragonDefeatedText:"ドラゴンは苦しげな咆哮をあげ、地に崩れ落ちた。ついに最後の戦いが終わった！",
       princessRescueTitle:"姫の救出！",
@@ -1126,8 +1168,7 @@
         {q:"Cách đọc của 「あ」 là gì?", c:["a","i","u","e"], a:0},
         {q:"Cách đọc của 「か」 là gì?", c:["ka","sa","ta","na"], a:0},
         {q:"Cách đọc của 「ん」 là gì?", c:["n","r","w","m"], a:0},
-        {q:"Chữ hiragana tương ứng với katakana 「ア」 là chữ nào?", c:["あ","い","う","え"], a:0},
-        {q:"「さくら」 nếu viết toàn bộ bằng hiragana thì viết như thế nào?", c:["さくら","サクラ","さクら","サくら"], a:0}],
+        {q:"Chữ hiragana tương ứng với katakana 「ア」 là chữ nào?", c:["あ","い","う","え"], a:0}],
       hard:[
         {q:"Trong từ katakana 「コーヒー」, vai trò của dấu 「ー」 là gì?", c:["Kéo dài nguyên âm phía trước","Thay đổi phụ âm","Có thể bỏ qua, không cần để ý","Giống với 「っ」 nhỏ"], a:0},
         {q:"Cách phân biệt sử dụng chính giữa 「ひらがな」 và 「カタカナ」 là gì?", c:["Hiragana dùng cho từ thuần Nhật, katakana dùng cho từ ngoại lai v.v.","Hiragana chỉ dùng để ghi cách đọc (furigana) của chữ Hán","Katakana chỉ dùng trong văn bản hành chính","Không có sự phân biệt nào"], a:0}]},
@@ -1140,8 +1181,7 @@
         {q:"「わたしは IMCの ミラーです。」 Trong câu này, 「の」 nằm giữa 2 danh từ có vai trò gì?", c:["Sở hữu đồ vật","Thể hiện nơi thuộc về (công ty/tổ chức)","Chỉ địa điểm","Chỉ thời gian"], a:1}]},
     2:{ title:"これ／それ／あれ・所有(の)", normal:[
         {q:"Trong câu 「これは わたしの かさです。」, 「これ」 chỉ vật ở vị trí nào so với người nói?", c:["Gần người nói","Gần người nghe","Xa cả hai người","Không xác định"], a:0},
-        {q:"Trong câu 「それは にほんごの ほんです。」, cụm 「にほんごの ほん」 nghĩa là gì?", c:["Sách tiếng Nhật","Sách của người Nhật","Sách viết ở Nhật Bản","Sách dành cho người dạy tiếng Nhật"], a:0},
-        {q:"Trong câu 「この かさは たなかさんのです。」, 「たなかさんの」 đang lược bỏ danh từ nào phía sau?", c:["ひと","かさ","くに","なまえ"], a:1}],
+        {q:"Trong câu 「それは にほんごの ほんです。」, cụm 「にほんごの ほん」 nghĩa là gì?", c:["Sách tiếng Nhật","Sách của người Nhật","Sách viết ở Nhật Bản","Sách dành cho người dạy tiếng Nhật"], a:0}],
       hard:[
         {q:"Sự khác nhau giữa 「これ」 và 「この＋名詞」 là gì?", c:["「これ」đứng một mình thay cho danh từ, còn 「この＋名詞」 phải đi kèm danh từ theo sau","Không có sự khác nhau","「これ」 chỉ dùng cho người, 「この」 chỉ dùng cho vật","「この」 lịch sự hơn 「これ」"], a:0},
         {q:"「あれは だれの かばんですか。」 Từ để hỏi 「だれ」 trong câu này dùng để hỏi về điều gì?", c:["Địa điểm","Người sở hữu","Giá tiền","Thời gian"], a:1}]},
@@ -1188,7 +1228,6 @@
         {q:"「元気な 子供」 và 「元気です」, cách chia của 「元気」 khác nhau như thế nào khi đứng trước danh từ?", c:["Thêm な khi đứng trước danh từ","Không đổi gì cả","Thêm い","Bỏ hẳn từ đó"], a:0},
         {q:"Tính từ đuôi い nào KHÔNG theo quy tắc chia phủ định thông thường (gợi ý: いい)?", c:["いい (phủ định là よくない chứ không phải いくない)","たかい","やすい","おおきい"], a:0}]},
     9:{ title:"好き・上手・わかります・から(理由)", normal:[
-        {q:"Trong câu 「わたしは すしが 好きです。」, trợ từ đứng trước 「好きです」 là gì?", c:["が","を","に","で"], a:0},
         {q:"Trong câu 「わたしは 日本語が わかります。」, động từ 「わかります」 nghĩa là gì?", c:["Hiểu (được)","Thích","Có (tồn tại)","Giỏi"], a:0},
         {q:"Trong câu 「時間が ありませんから、急ぎます。」, mẫu 「～から」 dùng để diễn tả điều gì?", c:["Lý do/nguyên nhân","Thời gian bắt đầu","Địa điểm xuất phát","Mục đích"], a:0}],
       hard:[
@@ -1280,7 +1319,6 @@
         {q:"「A: すずしいですね。 B: ええ、わたしも そう思います。」 「そう思います」 khác với 「そうです」 ở điểm nào?", c:["「そう思います」thể hiện đó là ý kiến/suy nghĩ cá nhân của người nói, còn 「そうです」chỉ đơn thuần xác nhận sự việc","Không có khác biệt gì","「そう思います」chỉ dùng cho quá khứ","「そうです」chỉ dùng khi phủ định"], a:0}]},
     22:{ title:"名詞修飾(N[人・物・場所]は/を/が～)・用事/約束があります", normal:[
         {q:"「きのう 会った 人は 山田さんです。」 Cụm 「きのう 会った」 đứng trước danh từ 「人」 để làm gì?", c:["Bổ nghĩa/mô tả rõ hơn cho danh từ đứng sau (danh từ đó là ai/cái gì)","Là một câu hoàn chỉnh độc lập","Phủ định danh từ đứng sau","Đặt câu hỏi về danh từ đó"], a:0},
-        {q:"「これは わたしが 撮った 写真です。」 Trong mệnh đề bổ nghĩa 「わたしが 撮った」, chủ ngữ 「わたし」 dùng trợ từ nào?", c:["が","は","を","に"], a:0},
         {q:"「あした 大事な 約束が あります。」 câu này diễn tả điều gì?", c:["Có một cuộc hẹn/lịch trình quan trọng vào ngày mai","Không có việc gì phải làm","Một lời mời","Một câu hỏi về thời gian"], a:0}],
       hard:[
         {q:"So sánh 「わたしは 写真を 撮りました。」 và 「これは わたしが 撮った 写真です。」, vì sao mệnh đề bổ nghĩa danh từ lại dùng 「が」 thay vì 「は」 cho chủ ngữ 「わたし」?", c:["Trong mệnh đề bổ nghĩa danh từ(修飾節), chủ ngữ luôn dùng 「が」, không dùng 「は」","Cả hai đều dùng như nhau, không có quy tắc","「は」chỉ dùng cho câu hỏi","「が」chỉ dùng khi phủ định"], a:0},
@@ -1524,6 +1562,8 @@
     herbCount:0,
     hasAmulet:false,
     hasClimbingBoots:false,
+    hasLamp:false,
+    hasSwimRing:false,
     busy:false,
     cellMap:{},
     lastDiceRoll:null,
@@ -1608,6 +1648,141 @@
   function randomScrambleSentence(){
     if(scrambleSentenceBag.length===0){ scrambleSentenceBag = shuffle(SCRAMBLE_SENTENCES.slice()); }
     return scrambleSentenceBag.shift();
+  }
+
+  // ユーザー指定(2026-08-28): 幹部戦・ドラゴン戦では、通常の出題に加えて25%の確率で
+  // 「そのLV(課)」の並び替え問題も出題する。文は姉妹プロジェクト(github.com/ITM-kaiwa/
+  // Composition、みんなのにほんごの文型・例文をkuromojiで単語単位に分割したデータ)から
+  // 引用したもので、新規の日本語文は作成していない(課ごとの実在の教科書文をそのまま使用)。
+  const LV_SCRAMBLE_CHANCE = 0.25;
+  const LV_SCRAMBLE_SENTENCES = {
+    6: [
+      { words:["わたし","は","本","を","読み","ます。"] },
+      { words:["ちょっと","休み","ましょう。"] },
+    ],
+    7: [
+      { words:["いいえ、","英語","で","書き","ます。"] },
+      { words:["先生","と","友達","に","書き","ます。"] },
+    ],
+    8: [
+      { words:["桜","は","きれい","です。"] },
+      { words:["富士山","は","高い","です。"] },
+    ],
+    9: [
+      { words:["お","酒","が","好き","です","か。"] },
+      { words:["いいえ、","好き","じゃ","あり","ませ","ん。"] },
+    ],
+    10: [
+      { words:["あそこ","に","コンビニ","が","あり","ます。"] },
+      { words:["家族","は","ニューヨーク","に","い","ます。"] },
+    ],
+    11: [
+      { words:["兄弟","は","何","人","です","か。"] },
+      { words:["りんご","を","いくつ","買い","まし","た","か。"] },
+    ],
+    12: [
+      { words:["きのう","は","雨","でし","た。"] },
+      { words:["きのう","は","寒かっ","た","です。"] },
+    ],
+    13: [
+      { words:["わたし","は","車","が","欲しい","です。"] },
+      { words:["新しい","ケータイ","が","欲しい","です。"] },
+    ],
+    14: [
+      { words:["ちょっと","待っ","て","ください。"] },
+      { words:["荷物","を","持ち","ましょう","か。"] },
+    ],
+    15: [
+      { words:["ええ、","いい","です","よ。","どうぞ。"] },
+      { words:["いいえ、","知り","ませ","ん。"] },
+    ],
+    16: [
+      { words:["大阪","は","食べ物","が","おいしい","です。"] },
+      { words:["マリア","さん","は","どの人","です","か。"] },
+    ],
+    17: [
+      { words:["写真","を","撮ら","ない","で","ください。"] },
+      { words:["金曜日","まで","に","出し","て","ください。"] },
+    ],
+    18: [
+      { words:["はい、","でき","ます。"] },
+      { words:["いいえ、","でき","ませ","ん。"] },
+    ],
+    19: [
+      { words:["これから","だんだん","暑く","なり","ます。"] },
+      { words:["ありがとう","ござい","ます。","でも、","まだまだ","です。"] },
+    ],
+    20: [
+      { words:["東京","は","人","が","多い。"] },
+      { words:["アイスクリーム","を","食べる？"] },
+    ],
+    21: [
+      { words:["疲れ","た","でしょう","?"] },
+      { words:["ミラー","さん","は","どこ","です","か。"] },
+    ],
+    22: [
+      { words:["そう","です","か。","すごい","です","ね。"] },
+      { words:["木村","さん","です。"] },
+    ],
+    23: [
+      { words:["よく","テレビ","を","見","ます","か。"] },
+      { words:["はい、","消し","まし","た。"] },
+    ],
+    24: [
+      { words:["おいしい","ワイン","です","ね。"] },
+      { words:["電車","で","行き","まし","た","か。"] },
+    ],
+    25: [
+      { words:["学校","を","作り","たい","です。"] },
+      { words:["歩い","て","帰り","ます。"] },
+    ],
+    26: [
+      { words:["あした","から","旅行","な","ん","です。"] },
+      { words:["おもしろい","デザイン","の","靴","です","ね。"] },
+    ],
+    27: [
+      { words:["山","が","はっきり","見え","ます。"] },
+      { words:["いいえ、","読め","ませ","ん。"] },
+    ],
+    28: [
+      { words:["そう","です","か。","偉い","です","ね。"] },
+      { words:["いい","先生","です","ね。"] },
+    ],
+    29: [
+      { words:["窓","が","閉まっ","て","い","ます。"] },
+      { words:["いっしょ","に","帰り","ませ","ん","か。"] },
+    ],
+    30: [
+      { words:["え？","そう","です","か。"] },
+      { words:["セロテープ","は","どこ","です","か。"] },
+    ],
+    31: [
+      { words:["いっしょ","に","行こ","う。"] },
+      { words:["来月","車","を","買う","つもり","です。"] },
+    ],
+    32: [
+      { words:["あした","は","雪","が","降る","でしょう。"] },
+      { words:["いい","と","思い","ます","よ。"] },
+    ],
+    33: [
+      { words:["もう","走れ","ない。"] },
+      { words:["もう","時間","が","ない。"] },
+    ],
+    34: [
+      { words:["これ","は","新しい","ロボット","です。"] },
+      { words:["どんな","ロボット","です","か。"] },
+    ],
+    35: [
+      { words:["いいえ、","特に","あり","ません。"] },
+      { words:["とても","便利","です。"] },
+    ],
+  };
+  let lvScrambleBags = {};
+  function randomLvScrambleSentence(lv){
+    const pool = LV_SCRAMBLE_SENTENCES[lv];
+    if(!pool || pool.length===0) return null;
+    if(!lvScrambleBags[lv] || lvScrambleBags[lv].length===0){ lvScrambleBags[lv] = shuffle(pool.slice()); }
+    return lvScrambleBags[lv].shift();
   }
 
   // 番人(guardian)専用: 10%の確率で出題する「単語並べ替え(1文字ずつのバブル)」問題。
@@ -1736,7 +1911,9 @@
     pushN("lost",2);
     pushN("tailwind",2);
     pushN("step",2);
-    pushN("blank",4); // 合計28
+    pushN("swimRing",2); // 新規アイテム「浮き輪」(2026-08-28追加): 水のエリアで溺れなくなる。blankを4→2に減らして調整
+    pushN("blank",2);
+    // 合計 10+2+2+2+2+2+2+2+2+2=28
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -1803,11 +1980,12 @@
     pushN("fire",5);
     pushN("herb",4);
     pushN("shop",2);
-    pushN("shortcut",2);
-    pushN("lost",2);
-    pushN("tailwind",2);
+    pushN("shortcut",1); // ランプ追加分の調整(標準2→1)
+    pushN("lost",1); // ランプ追加分の調整(標準2→1)
+    pushN("tailwind",1); // ランプ追加分の調整(標準2→1)
     pushN("step",2);
     pushN("climbBoots",1); // 新規アイテム「登山靴」(2026-08-28追加): 高山エリアで足を滑らせなくなる。enemyを7→6に1減らして調整
+    pushN("lamp",3); // 新規アイテム「ランプ」(2026-08-28追加): 暗いマップでの視界が広がる。shortcut/lost/tailwindを1つずつ減らして調整
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -2019,7 +2197,7 @@
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
     drown:"🌊", fire:"🔥", officer:"👺", cactus:"🌵", dragon:"🐉",
-    amulet:"🧿", climbBoots:"🥾",
+    amulet:"🧿", climbBoots:"🥾", lamp:"🪔", swimRing:"🛟",
   };
 
   function tileVisual(cellNum){
@@ -2081,12 +2259,17 @@
   }
 
   // マップ3「洞窟」・マップ10「魔王城」専用: 現在地から一定マス先までしか見えない「霧」の演出。
-  // マップごとに見える範囲(半径)が異なる(マップ3=3マス、マップ10=5マス、ユーザー指定)。
+  // マップごとに見える範囲(半径)が異なる(マップ3・マップ10とも標準3マス、ユーザー指定)。
   // state.cellMapの中身自体は変更せず(ゲームロジックはそのまま参照可能)、
   // DOM上の見た目(アイコン・ラベル・背景色)だけを一時的に隠す。
-  const FOG_RADIUS = { 3:3, 10:5 };
+  // (2026-08-28: 新規アイテム「ランプ」導入に伴い、マップ10の標準視界を5→3に変更。
+  //  ランプを持っていれば5マス先まで見えるようになる、という仕様に統一するため)
+  const FOG_RADIUS = { 3:3, 10:3 };
+  // 新規アイテム「ランプ」(2026-08-28追加): 持っていると、暗いマップでの視界がこの半径まで広がる。
+  const LAMP_FOG_RADIUS = 5;
   function applyFogOfWar(curNum){
-    const radius = FOG_RADIUS[state.currentMap];
+    const baseRadius = FOG_RADIUS[state.currentMap];
+    const radius = baseRadius && state.hasLamp ? Math.max(baseRadius, LAMP_FOG_RADIUS) : baseRadius;
     if(!radius){
       // 霧のかかるマップ以外では霧を一切かけない(念のため既存の霧表示を解除)
       document.querySelectorAll(".tile.fog").forEach(el=>{
@@ -2120,13 +2303,16 @@
   /* 所持アイテム(インベントリ)一覧(2026-08-22・16回目追加)。
      ゲーム内で「持ち続けて、特定の条件が来たら発動する」アイテムとして管理されているのは
      王の命令書(hasOrderScroll)・エリクサー(hasElixir)・お守り(hasAmulet)・
-     登山靴(hasClimbingBoots)の4つ(2026-08-28: お守り・登山靴を追加)。
+     登山靴(hasClimbingBoots)・ランプ(hasLamp)・浮き輪(hasSwimRing)の6つ
+     (2026-08-28: お守り・登山靴・ランプ・浮き輪を追加)。
      (薬草の即時回復・ブーツ等は入手した瞬間に効果が発動する即時消費型のため対象外)。 */
   const INVENTORY_ITEMS = [
     { icon:"📜", has:()=>state.hasOrderScroll, nameKey:"itemOrderScroll", descKey:"itemOrderScrollDesc" },
     { icon:"🧪", has:()=>state.hasElixir, nameKey:"itemElixir", descKey:"itemElixirDesc" },
     { icon:"🧿", has:()=>state.hasAmulet, nameKey:"itemAmulet", descKey:"itemAmuletDesc" },
     { icon:"🥾", has:()=>state.hasClimbingBoots, nameKey:"itemClimbBoots", descKey:"itemClimbBootsDesc" },
+    { icon:"🪔", has:()=>state.hasLamp, nameKey:"itemLamp", descKey:"itemLampDesc" },
+    { icon:"🛟", has:()=>state.hasSwimRing, nameKey:"itemSwimRing", descKey:"itemSwimRingDesc" },
   ];
 
   // 薬草をインベントリーから使う(2026-08-28追加): ライフが満タンの時に拾った薬草だけ
@@ -2308,7 +2494,29 @@
     });
   }
 
-  function showQuiz(question, badgeText, onDone){
+  // battleInfo({icon, life, maxLife})を渡すと、番人・幹部戦用のドラクエ風バトル画面
+  // (絵文字の大きな敵アイコン+体力バー、ドラゴン戦と同じ.dragon-battle-card流用)で表示する。
+  // 省略時(通常の敵)は従来通りの小さいカードのまま。
+  function battleHeaderHtml(battleInfo){
+    if(!battleInfo) return "";
+    const pct = Math.max(0, Math.round((battleInfo.life/battleInfo.maxLife)*100));
+    // battleInfo.imgがあれば(ドラゴン戦の並び替え問題時)絵文字の代わりに画像を表示する。
+    const spriteHtml = battleInfo.img
+      ? `<img class="dragon-img" id="battleSprite" src="${battleInfo.img}" alt="">`
+      : `<div class="battle-sprite" id="battleSprite">${battleInfo.icon}</div>`;
+    return `
+      ${spriteHtml}
+      <div class="dragon-life-wrap">
+        <div class="dragon-life-label">${battleInfo.icon} ${t("battleHpLabel")}: ${Math.max(0,battleInfo.life)}/${battleInfo.maxLife}</div>
+        <div class="dragon-life-bar"><div class="dragon-life-fill" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  }
+  function flashBattleHit(){
+    const sprite = document.getElementById("battleSprite");
+    if(sprite) sprite.classList.add("hit");
+  }
+  function showQuiz(question, badgeText, onDone, battleInfo){
     // 選択肢の表示順を毎回シャッフルする(正解が毎回同じ位置(1番目)に固定されてしまう問題への対応)。
     // question.c/question.a 自体は書き換えず、表示用の並び替え配列(order)だけをこの描画で使う。
     // order[表示位置] = 元の配列(question.c)でのインデックス、という対応表。
@@ -2316,7 +2524,8 @@
     const displayedChoices = order.map(origIdx=>question.c[origIdx]);
     const correctDisplayIdx = order.indexOf(question.a);
     openModal(`
-      <div class="card">
+      <div class="card${battleInfo?" dragon-battle-card":""}">
+        ${battleHeaderHtml(battleInfo)}
         <div class="badge">${badgeText}</div>
         <div class="qtext">${addFurigana(question.q)}</div>
         <div class="choices" id="choicesWrap">
@@ -2336,6 +2545,7 @@
           btn.classList.add("correct");
           fb.textContent = t("correct");
           fb.className = "feedback ok";
+          flashBattleHit();
         } else {
           btn.classList.add("wrong");
           wrap.children[correctDisplayIdx].classList.add("correct");
@@ -2360,12 +2570,13 @@
   function normalizeConjAnswer(s){
     return (s||"").replace(/[\s　]+/g, "").trim();
   }
-  function showConjugateQuiz(item, formType, badgeText, onDone){
+  function showConjugateQuiz(item, formType, badgeText, onDone, battleInfo){
     const promptKey = formType==="teForm" ? "conjugateTeFormPrompt" : "conjugateDictFormPrompt";
     const correctKana = formType==="teForm" ? item.teKana : item.dictKana;
     const correctKanji = formType==="teForm" ? item.te : item.dict;
     openModal(`
-      <div class="card">
+      <div class="card${battleInfo?" dragon-battle-card":""}">
+        ${battleHeaderHtml(battleInfo)}
         <div class="badge">${badgeText}</div>
         <div class="qtext">${t(promptKey, addFurigana(item.masu))}</div>
         <input type="text" id="conjInput" class="name-input" placeholder="${t("conjugateInputPlaceholder")}" autocomplete="off" autocapitalize="off" spellcheck="false">
@@ -2386,6 +2597,7 @@
       if(isCorrect){
         fb.textContent = t("correct");
         fb.className = "feedback ok";
+        flashBattleHit();
       } else {
         fb.textContent = t("wrong")+" "+t("conjugateAnswerRevealLabel")+correctKanji+"（"+correctKana+"）";
         fb.className = "feedback no";
@@ -2396,13 +2608,14 @@
     input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") submit(); });
   }
 
-  function showBubbleQuiz(units, badgeText, hintText, revealSep, onDone){
+  function showBubbleQuiz(units, badgeText, hintText, revealSep, onDone, battleInfo){
     const ids = units.map((_,i)=>i);
     let poolIds = shuffle(ids.slice());
     let answerIds = [];
     let locked = false;
     openModal(`
-      <div class="card">
+      <div class="card${battleInfo?" dragon-battle-card":""}">
+        ${battleHeaderHtml(battleInfo)}
         <div class="badge">${badgeText}</div>
         <p class="scramble-hint">${hintText}</p>
         <div class="bubble-answer" id="bubbleAnswer"></div>
@@ -2444,6 +2657,7 @@
       if(isCorrect){
         fb.textContent = t("correct");
         fb.className = "feedback ok";
+        flashBattleHit();
       } else {
         fb.textContent = t("wrong")+" "+t("scrambleAnswerRevealLabel")+units.join(revealSep);
         fb.className = "feedback no";
@@ -3020,24 +3234,37 @@
         checkDeath(()=>{ setTimeout(ask, 150); });
       }
 
+      // 番人・幹部戦だけ、ドラゴン戦と同じドラクエ風バトル画面(絵文字の敵アイコン+体力バー)で
+      // 出題する(2026-08-28追加)。通常の敵(1発で倒せる雑魚)は従来通りの小さいカードのまま。
+      const battleInfo = (isGuardian || isOfficer) ? {icon, life:remainingLife, maxLife:life} : null;
+
+      // ユーザー指定(2026-08-28): 幹部戦では、通常のteForm/dictForm/4択に代えて25%の確率で
+      // その幹部が象徴するLV(課)の並び替え問題を出題する(通常のscramble指定(LV22)より前に判定する)。
+      if(isOfficer && officerNominalLv && Math.random() < LV_SCRAMBLE_CHANCE){
+        const item = randomLvScrambleSentence(officerNominalLv);
+        if(item){
+          showEvent(()=> showBubbleQuiz(item.words, icon+" "+getTitle(), t("scrambleSentenceHint"), "", handleAnswer, battleInfo));
+          return;
+        }
+      }
       if(specialType==="teForm" || specialType==="dictForm"){
         const item = randomConjugateVerb(specialType);
-        showEvent(()=> showConjugateQuiz(item, specialType, icon+" "+getTitle(), handleAnswer));
+        showEvent(()=> showConjugateQuiz(item, specialType, icon+" "+getTitle(), handleAnswer, battleInfo));
         return;
       }
       if(specialType==="scramble"){
         const item = randomScrambleSentence();
-        showEvent(()=> showBubbleQuiz(item.words, icon+" "+getTitle(), t("scrambleSentenceHint"), "", handleAnswer));
+        showEvent(()=> showBubbleQuiz(item.words, icon+" "+getTitle(), t("scrambleSentenceHint"), "", handleAnswer, battleInfo));
         return;
       }
       // 番人限定: 10%の確率で通常の4択の代わりに単語(1文字ずつ)並べ替え問題を出題する。
       if(isGuardian && Math.random() < WORD_SCRAMBLE_CHANCE){
         const word = randomScrambleWord();
-        showEvent(()=> showBubbleQuiz(word.split(""), icon+" "+getTitle(), t("scrambleWordHint"), "", handleAnswer));
+        showEvent(()=> showBubbleQuiz(word.split(""), icon+" "+getTitle(), t("scrambleWordHint"), "", handleAnswer, battleInfo));
         return;
       }
       const q = (isGuardian || isOfficer) ? randomHardQuestion() : randomQuestion("normal");
-      showEvent(()=> showQuiz(q, icon+" "+getTitle(), handleAnswer));
+      showEvent(()=> showQuiz(q, icon+" "+getTitle(), handleAnswer, battleInfo));
     }
     ask();
   }
@@ -3066,7 +3293,9 @@
     const all = [];
     for(let lv=DRAGON_QUESTION_MIN_LEVEL; lv<=DRAGON_QUESTION_MAX_LEVEL; lv++){
       const bank = getQuestionBank(lv, "hard");
-      if(bank) all.push(...bank);
+      // 各問題にどのLV(課)から出たかを持たせておく(2026-08-28追加)。
+      // 「そのLVの課の並び替え問題」を25%の確率で差し込む際にLVを特定するために使う。
+      if(bank) all.push(...bank.map(q=>({...q, lv})));
     }
     return shuffle(all);
   }
@@ -3085,7 +3314,7 @@
     const lifePct = Math.max(0, Math.round((lifeRemaining/DRAGON_MAX_LIFE)*100));
     openModal(`
       <div class="card dragon-battle-card">
-        <img class="dragon-img" src="public/images/dragon.jpg" alt="dragon">
+        <img class="dragon-img" id="battleSprite" src="public/images/dragon.jpg" alt="dragon">
         <div class="dragon-life-wrap">
           <div class="dragon-life-label">🐉 ${t("dragonLifeLabel")}: ${lifeRemaining}/${DRAGON_MAX_LIFE}</div>
           <div class="dragon-life-bar"><div class="dragon-life-fill" style="width:${lifePct}%"></div></div>
@@ -3109,6 +3338,7 @@
           btn.classList.add("correct");
           fb.textContent = t("correct");
           fb.className = "feedback ok";
+          flashBattleHit();
         } else {
           btn.classList.add("wrong");
           wrap.children[correctDisplayIdx].classList.add("correct");
@@ -3125,8 +3355,7 @@
     dragonQuestionBag = buildDragonQuestionBag();
     let dragonLife = DRAGON_MAX_LIFE;
     function ask(){
-      const q = randomDragonQuestion();
-      showEvent(()=> showDragonQuiz(q, dragonLife, (correct)=>{
+      function handleAnswer(correct){
         if(correct){
           gainExp(1);
           const isCritical = Math.random() < CRITICAL_HIT_CHANCE;
@@ -3155,7 +3384,19 @@
         }
         loseLife(1);
         checkDeath(()=>{ setTimeout(ask, 150); });
-      }));
+      }
+      const q = randomDragonQuestion();
+      // ユーザー指定(2026-08-28): ドラゴン戦でも、通常の4択に代えて25%の確率で今出た問題と
+      // 同じLV(課)の並び替え問題を出題する。ドラゴンの絵(dragon.jpg)は並び替え時も表示し続ける。
+      if(q.lv && Math.random() < LV_SCRAMBLE_CHANCE){
+        const item = randomLvScrambleSentence(q.lv);
+        if(item){
+          const battleInfo = {img:"public/images/dragon.jpg", icon:"🐉", life:dragonLife, maxLife:DRAGON_MAX_LIFE};
+          showEvent(()=> showBubbleQuiz(item.words, "🐉 "+t("dragonTitle"), t("scrambleSentenceHint"), "", handleAnswer, battleInfo));
+          return;
+        }
+      }
+      showEvent(()=> showDragonQuiz(q, dragonLife, handleAnswer));
     }
     ask();
   }
@@ -3420,6 +3661,10 @@
       return;
     }
     if(ev.type==="drown"){
+      if(state.hasSwimRing){
+        showEvent(()=> showFlavor(ICONS.drown, t("drownTitle"), t("drownTextBlocked"), endTurn));
+        return;
+      }
       loseLife(1);
       showEvent(()=> showFlavor(ICONS.drown, t("drownTitle"), t("drownText"), ()=>{ checkDeath(endTurn); }));
       return;
@@ -3502,6 +3747,26 @@
       state.hasClimbingBoots = true;
       renderHUD();
       showEvent(()=> showFlavor(ICONS.climbBoots, t("climbBootsTitle"), t("climbBootsText"), endTurn));
+      return;
+    }
+    if(ev.type==="lamp"){
+      if(!itemsUsable()){
+        showEvent(()=> showFlavor(ICONS.lamp, t("lampTitle"), t("lampTextLocked"), endTurn));
+        return;
+      }
+      state.hasLamp = true;
+      renderHUD();
+      showEvent(()=> showFlavor(ICONS.lamp, t("lampTitle"), t("lampText"), endTurn));
+      return;
+    }
+    if(ev.type==="swimRing"){
+      if(!itemsUsable()){
+        showEvent(()=> showFlavor(ICONS.swimRing, t("swimRingTitle"), t("swimRingTextLocked"), endTurn));
+        return;
+      }
+      state.hasSwimRing = true;
+      renderHUD();
+      showEvent(()=> showFlavor(ICONS.swimRing, t("swimRingTitle"), t("swimRingText"), endTurn));
       return;
     }
     if(ev.type==="shop"){ openShop(); return; }
@@ -3685,6 +3950,8 @@
       herbCount: state.herbCount,
       hasAmulet: state.hasAmulet,
       hasClimbingBoots: state.hasClimbingBoots,
+      hasLamp: state.hasLamp,
+      hasSwimRing: state.hasSwimRing,
       cellMap: state.cellMap,
     };
   }
@@ -3706,6 +3973,8 @@
     state.herbCount = snap.herbCount || 0;
     state.hasAmulet = !!snap.hasAmulet;
     state.hasClimbingBoots = !!snap.hasClimbingBoots;
+    state.hasLamp = !!snap.hasLamp;
+    state.hasSwimRing = !!snap.hasSwimRing;
     state.busy = false;
     state.lastDiceRoll = null;
     state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap
@@ -4152,6 +4421,8 @@
       if(s.herbCount) items.push(`${t("itemHerb")}×${s.herbCount}`);
       if(s.hasAmulet) items.push(t("itemAmulet"));
       if(s.hasClimbingBoots) items.push(t("itemClimbBoots"));
+      if(s.hasLamp) items.push(t("itemLamp"));
+      if(s.hasSwimRing) items.push(t("itemSwimRing"));
       return items.length ? items.join("、")+`（${items.length}）` : at("adminUserDbNoItems");
     }
     function buildTable(rows){
@@ -4379,6 +4650,8 @@
     state.hasElixir = true;
     state.hasAmulet = true;
     state.hasClimbingBoots = true;
+    state.hasLamp = true;
+    state.hasSwimRing = true;
     resetQuestionBags();
     state.cellMap = buildMapByNumber(n);
     renderStaticText();
@@ -4474,6 +4747,8 @@
     state.herbCount = 0;
     state.hasAmulet = false;
     state.hasClimbingBoots = false;
+    state.hasLamp = false;
+    state.hasSwimRing = false;
     state.busy = false;
     state.lastDiceRoll = null;
     state.cellMap = buildMap1();
