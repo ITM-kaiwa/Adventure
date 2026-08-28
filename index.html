@@ -694,8 +694,8 @@
       stepFwdTitle:"Bước nhỏ", stepFwdText:"Một điều may mắn nhỏ, tiến lên 1 ô.",
       stepBackTitle:"Bước hụt", stepBackText:"Một điều xui xẻo nhỏ, lùi lại 1 ô.",
       herbTitle:"Nhặt được Thảo Dược!", herbTextHeal:"Bạn dùng thảo dược, hồi phục 1 sinh lực!", herbTextFull:"Bạn tìm thấy thảo dược nhưng sinh lực đã đầy nên không dùng.",
-      herbTextLocked:"Bạn nhặt được thảo dược, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
       herbTextStored:"Bạn tìm thấy thảo dược, nhưng vì sinh lực đã đầy nên cất vào túi đồ để dùng sau.",
+      herbTextStoredLocked:"Bạn nhặt được thảo dược, nhưng vì chưa học ở Võ đường Vật Phẩm nên đã cất vào túi đồ. Có thể dùng sau khi học xong.",
       amuletTitle:"Nhặt được Bùa Hộ Mệnh!",
       amuletText:"Bạn nhận được Bùa Hộ Mệnh. Với vật này trong người, ngọn lửa sẽ không thể làm bạn tổn thương nữa!",
       amuletTextLocked:"Bạn nhặt được Bùa Hộ Mệnh, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
@@ -940,8 +940,8 @@
       stepFwdTitle:"小さな幸運", stepFwdText:"ちょっとした幸運で1マス進む。",
       stepBackTitle:"小さな不運", stepBackText:"ちょっとした不運で1マス戻る。",
       herbTitle:"薬草を見つけた！", herbTextHeal:"薬草を使い、ライフが1回復した！", herbTextFull:"薬草を見つけたが、ライフが満タンなので使わなかった。",
-      herbTextLocked:"薬草を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
       herbTextStored:"薬草を見つけたが、ライフが満タンなので持ち物に保管した。後で使うことができる。",
+      herbTextStoredLocked:"薬草を手に入れたが、まだアイテムの道場で学んでいないので持ち物に保管した。修行後に使えるようになる。",
       amuletTitle:"お守りを見つけた！",
       amuletText:"お守りを手に入れた。これを持っていれば、炎に襲われてもライフが減らなくなる！",
       amuletTextLocked:"お守りを手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
@@ -2205,7 +2205,7 @@
   const COLS = 6;
 
   const ICONS = {
-    start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🛡️",
+    start:"🏘️", king:"👑", dojo:"🏯", enemy:"👹", guardian:"🐺",
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
     drown:"🌊", fire:"🔥", officer:"👺", cactus:"🌵", dragon:"🐉",
@@ -2332,6 +2332,7 @@
   function useHerbFromInventory(){
     if(state.busy) return;
     if(!(state.herbCount>0)) return;
+    if(!itemsUsable()) return; // まだアイテムの道場で修行していない間は使えない
     if(state.life>=state.maxLife) return;
     state.herbCount -= 1;
     state.life = Math.min(state.maxLife, state.life+1);
@@ -3140,7 +3141,7 @@
     // (幹部はマップ1には登場しないため、isPracticeFramingが真になることはない)
     const isPracticeFraming = state.currentMap===1;
     const getTitle = ()=> isGuardian ? t("guardianTitle") : isOfficer ? t("officerTitle") : t(isPracticeFraming ? "enemyTitle" : "enemyTitleReal");
-    const icon = isGuardian ? "🛡️" : isOfficer ? "👺" : "👹";
+    const icon = isGuardian ? "🐺" : isOfficer ? "👺" : "👹";
 
     // ユーザー指定(2026-08-23・25回目): 城下町(マップ1)で番人と出会った時は、3つの道場
     // (戦い方・守り方・道具の使い方)のうち1つでも未修行なら、ダメージなしでスタート(1マス目)
@@ -3553,7 +3554,12 @@
             return;
           }
           if(item.key==="herb"){
-            if(!usable){ render(t("herbTextLocked")); return; }
+            if(!usable){
+              state.herbCount = (state.herbCount||0) + 1;
+              renderHUD();
+              render(t("herbTextStoredLocked"));
+              return;
+            }
             if(state.life<state.maxLife){
               state.life = Math.min(state.maxLife, state.life+1);
               renderHUD();
@@ -3737,7 +3743,11 @@
     }
     if(ev.type==="herb"){
       if(!itemsUsable()){
-        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextLocked"), endTurn));
+        // ユーザー指定(2026-08-28): まだアイテムの道場で修行していない場合も、薬草を
+        // 無駄にせずインベントリーに保管する(道場で修行した後に使えるようになる)。
+        state.herbCount = (state.herbCount||0) + 1;
+        renderHUD();
+        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextStoredLocked"), endTurn));
         return;
       }
       if(state.life<state.maxLife){
@@ -4782,6 +4792,9 @@
     diceEl.classList.remove("disabled");
     hintEl.textContent = t("hintStart");
     closeModal();
+    // 死んで「もう一度挑戦する」で城下町に戻る際、直前のマップ/戦闘BGMが鳴りっぱなしに
+    // なっていたバグ修正(2026-08-28): 他のマップ遷移関数と同様、マップ1のBGMへ切り替える。
+    switchBgmTrack(bgmPathForMap(1));
   }
 
   diceEl.addEventListener("click", rollDice);
