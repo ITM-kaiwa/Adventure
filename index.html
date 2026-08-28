@@ -666,6 +666,7 @@
       guardianDefeated:"Bạn đã đánh bại Người Gác Cổng luyện tập! Bản đồ 1 hoàn thành!",
       guardianDefeatedReal:"Bạn đã đánh bại Người Gác Cổng!",
       officerDefeated:"Bạn đã đánh bại Sĩ Quan Chỉ Huy (Kanbu)!",
+      officerElixirDropText:"Bạn còn nhặt được 🧪 Elixir Thần Kỳ từ Sĩ Quan Chỉ Huy!",
       pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
       shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
       lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
@@ -696,6 +697,8 @@
       itemOrderScrollDesc:"Chiếu chỉ do Quốc Vương ban tặng. Cần có vật này mới có thể luyện tập tại 3 võ đường của Thị Trấn Hoàng Gia.",
       itemElixirDesc:"Khi sinh lực về 0, tự động hồi sinh với 3 sinh lực. Chỉ dùng được 1 lần rồi biến mất.",
       itemHerbDesc:"Nhấn vào đây để dùng 1 thảo dược, hồi phục 1 sinh lực.",
+      itemAmuletDesc:"Khi mang theo, các ô lửa ở Vùng Lửa sẽ không làm bạn mất sinh lực nữa.",
+      itemClimbBootsDesc:"Khi mang theo, các ô lạc đường ở vùng núi tuyết sẽ không đẩy bạn lùi lại nữa.",
       inventoryLabel:"🎒 Vật phẩm:",
       saveToastSuccess:"💾 Đã lưu!",
       saveToastError:"⚠️ Lưu thất bại, vui lòng thử lại.",
@@ -927,6 +930,8 @@
       itemOrderScrollDesc:"国王から授かった命令書。城下町の3つの道場で修行するために必要。",
       itemElixirDesc:"ライフが0になったとき、自動的にライフ3で復活する。1回使うと消える。",
       itemHerbDesc:"クリックすると薬草を1個使い、ライフが1回復する。",
+      itemAmuletDesc:"持っていると、炎のエリアの炎マスに触れてもライフが減らなくなる。",
+      itemClimbBootsDesc:"持っていると、高山エリアの迷い道マスを踏んでも戻されなくなる。",
       inventoryLabel:"🎒 持ち物:",
       saveToastSuccess:"💾 保存しました！",
       saveToastError:"⚠️ 保存に失敗しました。もう一度お試しください。",
@@ -1970,16 +1975,16 @@
 
     const events = [];
     const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
-    pushN("enemy",9);
+    pushN("enemy",7);
     pushN("fire",4); // 「ライフが減るセルは炎が出ています。それが4つあります」(ユーザー指定)
     pushN("herb",2);
     pushN("shop",2);
     // shortcut(近道)はユーザー指定により配置しない
+    pushN("pit",4); // 標準(2)の2倍(2026-08-28・ユーザー指定)。増やした分、enemyとblankを減らして調整
     pushN("lost",5); // 「迷い道がおおいです」(ユーザー指定)
     pushN("tailwind",2);
     pushN("step",2);
-    pushN("blank",2);
-    // 合計 9+4+2+2+5+2+2+2=28
+    // 合計 7+4+2+2+4+5+2+2=28
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -2113,12 +2118,15 @@
   }
 
   /* 所持アイテム(インベントリ)一覧(2026-08-22・16回目追加)。
-     現状ゲーム内で「持ち続けるアイテム」として管理されているのは
-     王の命令書(hasOrderScroll)とエリクサー(hasElixir)の2つのみ
-     (薬草・ブーツ等は入手した瞬間に効果が発動する即時消費型のため対象外)。 */
+     ゲーム内で「持ち続けて、特定の条件が来たら発動する」アイテムとして管理されているのは
+     王の命令書(hasOrderScroll)・エリクサー(hasElixir)・お守り(hasAmulet)・
+     登山靴(hasClimbingBoots)の4つ(2026-08-28: お守り・登山靴を追加)。
+     (薬草の即時回復・ブーツ等は入手した瞬間に効果が発動する即時消費型のため対象外)。 */
   const INVENTORY_ITEMS = [
     { icon:"📜", has:()=>state.hasOrderScroll, nameKey:"itemOrderScroll", descKey:"itemOrderScrollDesc" },
     { icon:"🧪", has:()=>state.hasElixir, nameKey:"itemElixir", descKey:"itemElixirDesc" },
+    { icon:"🧿", has:()=>state.hasAmulet, nameKey:"itemAmulet", descKey:"itemAmuletDesc" },
+    { icon:"🥾", has:()=>state.hasClimbingBoots, nameKey:"itemClimbBoots", descKey:"itemClimbBootsDesc" },
   ];
 
   // 薬草をインベントリーから使う(2026-08-28追加): ライフが満タンの時に拾った薬草だけ
@@ -2887,6 +2895,10 @@
   // ヒット」判定になり、相手のライフが通常の1ではなく2減る。
   const CRITICAL_HIT_CHANCE = 0.05;
 
+  // ユーザー指定(2026-08-28): 幹部(中ボス)を倒した時、この確率でエリクサーを追加で入手できる
+  // (すでにエリクサーを持っている場合は抽選しない)。
+  const OFFICER_ELIXIR_DROP_CHANCE = 0.10;
+
   // kind: "enemy"(通常の敵) / "guardian"(マップ最後尾の番人) / "officer"(幹部・中ボス)。
   // 幹部はマップ中央付近に配置される中ボスで、番人より手強い(ライフ5・難問のみ)が、
   // 倒してもマップクリアにはならず(showMapClearを呼ばない)、通常の敵と同様にターンが続く。
@@ -2967,15 +2979,20 @@
           remainingLife -= isCritical ? 2 : 1;
           const afterHit = ()=>{
             if(remainingLife<=0){
-              const goldGain = isOfficer ? 8 : isGuardian ? 5 : 1;
+              // ユーザー指定(2026-08-28): とどめの一撃がクリティカルヒットだった場合、
+              // 獲得ゴールドを通常の5倍にする。
+              const goldGain = (isOfficer ? 8 : isGuardian ? 5 : 1) * (isCritical ? 5 : 1);
               state.gold += goldGain;
+              const gotElixir = isOfficer && !state.hasElixir && Math.random() < OFFICER_ELIXIR_DROP_CHANCE;
+              if(gotElixir){ state.hasElixir = true; }
               renderHUD();
               const defeatedTitle = isGuardian
                 ? t(isPracticeFraming ? "guardianDefeated" : "guardianDefeatedReal")
                 : isOfficer
                 ? t("officerDefeated")
                 : t(isPracticeFraming ? "enemyDefeated" : "enemyDefeatedReal");
-              const defeatedNote = isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain);
+              const defeatedNote = (isPracticeFraming ? t("practiceDefeatNote", goldGain) : t("defeatGoldNote", goldGain))
+                + (gotElixir ? "<br>"+t("officerElixirDropText") : "");
               if(isOfficer){ switchBgmTrack(bgmPathForMap(state.currentMap)); }
               showEvent(()=> showFlavor("🏆", defeatedTitle, defeatedNote, ()=>{
                 if(isGuardian){ showMapClear(); }
