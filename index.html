@@ -686,6 +686,7 @@
       officerDefeated:"Bạn đã đánh bại Sĩ Quan Chỉ Huy (Kanbu)!",
       officerElixirDropText:"Bạn còn nhặt được 🧪 Elixir Thần Kỳ từ Sĩ Quan Chỉ Huy!",
       pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
+      pitAvoidedText:"Bạn suýt rơi xuống hố, nhưng đã kịp né tránh! Sinh lực không bị mất.",
       shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
       lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
       lostTextBoots:"Bạn trượt chân trên tuyết, nhưng nhờ có Ủng Leo Núi nên đứng vững, không bị lùi lại!",
@@ -931,6 +932,7 @@
       guardianDefeatedReal:"番人を倒した！",
       officerDefeated:"幹部を倒した！",
       pitTitle:"落とし穴！", pitText:"落とし穴に落ちてしまった！ライフ-1。",
+      pitAvoidedText:"落とし穴に落ちそうになったが、うまく回避した！ライフは減らなかった。",
       shortcutTitle:"近道！", shortcutText:"近道を見つけた！3マス進む。",
       lostTitle:"迷い道！", lostText:"道に迷ってしまった！3マス戻る。",
       lostTextBoots:"雪で足を滑らせたが、登山靴のおかげでしっかり踏みとどまり、戻らずに済んだ！",
@@ -1574,7 +1576,12 @@
   function itemsUsable(){ return state.dojoItemDone; }
 
   const TOTAL_CELLS = 30;
-  const FIXED = { king:6, dojoCombat:8, dojoDefense:12, dojoItem:16, guardian:30 };
+  // ユーザー指定(2026-08-28): 城下町(マップ1)の道場を2倍(各種2つずつ、計6つ)に増やす。
+  // 2つ目の道場(dojoCombat2/dojoDefense2/dojoItem2)は17〜29マス(従来「練習エリア」だった
+  // 範囲)に配置する。修行済み判定(dojoCombatDone等)は種類ごとに1つの共通フラグなので、
+  // 同じ種類の道場はどちらで修行しても構わない(既存のresolveCell()側のロジックは
+  // ev.dojo(種類名)だけを見ているため、道場のマス数が増えても変更不要)。
+  const FIXED = { king:6, dojoCombat:8, dojoDefense:12, dojoItem:16, dojoCombat2:19, dojoDefense2:23, dojoItem2:27, guardian:30 };
   // 幹部(中ボス)の配置マス。「マップ中央付近に配置」という仕様に沿って、
   // 盤面(1〜30マス)の中央寄りの固定マスに配置する(ランダム抽選ではなく意図的な固定配置)。
   // マップごとの幹部の数は、そのマップが担当するLV範囲のうち何課が「幹部の課」に
@@ -1811,20 +1818,22 @@
     // 17〜29マス(道場3つより後のエリア)。落とし穴・薬草・敵はここにのみ配置する。
     // (2026-08-22追加: 薬草はアイテムの道場(16マス目)を修行した後でないと使えない
     //  仕様のため、道場より前に置いても実質意味がない。ユーザー指摘を受けて、
-    //  落とし穴と同様に薬草も道場より後のエリアに限定した。13マス中、敵9+落とし穴2+
-    //  薬草2で13マスちょうど埋まるため、敵の数を10→9に1体減らして調整している)
-    const HIGH_ZONE = []; for(let i=17;i<=29;i++) HIGH_ZONE.push(i);
+    //  落とし穴と同様に薬草も道場より後のエリアに限定した)
+    // (2026-08-28追加: 道場を2倍(各種2つずつ)にしたことで、2つ目の道場3つ(19,23,27)を
+    //  このエリアに配置するため、残り10マスに敵4+落とし穴2+薬草4(標準の2倍)を割り振る。
+    //  道場が増えた分・薬草を2倍にした分、敵の数を9→4に減らして調整している)
+    const HIGH_ZONE = []; for(let i=17;i<=29;i++) if(i!==FIXED.dojoCombat2 && i!==FIXED.dojoDefense2 && i!==FIXED.dojoItem2) HIGH_ZONE.push(i);
     // 2〜15マス(道場より前のエリア。6,8,12は固定マスなので除外)。
     const LOW_ZONE = [2,3,4,5,7,9,10,11,13,14,15];
 
     const highPool = shuffle(HIGH_ZONE);
-    const enemyCells = highPool.slice(0,9);
-    const leftoverHigh = highPool.slice(9); // 4マス分の余り(HIGH_ZONE 13 - 敵9) → 落とし穴2+薬草2
+    const enemyCells = highPool.slice(0,4);
+    const leftoverHigh = highPool.slice(4); // 6マス分の余り(HIGH_ZONE 10 - 敵4) → 落とし穴2+薬草4
 
-    // 余り4マスを「落とし穴」2つ・「薬草」2つに割り振る。同じ種類どうしが
+    // 余り6マスを「落とし穴」2つ・「薬草」4つに割り振る。同じ種類どうしが
     // 隣接しないよう、既存のassignNoAdjacentDup()を再利用する。
     const leftoverSorted = leftoverHigh.slice().sort((a,b)=>a-b);
-    const leftoverAssignment = assignNoAdjacentDup(leftoverSorted, ["pit","pit","herb","herb"]);
+    const leftoverAssignment = assignNoAdjacentDup(leftoverSorted, ["pit","pit","herb","herb","herb","herb"]);
     const pitCells = leftoverSorted.filter(c=>leftoverAssignment[c]==="pit");
     const herbCellsHigh = leftoverSorted.filter(c=>leftoverAssignment[c]==="herb");
 
@@ -1846,6 +1855,9 @@
     cellMap[FIXED.dojoCombat] = {type:"dojo", dojo:"combat"};
     cellMap[FIXED.dojoDefense] = {type:"dojo", dojo:"defense"};
     cellMap[FIXED.dojoItem] = {type:"dojo", dojo:"item"};
+    cellMap[FIXED.dojoCombat2] = {type:"dojo", dojo:"combat"};
+    cellMap[FIXED.dojoDefense2] = {type:"dojo", dojo:"defense"};
+    cellMap[FIXED.dojoItem2] = {type:"dojo", dojo:"item"};
     cellMap[FIXED.guardian] = {type:"guardian"};
     enemyCells.forEach(c=>{ cellMap[c] = {type:"enemy"}; });
     pitCells.forEach(c=>{ cellMap[c] = {type:"pit"}; });
@@ -3113,6 +3125,9 @@
   // (すでにエリクサーを持っている場合は抽選しない)。
   const OFFICER_ELIXIR_DROP_CHANCE = 0.10;
 
+  // ユーザー指定(2026-08-28): 全ステージ共通で、落とし穴のマスに乗ってもこの確率で回避できる。
+  const PIT_AVOID_CHANCE = 0.20;
+
   // kind: "enemy"(通常の敵) / "guardian"(マップ最後尾の番人) / "officer"(幹部・中ボス)。
   // 幹部はマップ中央付近に配置される中ボスで、番人より手強い(ライフ5・難問のみ)が、
   // 倒してもマップクリアにはならず(showMapClearを呼ばない)、通常の敵と同様にターンが続く。
@@ -3657,6 +3672,12 @@
     if(ev.type==="dragon"){ resolveDragonBattle(); return; }
 
     if(ev.type==="pit"){
+      // ユーザー指定(2026-08-28): 全ステージ共通で、落とし穴のマスに乗っても
+      // 20%の確率でうまく回避できてライフが減らないようにする。
+      if(Math.random() < PIT_AVOID_CHANCE){
+        showEvent(()=> showFlavor(ICONS.pit, t("pitTitle"), t("pitAvoidedText"), endTurn));
+        return;
+      }
       loseLife(1);
       showEvent(()=> showFlavor(ICONS.pit, t("pitTitle"), t("pitText"), ()=>{ checkDeath(endTurn); }));
       return;
