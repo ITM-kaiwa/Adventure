@@ -179,6 +179,17 @@
     border:6px solid transparent; border-top-color:#1c1408;
   }
   .inv-item:hover .inv-tooltip, .inv-item:focus .inv-tooltip{ opacity:1; }
+  /* 薬草の個数表示・クリック使用対応(2026-08-28追加) */
+  .inv-item.inv-item-clickable .inv-icon{ cursor:pointer; }
+  .inv-item.inv-item-clickable .inv-icon:active{ transform:translateY(1px); }
+  .inv-count{
+    position:absolute; bottom:-4px; right:-4px;
+    min-width:15px; height:15px; padding:0 3px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--gold,#d4a017); color:#1c1408;
+    border-radius:8px; font-size:.62rem; font-weight:700;
+    line-height:1; box-shadow:0 1px 3px rgba(0,0,0,.5);
+  }
 
   /* 手動保存ボタンのフィードバック用トースト(2026-08-22・16回目追加) */
   .save-toast{
@@ -240,6 +251,8 @@
   .tile.herb{ background:#3f7a4a; color:#eaffea; }
   .tile.shop{ background:#7a5a1e; color:#fff3d6; }
   .tile.blank{ background:#33405c; color:#c9d3ea; }
+  .tile.amulet{ background:#2a5a7a; color:#eaf6ff; }
+  .tile.climbBoots{ background:#5a4530; color:#fff0d9; }
 
   .token{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
@@ -656,11 +669,22 @@
       pitTitle:"Hố sập!", pitText:"Bạn rơi xuống hố! Sinh lực -1.",
       shortcutTitle:"Đường tắt!", shortcutText:"Bạn tìm thấy đường tắt! Tiến lên 3 ô.",
       lostTitle:"Lạc đường!", lostText:"Bạn bị lạc đường! Lùi lại 3 ô.",
+      lostTextBoots:"Bạn trượt chân trên tuyết, nhưng nhờ có Ủng Leo Núi nên đứng vững, không bị lùi lại!",
       tailwindTitle:"Gió thuận!", tailwindText:"Gió thuận chiều đưa bạn tiến lên 2 ô!",
       stepFwdTitle:"Bước nhỏ", stepFwdText:"Một điều may mắn nhỏ, tiến lên 1 ô.",
       stepBackTitle:"Bước hụt", stepBackText:"Một điều xui xẻo nhỏ, lùi lại 1 ô.",
       herbTitle:"Nhặt được Thảo Dược!", herbTextHeal:"Bạn dùng thảo dược, hồi phục 1 sinh lực!", herbTextFull:"Bạn tìm thấy thảo dược nhưng sinh lực đã đầy nên không dùng.",
       herbTextLocked:"Bạn nhặt được thảo dược, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      herbTextStored:"Bạn tìm thấy thảo dược, nhưng vì sinh lực đã đầy nên cất vào túi đồ để dùng sau.",
+      amuletTitle:"Nhặt được Bùa Hộ Mệnh!",
+      amuletText:"Bạn nhận được Bùa Hộ Mệnh. Với vật này trong người, ngọn lửa sẽ không thể làm bạn tổn thương nữa!",
+      amuletTextLocked:"Bạn nhặt được Bùa Hộ Mệnh, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      itemAmulet:"🧿 Bùa Hộ Mệnh",
+      fireTextBlocked:"Một ngọn lửa bùng lên, nhưng nhờ có Bùa Hộ Mệnh nên bạn không hề hấn gì!",
+      climbBootsTitle:"Nhặt được Ủng Leo Núi!",
+      climbBootsText:"Bạn nhận được Ủng Leo Núi. Với đôi ủng này, bạn sẽ không còn trượt chân trên núi tuyết nữa!",
+      climbBootsTextLocked:"Bạn nhặt được Ủng Leo Núi, nhưng vì chưa học ở Võ đường Vật Phẩm nên chưa thể sử dụng.",
+      itemClimbBoots:"🥾 Ủng Leo Núi",
       shopTitle:"Cửa hàng lưu động",
       shopIntro:"Một thương nhân đang bán các vật phẩm quý hiếm:",
       shopBuy:"Mua",
@@ -671,6 +695,7 @@
       itemOrderScroll:"📜 Chiếu Chỉ Nhà Vua",
       itemOrderScrollDesc:"Chiếu chỉ do Quốc Vương ban tặng. Cần có vật này mới có thể luyện tập tại 3 võ đường của Thị Trấn Hoàng Gia.",
       itemElixirDesc:"Khi sinh lực về 0, tự động hồi sinh với 3 sinh lực. Chỉ dùng được 1 lần rồi biến mất.",
+      itemHerbDesc:"Nhấn vào đây để dùng 1 thảo dược, hồi phục 1 sinh lực.",
       inventoryLabel:"🎒 Vật phẩm:",
       saveToastSuccess:"💾 Đã lưu!",
       saveToastError:"⚠️ Lưu thất bại, vui lòng thử lại.",
@@ -875,11 +900,22 @@
       pitTitle:"落とし穴！", pitText:"落とし穴に落ちてしまった！ライフ-1。",
       shortcutTitle:"近道！", shortcutText:"近道を見つけた！3マス進む。",
       lostTitle:"迷い道！", lostText:"道に迷ってしまった！3マス戻る。",
+      lostTextBoots:"雪で足を滑らせたが、登山靴のおかげでしっかり踏みとどまり、戻らずに済んだ！",
       tailwindTitle:"追い風！", tailwindText:"追い風に乗って2マス進む！",
       stepFwdTitle:"小さな幸運", stepFwdText:"ちょっとした幸運で1マス進む。",
       stepBackTitle:"小さな不運", stepBackText:"ちょっとした不運で1マス戻る。",
       herbTitle:"薬草を見つけた！", herbTextHeal:"薬草を使い、ライフが1回復した！", herbTextFull:"薬草を見つけたが、ライフが満タンなので使わなかった。",
       herbTextLocked:"薬草を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      herbTextStored:"薬草を見つけたが、ライフが満タンなので持ち物に保管した。後で使うことができる。",
+      amuletTitle:"お守りを見つけた！",
+      amuletText:"お守りを手に入れた。これを持っていれば、炎に襲われてもライフが減らなくなる！",
+      amuletTextLocked:"お守りを手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      itemAmulet:"🧿 お守り",
+      fireTextBlocked:"突然、炎が燃え上がったが、お守りのおかげでライフは減らなかった！",
+      climbBootsTitle:"登山靴を見つけた！",
+      climbBootsText:"登山靴を手に入れた。これを履いていれば、雪山で足を滑らせなくなる！",
+      climbBootsTextLocked:"登山靴を手に入れたが、まだアイテムの道場で学んでいないので使えなかった。",
+      itemClimbBoots:"🥾 登山靴",
       shopTitle:"移動商人のお店",
       shopIntro:"商人が珍しいアイテムを売っている:",
       shopBuy:"購入",
@@ -890,6 +926,7 @@
       itemOrderScroll:"📜 王の命令書",
       itemOrderScrollDesc:"国王から授かった命令書。城下町の3つの道場で修行するために必要。",
       itemElixirDesc:"ライフが0になったとき、自動的にライフ3で復活する。1回使うと消える。",
+      itemHerbDesc:"クリックすると薬草を1個使い、ライフが1回復する。",
       inventoryLabel:"🎒 持ち物:",
       saveToastSuccess:"💾 保存しました！",
       saveToastError:"⚠️ 保存に失敗しました。もう一度お試しください。",
@@ -1479,6 +1516,9 @@
     dojoDefenseDone:false,
     dojoItemDone:false,
     hasElixir:false,
+    herbCount:0,
+    hasAmulet:false,
+    hasClimbingBoots:false,
     busy:false,
     cellMap:{},
     lastDiceRoll:null,
@@ -1727,7 +1767,8 @@
     pushN("lost",2);
     pushN("tailwind",2);
     pushN("step",2);
-    pushN("blank",3); // 合計27(幹部1マス分を差し引いてblankを4→3に調整)
+    pushN("amulet",1); // 新規アイテム「お守り」(2026-08-28追加): 炎のエリアで炎の被ダメージを防ぐ
+    pushN("blank",2); // 合計27(お守り1マス分を追加した分、blankを3→2に調整)
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -1753,14 +1794,15 @@
 
     const events = [];
     const pushN = (type,n)=>{ for(let i=0;i<n;i++) events.push(type); };
-    pushN("enemy",7);
+    pushN("enemy",6);
     pushN("fire",5);
     pushN("herb",4);
     pushN("shop",2);
     pushN("shortcut",2);
     pushN("lost",2);
     pushN("tailwind",2);
-    pushN("step",2); // 合計26(幹部2マス分を差し引いてblank2→0に調整)
+    pushN("step",2);
+    pushN("climbBoots",1); // 新規アイテム「登山靴」(2026-08-28追加): 高山エリアで足を滑らせなくなる。enemyを7→6に1減らして調整
 
     const assignment = assignNoAdjacentDup(cellsAsc, events);
     cellsAsc.forEach(c=>{
@@ -1972,6 +2014,7 @@
     pit:"🕳️", shortcut:"🌟", lost:"🌀", tailwind:"🍃", step:"👣",
     herb:"🌿", shop:"🛒", blank:"·",
     drown:"🌊", fire:"🔥", officer:"👺", cactus:"🌵", dragon:"🐉",
+    amulet:"🧿", climbBoots:"🥾",
   };
 
   function tileVisual(cellNum){
@@ -2078,22 +2121,45 @@
     { icon:"🧪", has:()=>state.hasElixir, nameKey:"itemElixir", descKey:"itemElixirDesc" },
   ];
 
+  // 薬草をインベントリーから使う(2026-08-28追加): ライフが満タンの時に拾った薬草だけ
+  // 即時消費せずに個数管理し、アイコンをクリックした時にだけ1個消費してライフを1回復する。
+  function useHerbFromInventory(){
+    if(state.busy) return;
+    if(!(state.herbCount>0)) return;
+    if(state.life>=state.maxLife) return;
+    state.herbCount -= 1;
+    state.life = Math.min(state.maxLife, state.life+1);
+    renderHUD();
+  }
+
   function renderInventory(){
     const row = document.getElementById("inventoryRow");
     if(!row) return;
     const held = INVENTORY_ITEMS.filter(it=>it.has());
-    if(held.length===0){
+    const herbHeld = (state.herbCount||0) > 0;
+    if(held.length===0 && !herbHeld){
       row.className = "inventory-row empty";
       row.innerHTML = "";
       return;
     }
     row.className = "inventory-row";
-    row.innerHTML = `<span class="inventory-label">${t("inventoryLabel")}</span>` + held.map(it=>`
+    const herbHtml = herbHeld ? `
+      <span class="inv-item inv-item-clickable" id="invHerbBtn" tabindex="0">
+        <span class="inv-icon">🌿<span class="inv-count">${state.herbCount}</span></span>
+        <span class="inv-tooltip"><b>${t("itemHerb")}</b>${t("itemHerbDesc")}</span>
+      </span>
+    ` : "";
+    row.innerHTML = `<span class="inventory-label">${t("inventoryLabel")}</span>` + herbHtml + held.map(it=>`
       <span class="inv-item" tabindex="0">
         <span class="inv-icon">${it.icon}</span>
         <span class="inv-tooltip"><b>${t(it.nameKey)}</b>${t(it.descKey)}</span>
       </span>
     `).join("");
+    if(herbHeld){
+      const btn = document.getElementById("invHerbBtn");
+      btn.onclick = useHerbFromInventory;
+      btn.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" "){ e.preventDefault(); useHerbFromInventory(); } });
+    }
   }
 
   function renderHUD(){
@@ -3219,7 +3285,9 @@
               renderHUD();
               render(t("herbTextHeal"));
             } else {
-              render(t("herbTextFull"));
+              state.herbCount = (state.herbCount||0) + 1;
+              renderHUD();
+              render(t("herbTextStored"));
             }
             return;
           }
@@ -3340,6 +3408,10 @@
       return;
     }
     if(ev.type==="fire"){
+      if(state.hasAmulet){
+        showEvent(()=> showFlavor(ICONS.fire, t("fireTitle"), t("fireTextBlocked"), endTurn));
+        return;
+      }
       loseLife(1);
       showEvent(()=> showFlavor(ICONS.fire, t("fireTitle"), t("fireText"), ()=>{ checkDeath(endTurn); }));
       return;
@@ -3356,6 +3428,10 @@
       return;
     }
     if(ev.type==="lost"){
+      if(state.currentMap===6 && state.hasClimbingBoots){
+        showEvent(()=> showFlavor(ICONS.lost, t("lostTitle"), t("lostTextBoots"), endTurn));
+        return;
+      }
       showEvent(()=> showFlavor(ICONS.lost, t("lostTitle"), t("lostText"), ()=>{
         stepMove(-3, ()=>{ resolveCell(); });
       }));
@@ -3385,8 +3461,30 @@
         renderHUD();
         showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextHeal"), endTurn));
       } else {
-        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextFull"), endTurn));
+        state.herbCount = (state.herbCount||0) + 1;
+        renderHUD();
+        showEvent(()=> showFlavor(ICONS.herb, t("herbTitle"), t("herbTextStored"), endTurn));
       }
+      return;
+    }
+    if(ev.type==="amulet"){
+      if(!itemsUsable()){
+        showEvent(()=> showFlavor(ICONS.amulet, t("amuletTitle"), t("amuletTextLocked"), endTurn));
+        return;
+      }
+      state.hasAmulet = true;
+      renderHUD();
+      showEvent(()=> showFlavor(ICONS.amulet, t("amuletTitle"), t("amuletText"), endTurn));
+      return;
+    }
+    if(ev.type==="climbBoots"){
+      if(!itemsUsable()){
+        showEvent(()=> showFlavor(ICONS.climbBoots, t("climbBootsTitle"), t("climbBootsTextLocked"), endTurn));
+        return;
+      }
+      state.hasClimbingBoots = true;
+      renderHUD();
+      showEvent(()=> showFlavor(ICONS.climbBoots, t("climbBootsTitle"), t("climbBootsText"), endTurn));
       return;
     }
     if(ev.type==="shop"){ openShop(); return; }
@@ -3567,6 +3665,9 @@
       dojoDefenseDone: state.dojoDefenseDone,
       dojoItemDone: state.dojoItemDone,
       hasElixir: state.hasElixir,
+      herbCount: state.herbCount,
+      hasAmulet: state.hasAmulet,
+      hasClimbingBoots: state.hasClimbingBoots,
       cellMap: state.cellMap,
     };
   }
@@ -3585,6 +3686,9 @@
     state.dojoDefenseDone = !!snap.dojoDefenseDone;
     state.dojoItemDone = !!snap.dojoItemDone;
     state.hasElixir = !!snap.hasElixir;
+    state.herbCount = snap.herbCount || 0;
+    state.hasAmulet = !!snap.hasAmulet;
+    state.hasClimbingBoots = !!snap.hasClimbingBoots;
     state.busy = false;
     state.lastDiceRoll = null;
     state.cellMap = (snap.cellMap && Object.keys(snap.cellMap).length) ? snap.cellMap
@@ -4028,6 +4132,9 @@
       const items = [];
       if(s.hasOrderScroll) items.push(t("itemOrderScroll"));
       if(s.hasElixir) items.push(t("itemElixir"));
+      if(s.herbCount) items.push(`${t("itemHerb")}×${s.herbCount}`);
+      if(s.hasAmulet) items.push(t("itemAmulet"));
+      if(s.hasClimbingBoots) items.push(t("itemClimbBoots"));
       return items.length ? items.join("、")+`（${items.length}）` : at("adminUserDbNoItems");
     }
     function buildTable(rows){
@@ -4236,12 +4343,25 @@
 
   // 管理者パネルからの直接マップ移動。goToMap2〜7と同じ処理を汎用化したもの
   // (ストーリーの導入フラバーテキストは表示しない、動作確認用の即時移動)。
+  // ユーザー指定(2026-08-28): 管理者パネルからマップへ直接移動する際は、動作確認が
+  // しやすいように体力10・ゴールド65535・薬草3個・武器防具類(道場修了フラグ+全アイテム)を
+  // 装備した状態にしてから移動する。
   function adminJumpToMap(n){
     closeModal();
     state.currentMap = n;
     state.cellIdx = 0;
     state.busy = false;
     state.lastDiceRoll = null;
+    state.life = 10;
+    state.gold = 65535;
+    state.herbCount = 3;
+    state.hasOrderScroll = true;
+    state.dojoCombatDone = true;
+    state.dojoDefenseDone = true;
+    state.dojoItemDone = true;
+    state.hasElixir = true;
+    state.hasAmulet = true;
+    state.hasClimbingBoots = true;
     resetQuestionBags();
     state.cellMap = buildMapByNumber(n);
     renderStaticText();
@@ -4334,6 +4454,9 @@
     state.dojoDefenseDone = false;
     state.dojoItemDone = false;
     state.hasElixir = false;
+    state.herbCount = 0;
+    state.hasAmulet = false;
+    state.hasClimbingBoots = false;
     state.busy = false;
     state.lastDiceRoll = null;
     state.cellMap = buildMap1();
