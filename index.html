@@ -3172,10 +3172,11 @@
     // 扱いで修正した)。ただしユーザー追加指定により、誤答時も5%の確率(WRONG_ANSWER_DEFENSE_CHANCE)
     // で「攻撃を防いだ」として防御に成功しライフは減らない特殊演出を挟む。また正答時も5%の確率
     // (CRITICAL_HIT_CHANCE)で「クリティカルヒット」となり、相手のライフを通常の1ではなく2減らす。
-    // 幹部戦だけは専用のBGM(enemy_bgm.mp3)に切り替える。倒した後、下のdefeatedTitle表示直後に
-    // 元のマップのテーマBGMへ戻す(番人戦はshowMapClear()→次マップへの遷移で自動的にBGMが変わるため、
-    // ここで個別に戻す必要はない)。
+    // 幹部戦・番人戦は専用のBGM(enemy_bgm.mp3/gatekeeper_bgm.mp3)に切り替える。倒した後、
+    // 下のdefeatedTitle表示直後に幹部戦は元のマップのテーマBGMへ戻す(番人戦はshowMapClear()→
+    // 次マップへの遷移で自動的にBGMが変わるため、ここで個別に戻す必要はない)。
     if(isOfficer){ switchBgmTrack(SPECIAL_BGM.officerBattle); }
+    else if(isGuardian){ switchBgmTrack(SPECIAL_BGM.guardianBattle); }
     let remainingLife = life;
     // ユーザー指定(2026-08-24・29回目): 幹部(中ボス)のうち、LV14=て形・LV18=辞書形・
     // LV22=並べ替えを象徴する幹部だけは、通常の4択(hard)問題ではなく専用の特殊問題
@@ -4160,6 +4161,7 @@
   // wedding(結婚エンディング)・opening(再び冒険に出る選択時、オープニング曲に戻す)を追加。
   const SPECIAL_BGM = {
     officerBattle: "public/audio/enemy_bgm.mp3",
+    guardianBattle: "public/audio/gatekeeper_bgm.mp3",
     dragonBattle: "public/audio/dragon_bgm.mp3",
     goal: "public/audio/goal_bgm.mp3",
     ending: "public/audio/ending_bgm.mp3",
@@ -4184,6 +4186,7 @@
     { label:"マップ9：砂漠", file: bgmPathForMap(9) },
     { label:"マップ10：魔王城", file: bgmPathForMap(10) },
     { label:"幹部(中ボス)戦", file: SPECIAL_BGM.officerBattle },
+    { label:"番人(ゲートキーパー)戦", file: SPECIAL_BGM.guardianBattle },
     { label:"ドラゴン(ラスボス)戦", file: SPECIAL_BGM.dragonBattle },
     { label:"ゴールファンファーレ", file: SPECIAL_BGM.goal },
     { label:"エンディング(姫の救出)", file: SPECIAL_BGM.ending },
