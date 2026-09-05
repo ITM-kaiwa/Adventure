@@ -386,8 +386,8 @@
   }
   .qtext{ font-size:1.08rem; font-weight:700; margin:6px 0 16px; line-height:1.9; }
   /* 質問文・選択肢中の漢字に振るふりがな(ルビ)の表示調整(2026-08-22・15回目追加) */
-  .qtext ruby, .choice-btn ruby{ ruby-position:over; }
-  .qtext rt, .choice-btn rt{ font-size:.55em; font-weight:400; color:inherit; opacity:.85; user-select:none; }
+  .qtext ruby, .choice-btn ruby, .bubble-btn ruby, .feedback ruby{ ruby-position:over; }
+  .qtext rt, .choice-btn rt, .bubble-btn rt, .feedback rt{ font-size:.55em; font-weight:400; color:inherit; opacity:.85; user-select:none; }
   .choices{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:6px; }
   .choice-btn{
     font-size:.92rem;
@@ -2610,8 +2610,8 @@
     const poolEl = document.getElementById("bubblePool");
     const fb = document.getElementById("fb");
     function render(){
-      answerEl.innerHTML = answerIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${units[id]}</button>`).join("");
-      poolEl.innerHTML = poolIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${units[id]}</button>`).join("");
+      answerEl.innerHTML = answerIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${addFurigana(units[id])}</button>`).join("");
+      poolEl.innerHTML = poolIds.map(id=>`<button class="bubble-btn" data-id="${id}" ${locked?"disabled":""}>${addFurigana(units[id])}</button>`).join("");
       answerEl.querySelectorAll(".bubble-btn").forEach(b=>{
         b.onclick = ()=>{
           if(locked) return;
@@ -2642,7 +2642,7 @@
         fb.className = "feedback ok";
         flashBattleHit();
       } else {
-        fb.textContent = t("wrong")+" "+t("scrambleAnswerRevealLabel")+units.join(revealSep);
+        fb.innerHTML = t("wrong")+" "+t("scrambleAnswerRevealLabel")+addFurigana(units.join(revealSep));
         fb.className = "feedback no";
       }
       render();
